@@ -1,0 +1,8 @@
+* xref:studio:index.adoc[]
+** xref:studio:install.adoc[]
+** xref:studio:update.adoc[]
+** xref:studio:project.adoc[]
+** xref:studio:studio-ui.adoc[]
+*** xref:studio:tool-window.adoc[]
+*** xref:studio:marketplace.adoc[]
+*** xref:studio:plugin-settings.adoc[]

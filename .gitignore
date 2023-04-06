@@ -1,0 +1,9 @@
+.idea/*
+!.idea/copyright
+
+build/
+.gradle/
+.amplicode
+
+.DS_Store
+node_modules/

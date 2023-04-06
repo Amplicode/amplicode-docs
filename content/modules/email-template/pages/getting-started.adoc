@@ -1,0 +1,5 @@
+= Getting Started with Email Templates
+
+This section shows how to start using Email Templates in your application.
+
+TODO

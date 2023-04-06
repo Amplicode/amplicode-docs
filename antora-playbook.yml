@@ -1,0 +1,28 @@
+site:
+  title: Amplicode Documentation
+  start_page: amplicode:ROOT:intro.adoc
+  url: https://docs.amplicode.io/
+content:
+  sources:
+  - url: ./
+    branches: HEAD
+    start_path: content
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+  supplemental_files: ./content/supplemental
+asciidoc:
+  extensions:
+    - asciidoctor-kroki
+  attributes:
+    main-site: 'https://amplicode.io'
+    idea-download-site: 'https://www.jetbrains.com/idea/download/'
+    page-pagination: true
+    spring-boot-version: '2.7.x'
+    spring-security-doc: 'https://docs.spring.io/spring-security/reference/5.7'
+    spring-security-api: 'https://docs.spring.io/spring-security/site/docs/5.7.x/api'
+antora:
+  extensions:
+    - require: '@jmix-framework/lunr-extension'
+      index_latest_only: true

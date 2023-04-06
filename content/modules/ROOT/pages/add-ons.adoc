@@ -1,0 +1,10 @@
+= Add-ons
+
+TODO
+
+[[installation]]
+== Installation
+
+Follow the instructions below to install add-ons into your project automatically. If you want to install an add-on manually by editing build scripts, see the documentation of the particular add-on.
+
+TODO

@@ -1,0 +1,9 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://nexus.amplicode.com/repository/public"
+        }
+        gradlePluginPortal()
+    }
+}

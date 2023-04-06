@@ -1,0 +1,13 @@
+= 1. Project Setup
+
+In this chapter you will go through a few simple steps to set up a new project. You will learn how to navigate the project structure and locate essential components. Once your project is set up, you will be able to run it and explore its pre-built features.
+
+[[dev-env]]
+== Setting Up Development Environment
+
+TODO
+
+[[create-project]]
+== Creating Project
+
+TODO

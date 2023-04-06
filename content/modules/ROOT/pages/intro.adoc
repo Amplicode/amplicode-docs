@@ -1,0 +1,30 @@
+= Introduction
+
+Welcome to the {main-site}[Amplicode^] documentation!
+
+[[whats-amplicode]]
+== What is Amplicode?
+
+TODO
+
+[[getting-started]]
+== Getting Started
+
+TODO
+
+Complete the xref:tutorial:index.adoc[] to learn basic concepts and techniques of programming with Amplicode.
+
+If you want to get a high-level idea of what Amplicode is before diving into code, see the architecture overview below.
+
+The documentation contains everything you need to know for developing with Amplicode:
+
+* xref:studio:index.adoc[] section gives you detailed information about Amplicode Studio features and installation options.
+
+* The top-level sections from TODO to TODO explain basic topics that help you develop any kind of application.
+
+* The xref:ROOT:add-ons.adoc[] section describes additional modules that can be used in your project.
+
+[[architecture]]
+== Architecture Overview
+
+TODO

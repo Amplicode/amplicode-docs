@@ -1,0 +1,7 @@
+= What's Next?
+
+Congratulations! You have built a full-stack web application and learned basic concepts and techniques of the TODO.
+
+Below are some recommendations on the next steps:
+
+TODO
