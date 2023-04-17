@@ -12,10 +12,80 @@ Make sure your computer meets the following requirements:
 
 * Hard drive free space – at least 20 GB.
 
+[[software]]
+== Install the Necessary Software
+
+Make sure you have the following software installed:
+
+ * IntelliJ IDEA 2022.3.3 or newer
+ * Node.js 16.20.0 with npm 8.* (using either older or newer versions of Node.js and/or npm is not recommended, since they are not compatible with Amplicode at the moment)
+ * A database engine of your choice, e.g. PostgreSQL (optional)
+
+While downloading and installing IntelliJ IDEA for working with the Amplicode plugin, keep in mind that if you are planning to work with both backend and frontend, you will need the Ultimate edition of the IDE, which is commercial software distributed with a 30-day trial period. If you intend to work with backend only, the Community edition (provided free of charge) will be enough.
+
+You can choose and download the suitable version of IntelliJIDEA by visiting _https://www.jetbrains.com/idea/download/other.html_. This page contains both Community and Ultimate editions of the IDE suitable for various operational systems and dating from 2012 till the present time.
+
+image::setup/intellij-versions.png[align=center]
+
+
+[[nodejs]]
+=== Installing the Correct Version of Node.js and Npm
+
+Currently, in order to work with the Aplicode plugin and be able to create the frontend part of the application you need particular versions of Node.js and npm installed, namely Node.js 16.20.0 with npm 8.*.
+
+In order to check which version of Node.js you have, you can use the following command:
+
+[source, bash]
+ node -v
+
+You can run it in the terminal window of your IDE.
+
+To check the actual version of npm, run the following command:
+
+[source, bash]
+ npm -v
+
+image::setup/npm-version.png[align=center]
+
+If you don't have the software installed or have the wrong versions, you will have to install the correct versions of both Node.js and npm. Failure to do so will make it impossible to create the frontend part of your application.
+
+ * If you have Node.js of another version installed, uninstall it.
+ * Go to _https://nodejs.org/download/release/v16.20.0/_, choose _**node-v16.20.0-x64.msi**_ from the list and download it.
+
+image::setup/nodejs-download.png[align=center]
+ * install the downloaded file.
+
+This distribution already contains the necessary version of npm. However, if you already have the correct version of Node.js and only need to change the version of npm to 8, you can run the following command in the terminal (make sure you have administrator's rights or use _**sudo**_ if you are working under Linux):
+
+[source, bash]
+npm -g install npm@8
+
+Now you have all the necessary prerequisites for using the Amplicode plugin.
+
 [[studio]]
 == Install Amplicode Studio
 
-TODO
+To install the Amplicode plugin from disk execute the following steps:
+
+ * In your current IntelliJ IDEA IDE click *File* -> *Settings* in the main menu.
+
+image::setup/file-settings.png[align=center]
+
+ * In the popup window that opens select *Plugins*.
+
+image::setup/plugins.png[align=center]
+
+ * Click on the "Gear" pictogram image:setup/gear.png[align=center] at the top of the window and select *"Install Plugin from Disk"* in the menu that opens.
+
+image::setup/install-from-disk.png[align=center]
+
+ * Choose the Amplicode archive from the file tree on your hard drive.
+
+image::setup/file-tree.png[align=center]
+
+Once the installation of the plugin is completed, click the *"Restart IDE"* button to complete the procedure.
+
+image::setup/restart-ide.png[align=center]
 
 [[jdk]]
 == Install Java Development Kit (JDK)
