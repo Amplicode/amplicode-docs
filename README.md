@@ -12,4 +12,4 @@ This repository contains documentation for all [Amplicode](https://amplicode.io)
   npx antora antora-playbook.yml
   ```
 
-* Open `amplicode-docs/build/site/index.html` in a web browser.
+* Open `.//amplicode-docs/build/site/index.html` in a web browser.
