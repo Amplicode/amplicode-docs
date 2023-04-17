@@ -50,7 +50,7 @@ image::setup/npm-version.png[align=center]
 If you don't have the software installed or have the wrong versions, you will have to install the correct versions of both Node.js and npm. Failure to do so will make it impossible to create the frontend part of your application.
 
  * If you have Node.js of another version installed, uninstall it.
- * Go to _https://nodejs.org/download/release/v16.20.0/_, choose _**node-v16.20.0-x64.msi**_ from the list and download it.
+ * Go to _https://nodejs.org/download/release/v16.20.0/_, choose the file that corresponds to your OS from the list and download it.
 
 image::setup/nodejs-download.png[align=center]
  * install the downloaded file.
@@ -90,8 +90,6 @@ image::setup/restart-ide.png[align=center]
 [[jdk]]
 == Install Java Development Kit (JDK)
 
-**TODO**
-
 Download JDK version 17 (for example, https://adoptium.net[Eclipse Temurin^] or https://bell-sw.com/pages/downloads[Liberica^] JDK) and install it to a directory suggested by the installer. This is enough for creating and running applications from the IDE.
 
 To run Amplicode applications from the terminal, set `JAVA_HOME` environment variable as described below.
@@ -125,8 +123,6 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/liberica-jdk-17.jdk/Contents
 
 The command should return the Java version, e.g. `17.0.6`.
 --
-
-CAUTION: If you connect to the internet via a proxy server, some Java system properties must be passed to the JVM running development tools and Gradle. xref:studio:install.adoc#working-behind-proxy[Configure] these properties using Jmix Studio.
 
 [[Troubleshooting]]
 == Troubleshooting
