@@ -1,0 +1,95 @@
+= 2. Data Model
+
+Once the project is created and a database connection set up, the next step is to create the data model.
+
+We will start with creating the Doctor entity.
+
+In the left-side panel, right-click _src_ -> _main_ -> _java_ -> _com.company.doctorsdemo_ and select *_New_* -> *_Package_*. This way we will separate the entities from each other by placing them in different packages.
+
+image::new-package.png[align=center]
+
+A window will pop up. Name the new package "_doctor_" and press *_Enter_*.
+
+image::new-package-naming.png[align=center]
+
+Now, right-click the newly created folder and select *_New_* -> *_JPA Entity_*.
+
+image::new-jpa-entity.png[align=center]
+
+In the popup window put *_"Doctor"_* into the *_"Name"_* field, select *_"Long"_* from the "Id" drop-down and select the *_"Identity"_* radio button for *_"Id generation"_*.
+
+image::entity-completion.png[align=center]
+
+Click "Ok". The Amplicode plugin will generate a new .java file containing a standard class for the new entity.
+
+image::doctor-java-class.png[align=center]
+
+Besides, now we have a *_"Designer"_* tab added. Let us click on it and see what it offers.
+
+image::designer.png[align=center]
+
+The upper part of the Designer panel is called a *_Palette_*; the lower one is an *_Inspector_*. The Palette contains all possible actions that can be carried out with the entities, and the Inspector allows us to view and edit the properties of the selected component.
+
+These tools will help us add the attributes to the *_"Doctor"_* entity.
+
+Right-click *_Attribute_* -> *_Basic Type_* and select *_"Add to Source"_*.
+
+image::add-to-source.png[align=center]
+
+Put *_"firstName"_* into the *_"Name"_* field and check the *_"Mandatory"_* checkbox. Click *_"Ok"_*.
+
+image::firstname.png[align=center]
+
+Now we can use the Inspector to finish setting up the *_firstName_* attribute. We will carry out the following
+actions:
+
+ * Limit the maximum length of the String to 127
+
+image::length-limit.png[align=center]
+
+ * Make the attribute a *_Not Null_*
+
+image::not-null.png[align=center]
+
+ * Set the minimum length of the String to 2.
+
+image::min-length.png[align=center]
+
+Repeat the same step to create the *_lastName _* attribute.
+
+The last attribute we need, *_specialty_*, is an Enum, and it will require a slightly different procedure.
+Right-click the "Doctor" entity in the project tree and select *_New_* -> *_Java Class_*.
+
+image::new-enum.png[align=center]
+
+Select *_Enum_* in the popup window.
+
+image::enum.png[align=center]
+
+Type *_"Specialty"_* in the *_"Name"_* field above. Press *_Enter_*.
+
+image::specialty.png[align=center]
+
+IntelliJ IDEA will create an empty class for the new ENUM.
+
+image::enum-template.png[align=center]
+
+Fill it in as shown below. You can copy and paste the code directly from this page.
+
+[source,java]
+public enum Specialty {
+    GP,
+    ALLERGY_AND_IMMUNOLOGY,
+    DERMATOLOGY,
+    OPHTALMOLOGY,
+    NEUROLOGY,
+    PSYCHIATRY
+}
+
+Now we need to turn this Enum into a new attribute for the *_Doctor_* entity.
+
+Double-click the *_"Doctor"_* entity in the project tree to return to the Doctor.java file, then  select *_Attribute_* -> *_Enum_* -> *_Add to Source_* from the Palette.
+
+image::enum-attribute.png[align=center]
+
+Select *_"Specialty"_* from the Type drop-down list and check the *_"Mandatory"_* checkbox. Click *_"Ok"_*. Amplicode will generate the necessary source code.

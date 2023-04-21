@@ -5,9 +5,69 @@ In this chapter you will go through a few simple steps to set up a new project. 
 [[dev-env]]
 == Setting Up Development Environment
 
-TODO
+Visit the general xref:ROOT:setup.adoc[] page to see if you have all prerequisites set that are necessary for the tutorial. Notice that though we mention PostgreSQL as optional in the general scheme of things, it will be mandatory for this tutorial and needs to be installed.
 
 [[create-project]]
 == Creating Project
 
-TODO
+In this section you will learn how to create a new Amplicode-based project from a template and how to set up a database connection.
+
+ * If you have another project open in your IntelliJIdea, close it.
+
+ * Click the _**New Project**_ button in the upper right corner.
+
+image::new-project.png[align=center]
+
+ * Select "Amplicode Project" from the left-side menu.
+
+image::amplicode-project.png[align=center]
+
+ * Choose the template version. For now, it should be 0.2.3-SNAPSHOT, since newer versions are still work in progress.
+
+image::template-version.png[align=center]
+
+ * Click _**"Next"**_.
+
+ * Choose _"Amplicode Java project (Maven)"_ from the list of templates.
+
+image::java-maven.png[align=center]
+
+* Click _**"Next"**_.
+
+* Name the project. In our case the name will be _doctorsdemo_.
+
+image::doctorsdemo.png[align=center]
+
+* Click _**"Create"**_.
+
+Now Amplicode will automatically generate the new project and open it in IntelliJIDEA.
+
+[[set-database]]
+=== Setting Up a Database Connection
+
+The first thing we are going to do in this new project will be changing the database engine from the default H2 to the much more powerful and flexible PostgreSQL.
+
+First of all, create a new PostgreSQL database in your pgAdmin or, alternatively, using the terminal. After that, return to IntelliJ IDEA.
+
+Choose *Data Sources* -> *DataSource* on the right-side toolbar provided by Amplicode, right-click it and click on Edit Datasource.
+
+image::editdatasource.png[align=center]
+
+A popup window will appear:
+
+image::editingdatasource.png[align=center]
+
+In this window, set the DB Type to PostgreSQL, enter the database name and set the User and Password fields according to the settings you have in your database.
+
+Click _**"Test Connection"**_.
+If the connection was successful, you should see the following result:
+
+image::connectionsuccessful.png[align=center]
+
+If this is what you see, you just need to click "OK" (twice), and the database connection will be set up.
+
+However, if the connection test has failed, you will probably see the following:
+
+image::connectionfailed.png[align=center]
+
+In this case you will need to visit https://www.jetbrains.com/help/idea/postgresql.html[this page] on the JetBrains website and follow the steps described there. Then repeat the "Edit Datasource" procedure. It should work this time.
