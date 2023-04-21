@@ -18,12 +18,11 @@ Make sure your computer meets the following requirements:
 Make sure you have the following software installed:
 
  * IntelliJ IDEA 2022.3.3 or newer
- * Node.js 16.20.0 with npm 8.* (using either older or newer versions of Node.js and/or npm is not recommended, since they are not compatible with Amplicode at the moment)
- * A database engine of your choice, e.g. PostgreSQL (optional)
+ * Node.js 16.20.0 with npm 8.* (using either older or newer versions of Node.js and/or npm is not recommended, since they are not compatible with Amplicode at the moment).
 
 While downloading and installing IntelliJ IDEA for working with the Amplicode plugin, keep in mind that if you are planning to work with both backend and frontend, you will need the Ultimate edition of the IDE, which is commercial software distributed with a 30-day trial period. If you intend to work with backend only, the Community edition (provided free of charge) will be enough.
 
-You can choose and download the suitable version of IntelliJIDEA by visiting _https://www.jetbrains.com/idea/download/other.html_. This page contains both Community and Ultimate editions of the IDE suitable for various operational systems and dating from 2012 till the present time.
+You can choose and download the suitable version of IntelliJIDEA by visiting https://www.jetbrains.com/idea/download/other.html[JetBrains website]. This page contains both Community and Ultimate editions of the IDE suitable for various operational systems.
 
 image::setup/intellij-versions.png[align=center]
 
@@ -31,7 +30,7 @@ image::setup/intellij-versions.png[align=center]
 [[nodejs]]
 === Installing the Correct Version of Node.js and Npm
 
-Currently, in order to work with the Aplicode plugin and be able to create the frontend part of the application you need particular versions of Node.js and npm installed, namely Node.js 16.20.0 with npm 8.*.
+Currently, in order to work with the Amplicode plugin and be able to create the frontend part of the application you need particular versions of Node.js and npm installed, namely Node.js 16.* with npm 8.*.
 
 In order to check which version of Node.js you have, you can use the following command:
 
@@ -53,7 +52,7 @@ If you don't have the software installed or have the wrong versions, you will ha
  * Go to _https://nodejs.org/download/release/v16.20.0/_, choose the file that corresponds to your OS from the list and download it.
 
 image::setup/nodejs-download.png[align=center]
- * install the downloaded file.
+ * Install the downloaded file.
 
 This distribution already contains the necessary version of npm. However, if you already have the correct version of Node.js and only need to change the version of npm to 8, you can run the following command in the terminal (make sure you have administrator's rights or use _**sudo**_ if you are working under Linux):
 
@@ -65,13 +64,13 @@ Now you have all the necessary prerequisites for using the Amplicode plugin.
 [[studio]]
 == Install Amplicode Studio
 
-To install the Amplicode plugin from disk execute the following steps:
+To install the Amplicode plugin from disk, execute the following steps:
 
  * In your current IntelliJ IDEA IDE click *File* -> *Settings* in the main menu.
 
 image::setup/file-settings.png[align=center]
 
- * In the popup window that opens select *Plugins*.
+ * Select *Plugins* in the popup window.
 
 image::setup/plugins.png[align=center]
 
@@ -83,9 +82,25 @@ image::setup/install-from-disk.png[align=center]
 
 image::setup/file-tree.png[align=center]
 
+Click *_"OK"_*.
+
+IntelliJ IDEA will ask you to accept responsibility for installing a third party plugin.
+
+image::setup/third-party.png[align=center]
+
+Click *_"Accept"_*.
+
+Since you will need the GraphQL plugin to work with Amplicode, the software will ask you to install it.
+
+image::setup/graphql.png[align=center]
+
+Click *_"Install"_*. The software will proceed to install the GraphQL plugin and then Amplicode. There will be no more prompts.
+
 Once the installation of the plugin is completed, click the *"Restart IDE"* button to complete the procedure.
 
 image::setup/restart-ide.png[align=center]
+
+If the software asks to confirm IDE restart, click *_"Restart"_*.
 
 [[jdk]]
 == Install Java Development Kit (JDK)
