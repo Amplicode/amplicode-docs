@@ -1,8 +1,11 @@
 = 2. Data Model
 
-Once the project is created and a database connection set up, the next step is to create the data model.
+Once the project is created, the next step is to create the data model.
 
-We will start with creating the Doctor entity.
+[[entities]]
+== Creating Entities
+
+We will start with creating the *_Doctor_* entity.
 
 In the left-side panel, right-click _src_ -> _main_ -> _java_ -> _com.company.doctorsdemo_ and select *_New_* -> *_Package_*. This way we will separate the entities from each other by placing them in different packages.
 
@@ -93,3 +96,133 @@ Double-click the *_"Doctor"_* entity in the project tree to return to the Doctor
 image::enum-attribute.png[align=center]
 
 Select *_"Specialty"_* from the Type drop-down list and check the *_"Mandatory"_* checkbox. Click *_"Ok"_*. Amplicode will generate the necessary source code.
+
+Now we need to create the *_Patient_* entity. In order to do this, simply repeat all the steps you've just done for the Doctor entity, starting with the new package, but excluding the Enum creation, since a patient doesn't have a specialty. For a patient we only need the firstName and lastName attributes.
+
+image::patient-class.png[align=center]
+
+Now we need an *_Appointment_* entity to complete our data model. Create the *_appointment_* package and the *_Appointment_* JPA Entity inside it as you did for the previous two entities.
+
+image::appointment-entity.png[align=center]
+
+This entity needs two attributes - patient and doctor - which are actually references to our two preciously created classes. In order to create these attributes we will have to edit the source code of the new Java class directly.
+
+Go to Appointment.java source code file and type:
+
+[source, java]
+private Doctor doctor;
+
+IntelliJ IDEA will prompt you to click _Alt+Enter_ and a popup window will appear. It will ask you to create either *_"Many to One"_* or *_"One to One"_* relationship between the entities.
+
+image::many-to-one.png[align=center]
+
+Select *_Many to One_*. Amplicode will generate the necessary annotations and the getter/setter code for the *_doctor_* variable.
+
+image::private-doctor.png[align=center]
+
+Repeat the same steps for the *_"Patient"_*. The resulting source code of the *_Appointment.java_* class should look like this:
+
+[source, java]
+----
+package com.company.doctorsdemo.appointment;
+
+import com.company.doctorsdemo.doctor.Doctor;
+import com.company.doctorsdemo.patient.Patient;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "appointment")
+public class Appointment {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name = "id", nullable = false)
+private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+}
+----
+
+Feel free to copy and paste this block of code into your application if you are having difficulties generating it.
+
+Put your cursor on the "doctor" variable in the source code. Change the *_Fetch type_* from _EAGER_ to _LAZY_ in the Inspector. Make the attribute Mandatory and NotNull.
+
+image::lazy.png[align=center]
+
+image::mandatory.png[align=center]
+
+These changes will also be reflected in the source code.
+
+Now we need to create the remaining attributes. Since they are not associations, we will once again use Amplicode's wizards to create them.
+
+Select *_Attribute_* -> *_Basic Type_* -> .*_Add to Source_*, fill in the fields as shown on the image below and click "Ok".
+
+image::time.png[align=center]
+
+In the Inspector make this field *_NotNull_* and *_Future_* (appointments cannot be booked for the past).
+
+image::time-validations.png[align=center]
+
+For the status attribute create a new Enum. Your Status.java class should look like this:
+
+[source, java]
+----
+package com.company.doctorsdemo.appointment;
+
+public enum Status {
+    PENDING,
+    MISSED,
+    IN_PROGRESS,
+    CANCELLED,
+    FINISHED
+}
+----
+
+Return to the Appointment.java class and create the *_status_* attribute.
+
+image::status-enum.png[align=center]
+
+Make it a NotNull in the Inspector.
+
+Lastly, we create the "duration" attribute, which means the duration of the appointment in minutes.
+
+It is a Basic Type attribute with the Integer type. It should also be mandatory.
+
+image::duration.png[align=center]
+
+Make it NotNull and Positive in the Inspector.
+
+image::duration-validations.png[align=center]
+
+[[database-schema]]
+== Database Schema Synchronization

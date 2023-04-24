@@ -40,5 +40,5 @@ image::doctorsdemo.png[align=center]
 
 * Click _**"Create"**_.
 
-Now Amplicode will automatically generate the new project and open it in IntelliJIDEA.
+Now Amplicode will automatically generate the new project and open it in IntelliJ IDEA.
 
