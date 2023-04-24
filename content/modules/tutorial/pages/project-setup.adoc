@@ -42,32 +42,3 @@ image::doctorsdemo.png[align=center]
 
 Now Amplicode will automatically generate the new project and open it in IntelliJIDEA.
 
-[[set-database]]
-=== Setting Up a Database Connection
-
-The first thing we are going to do in this new project will be changing the database engine from the default H2 to the much more powerful and flexible PostgreSQL.
-
-First of all, create a new PostgreSQL database in your pgAdmin or, alternatively, using the terminal. After that, return to IntelliJ IDEA.
-
-Choose *Data Sources* -> *DataSource* on the right-side toolbar provided by Amplicode, right-click it and click on Edit Datasource.
-
-image::editdatasource.png[align=center]
-
-A popup window will appear:
-
-image::editingdatasource.png[align=center]
-
-In this window, set the DB Type to PostgreSQL, enter the database name and set the User and Password fields according to the settings you have in your database.
-
-Click _**"Test Connection"**_.
-If the connection was successful, you should see the following result:
-
-image::connectionsuccessful.png[align=center]
-
-If this is what you see, you just need to click "OK" (twice), and the database connection will be set up.
-
-However, if the connection test has failed, you will probably see the following:
-
-image::connectionfailed.png[align=center]
-
-In this case you will need to visit https://www.jetbrains.com/help/idea/postgresql.html[this page] on the JetBrains website and follow the steps described there. Then repeat the "Edit Datasource" procedure. It should work this time.

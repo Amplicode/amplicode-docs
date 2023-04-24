@@ -16,7 +16,7 @@ The application will simulate the work of a clinic portal offering patients a se
 
 Through the step-by-step application building process the tutorial will demonstrate how to use Amplicode to create the backend part of the application, including entities, repositories, controllers and organize work with the database. We will then implement the business logic and demonstrate how to work with the frontend part by creating a simple CRUD screen and setting up the necessary connection between backend and frontend.
 
-The application will make use of several types of data. The tutorial will also demonstrate how to switch from the default database engine to the more powerful PostgreSQL.
+The application will make use of several types of data: String, Integer, LocalDateTime, and Enum.
 
 [[data-model]]
 === Data Model
@@ -25,13 +25,10 @@ In most cases it is necessary to design the data model before starting to develo
 
 image::data-model.png[align=center]
 
-The User is the entity that contains user's login and other information, such as first name and last name. The user can be a patient or an admin. Patients can book appointments with doctors and cancel them if necessary, and admins have full access to all data and are allowed to make any changes to any entities.
+The Patient is the entity that contains Patient's  information, such as first name and last name.
 
-The Doctor is an entity that includes available information about every doctor that allows patients to make their choice and book appointments. A doctor is __**not **__a user.
+The Doctor is an entity that includes available information about every doctor that can be used to book appointments.
 
-Finally, an Appointment connects users with doctors and also contains additional information about every appointment, such as the time slot chosen, the status and the duration.
+Finally, an Appointment connects patients with doctors and also contains additional information about every appointment, such as the time slot chosen, the status and the duration.
 
-[[user-roles]]
-=== User Roles
 
-A User can have two roles: a patient or an admin. A patient can book appointments, view his/her own appointments and cancel them if necessary. An admin can see all appointments, edit them and cancel them, if necessary. An admin can also create appointments for any user.
