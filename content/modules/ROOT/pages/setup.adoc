@@ -18,11 +18,11 @@ Make sure your computer meets the following requirements:
 Make sure you have the following software installed:
 
  * IntelliJ IDEA 2022.3.3 or newer
- * Node.js 16.20.0 with npm 8.* (using either older or newer versions of Node.js and/or npm is not recommended, since they are not compatible with Amplicode at the moment).
+ * Node.js 16.* with npm 8.* (using either older or newer versions of Node.js and/or npm is not recommended, since they are not compatible with Amplicode at the moment).
 
 While downloading and installing IntelliJ IDEA for working with the Amplicode plugin, keep in mind that if you are planning to work with both backend and frontend, you will need the Ultimate edition of the IDE, which is commercial software distributed with a 30-day trial period. If you intend to work with backend only, the Community edition (provided free of charge) will be enough.
 
-You can choose and download the suitable version of IntelliJIDEA by visiting https://www.jetbrains.com/idea/download/other.html[JetBrains website]. This page contains both Community and Ultimate editions of the IDE suitable for various operational systems.
+You can choose and download the suitable version of IntelliJ IDEA by visiting https://www.jetbrains.com/idea/download/other.html[JetBrains website]. This page contains both Community and Ultimate editions of the IDE suitable for various operational systems.
 
 image::setup/intellij-versions.png[align=center]
 
