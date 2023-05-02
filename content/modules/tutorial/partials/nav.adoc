@@ -1,4 +1,6 @@
 * xref:tutorial:index.adoc[]
 ** xref:tutorial:project-setup.adoc[]
 ** xref:tutorial:data-model.adoc[]
+** xref:tutorial:repository-creation.adoc[]
+** xref:tutorial:customization.adoc[]
 ** xref:tutorial:next.adoc[]

@@ -46,10 +46,6 @@ image::firstname.png[align=center]
 Now we can use the Inspector to finish setting up the *_firstName_* attribute. We will carry out the following
 actions:
 
- * Limit the maximum length of the String to 127
-
-image::length-limit.png[align=center]
-
  * Make the attribute a *_Not Null_*
 
 image::not-null.png[align=center]
@@ -77,7 +73,7 @@ IntelliJ IDEA will create an empty class for the new ENUM.
 
 image::enum-template.png[align=center]
 
-Fill it in as shown below. You can copy and paste the code directly from this page.
+Fill it in as shown below. To save time, you can copy and paste the code directly from this page.
 
 [source,java]
 public enum Specialty {
@@ -95,93 +91,41 @@ Double-click the *_"Doctor"_* entity in the project tree to return to the Doctor
 
 image::enum-attribute.png[align=center]
 
-Select *_"Specialty"_* from the Type drop-down list and check the *_"Mandatory"_* checkbox. Click *_"Ok"_*. Amplicode will generate the necessary source code.
+Select *_"Specialty"_* from the Type drop-down list and check the *_"Mandatory"_* checkbox. Change *_Enum type_* to *_STRING_*. Click *_"Ok"_*. Amplicode will generate the necessary source code.
 
-Now we need to create the *_Patient_* entity. In order to do this, simply repeat all the steps you've just done for the Doctor entity, starting with the new package, but excluding the Enum creation, since a patient doesn't have a specialty. For a patient we only need the firstName and lastName attributes.
+image::enum-attribute-creation.png[align=center]
+
+Now we need to create the *_Patient_* entity. In order to do this, simply repeat all the steps you've just done for the Doctor entity, starting with the new package, but excluding the *_Enum_*-related part, since a patient doesn't have a specialty. For a patient we only need the firstName and lastName attributes.
 
 image::patient-class.png[align=center]
 
-Now we need an *_Appointment_* entity to complete our data model. Create the *_appointment_* package and the *_Appointment_* JPA Entity inside it as you did for the previous two entities.
+The next step is to create an *_Appointment_* entity to complete our data model. Create the *_appointment_* package and the *_Appointment_* JPA Entity inside it as you did for the previous two entities.
 
 image::appointment-entity.png[align=center]
 
-This entity needs two attributes - patient and doctor - which are actually references to our two preciously created classes. In order to create these attributes we will have to edit the source code of the new Java class directly.
+This entity needs two attributes - patient and doctor - which are actually references to our two preciously created classes. In order to create these attributes we will have to use the Association attribute type.
 
-Go to Appointment.java source code file and type:
+Select Attributes -> Association -> Add to Source.
 
-[source, java]
-private Doctor doctor;
+image::association-create.png[align=center]
 
-IntelliJ IDEA will prompt you to click _Alt+Enter_ and a popup window will appear. It will ask you to create either *_"Many to One"_* or *_"One to One"_* relationship between the entities.
+Select *_"Doctor"_* from the *_"Type"_* drop-down box, leave the *_"Cardinality"_* with the default value of *_"Many to One"_* and click the *_"Mandatory"_* check box. Click *_"OK"_*.
 
 image::many-to-one.png[align=center]
 
-Select *_Many to One_*. Amplicode will generate the necessary annotations and the getter/setter code for the *_doctor_* variable.
+Amplicode will generate the necessary code for the *_doctor_* variable.
 
 image::private-doctor.png[align=center]
 
-Repeat the same steps for the *_"Patient"_*. The resulting source code of the *_Appointment.java_* class should look like this:
-
-[source, java]
-----
-package com.company.doctorsdemo.appointment;
-
-import com.company.doctorsdemo.doctor.Doctor;
-import com.company.doctorsdemo.patient.Patient;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name = "appointment")
-public class Appointment {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name = "id", nullable = false)
-private Long id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-}
-----
-
-Feel free to copy and paste this block of code into your application if you are having difficulties generating it.
-
-Put your cursor on the "doctor" variable in the source code. Change the *_Fetch type_* from _EAGER_ to _LAZY_ in the Inspector. Make the attribute Mandatory and NotNull.
+Put your cursor on the "doctor" variable in the source code. Change the *_Fetch type_* from _EAGER_ to _LAZY_ in the Inspector. Make the attribute NotNull.
 
 image::lazy.png[align=center]
 
 image::mandatory.png[align=center]
 
-These changes will also be reflected in the source code.
+These changes will be reflected in the source code.
+
+Repeat exactly the same steps for the *_"Patient"_*.
 
 Now we need to create the remaining attributes. Since they are not associations, we will once again use Amplicode's wizards to create them.
 
@@ -193,12 +137,10 @@ In the Inspector make this field *_NotNull_* and *_Future_* (appointments cannot
 
 image::time-validations.png[align=center]
 
-For the status attribute create a new Enum. Your Status.java class should look like this:
+For the status attribute create a new Enum. Set the Enum type to ORDINAL. Add the possible values (you can copy and paste the code below):
 
 [source, java]
 ----
-package com.company.doctorsdemo.appointment;
-
 public enum Status {
     PENDING,
     MISSED,
@@ -224,5 +166,32 @@ Make it NotNull and Positive in the Inspector.
 
 image::duration-validations.png[align=center]
 
-[[database-schema]]
-== Database Schema Synchronization
+We are also going to need another attribute, *_endTime_*, but it will be calculated from *_startTime_* and *_duration_*. It will be necessary to check for possible conflicting appointments, since our application will be programmed to be able to reject conflicting appointments.
+
+Select *_Attributes_* ->*__ Basic Type__* -> *_Add to Source_*, then from the *_"Type"_* drop-down box select *_LocalDateTime_*, the same way as we did for **__startTim__**e, name the new attribute *_"endTime"_*
+and click *_"OK"_*.
+
+image::endTime.png[align=center]
+
+This attribute doesn't have to be designated as Mandatory.
+
+For calculated attributes we will need another Pallette entry named *_"Lifecycle Callbacks"_*.
+
+image::callbacks.png[align=center]
+
+In this particular case we need only one callback called *_"PrePersist"_*. Double-click it, and Amplicode will create an empty method for calculations.
+
+image::prepersist.png[align=center]
+
+To calculate endTime we need to add duration in minutes to startTime. The Java code to do it looks as follows:
+
+[source, java]
+----
+@PrePersist
+    public void prePersist() {
+        if (startTime != null)
+            endTime = startTime.plusMinutes(duration);
+    }
+----
+
+The implementation of our data model has been completed.

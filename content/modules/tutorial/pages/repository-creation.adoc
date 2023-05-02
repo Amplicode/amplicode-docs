@@ -1,0 +1,108 @@
+= 3. Repositories and Controllers
+
+[[database-access]]
+== Database Access
+
+In Amplicode all access to relational databases is implemented via *Spring Data* repositories.  Now we are going to create repositories to work with our freshly created entities.
+
+[[repository-creation]]
+== Creating Repositories
+
+In order to do this, we need to execute the following steps:
+
+ * Switch from "Designer" to "Structure" in the upper Amplicode menu
+
+ * Click on the "+" pictogram
+
+image::add-repository.png[align=center]
+
+ * Click "Spring Data JPA Repository"
+
+image::spring-data-jpa-rep.png[align=center]
+
+ * Switch from *_"Single"_* to *_"Bulk"_*, then check the necessary entity checkboxes and the *_"Criteria API specification"_* checkbox.
+
+image::bulk-creation.png[align=center]
+
+ * click *_"OK"_*.
+
+All repositories will appear in the same directory in the project tree.
+
+image::same-package.png[align=center]
+
+Use drag-and-drop to move repositories to different packages according to their names. When the system asks you to confirm the move, click "Refactor".
+
+image::refactor.png[align=center]
+
+The correct tree should look like this:
+
+image::different-packages.png[align=center]
+
+[[database-update]]
+== Updating the Database Structure
+
+In order to ensure that the database will automatically update itself according to our changes of the data model, we will use the Hibernate setting called *_"Spring Data JPA"_*.
+
+Select *_Configurations_* -> *_Spring Data JPA_*, right click it and click *_"Configure"_*. Then, in the popup window, set *_"Auto DDL"_* to *_"update"_*.
+
+image::update-database.png[align=center]
+
+Click *_"Next"_*, then click *_"Finish"_*.
+
+For real-life applications we recommend using the Liquibase library for this purpose. The Liquibase library is configured in every Applicode application. But for the purpose of this tutorial we have used the simpler, faster option described above.
+
+== Creating CRUD Controllers
+
+[[crud-controllers]]
+
+Now we can create the API for our backend application. Amplicode uses *_Spring GraphQL controllers_* as API. Amplicode allows us to create a controller covering all simple CRUD operations via a wizard.
+
+Let us start with the *_Patient_* entity. Right-click the *_patient_* package in the project tree and select *_New_* -> *_Spring GraphQL Controller_*.
+
+In the *_Data repository_* drop-down box select *_PatientRepository_*.
+
+image::patient-repository.png[align=center]
+
+Expand the collapsible blocks at the bottom of the form. In *_"Pagination And Sorting"_* check the *_"Pagination"_* checkbox and add *_firstName_* and *_lastName_* in *_"Fields for sorting"_*.
+
+In *_"Filtering"_* add new attributes using the *_"+"_* pictogram amd select *_firstName, contains, IgnoreCase_* and *_lastName, contains, IgnoreCase_* as two filtering attributes as shown on the picture below. Click *_"OK"_*.
+
+image::sorting-filtering.png[align=center]
+
+A new Java class will be created that contains all code necessary to support four basic CRUD operations.
+
+Repeat the same steps for *_Doctor_*.
+
+For the Appointment entity a few things will be different.
+
+To begin with, we uncheck repository methods *_"save"_* and *_"delete"_*. They will later be replaced with customized methods.
+
+image::appointment-repository.png[align=center]
+
+Pagination will be enabled as for the two other entities, but for sorting we choose *_doctor.firstName_*, *_patient.firstName_* and *_startTime_*.
+
+For filtering, we add the following constructions:
+
+ * _**doctor.lastName, contains, IgnoreCase**_
+ * _**patient.lastName, contains, IgnoreCase**_
+ * _**startTime, >=**_
+ * _**startTime, <**_.
+
+image::appointment-filtering.png[align=center]
+
+[[schema-update]]
+== Updating GraphQL schema
+
+In the right-hand side of the screen where the Amplicode tools are located (the "Structure" tab) expand the "GraphQL" section.
+
+image::graphql-schema.png[align=center]
+
+Right-click "Schema", then "schema.graphqls" and click the "Update" pictogram in the upper toolbar. The source code of the file will change to reflect the alterations we have done to the project, such as requests, mutations, data types and so on.
+
+image::update-schema.png[align=center]
+
+At this stage we can run the backend application to check if we have any errors. Click the "Run" pictogram in IntelliJ IDEA's own toolbar in the top right corner.
+
+image::run.png[align=center]
+
+If the application doesn't contain any error, it will run successfully.

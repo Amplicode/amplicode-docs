@@ -29,6 +29,6 @@ The Patient is the entity that contains Patient's  information, such as first na
 
 The Doctor is an entity that includes available information about every doctor that can be used to book appointments.
 
-Finally, an Appointment connects patients with doctors and also contains additional information about every appointment, such as the time slot chosen, the status and the duration.
+Finally, an Appointment connects patients with doctors and also contains additional information about every appointment, such as the start time, the status and the duration.
 
 

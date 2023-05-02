@@ -22,7 +22,7 @@ image::new-project.png[align=center]
 
 image::amplicode-project.png[align=center]
 
- * Choose the template version. For now, it should be 0.2.3-SNAPSHOT, since newer versions are still work in progress.
+ * Choose the template version. For now, it should be 0.4.0-SNAPSHOT, since some f the other versions are still work in progress and may generate incorrect code.
 
 image::template-version.png[align=center]
 
@@ -42,3 +42,8 @@ image::doctorsdemo.png[align=center]
 
 Now Amplicode will automatically generate the new project and open it in IntelliJ IDEA.
 
+Please pay attention to the Amplicode panel that will appear on the right side of the IntelliJ IDEA screen.
+
+image::amplicode-panel.png[align=center]
+
+This panel will be actively used in the course of building our demo application, namely, *_"Data Sources"_*, *_"GraphQL"_* and the upper toolbar, from which we will use the "Add New Actions" (image:add-new-actions.png[align=center]) pictogram and the "Regenerate GraphQL Schema" (image:regenerate-graphql.png[align=center]) one. In the future, while actively using the Amplicode plugin, you will doubtless make use of the other tools contained by this panel.
