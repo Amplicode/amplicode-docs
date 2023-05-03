@@ -71,7 +71,9 @@ image::sorting-filtering.png[align=center]
 
 A new Java class will be created that contains all code necessary to support four basic CRUD operations.
 
-Repeat the same steps for *_Doctor_*.
+Repeat the same steps for *_Doctor_*. The only difference will be the *_Specialty_* field. Add it to the Filtering section as shown below:
+
+image::doctor-filtering.png[align=center]
 
 For the Appointment entity a few things will be different.
 
