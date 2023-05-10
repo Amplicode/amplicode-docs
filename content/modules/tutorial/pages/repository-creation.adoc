@@ -99,7 +99,7 @@ In the right-hand side of the screen where the Amplicode tools are located (the 
 
 image::graphql-schema.png[align=center]
 
-Right-click "Schema", then "schema.graphqls" and click the "Update" pictogram in the upper toolbar. The source code of the file will change to reflect the alterations we have done to the project, such as requests, mutations, data types and so on.
+Right-click *_"Schema"_*, then *_"schema.graphqls"_* and click the *_"Regenerate GraphQL Schema"_* pictogram in the upper toolbar. The source code of the file will change to reflect the alterations we have done to the project, such as requests, mutations, data types and so on.
 
 image::update-schema.png[align=center]
 

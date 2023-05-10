@@ -106,7 +106,7 @@ public class AppointmentService {
 }
 ----
 
-Using the *_Designer_* panel mark the new method as *_Transactional_*.
+Using the *_Designer_* panel mark the new class as *_Transactional_*.
 
 image::transactional.png[align=center]
 
