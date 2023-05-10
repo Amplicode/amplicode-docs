@@ -1,0 +1,215 @@
+= Spring Data JPA
+
+== Introduction
+*_Spring Data JPA_* is part of the larger Spring Data family that makes it easy to implement JPA-based repositories quickly. JPA Buddy provides a clear UI for generating repositories, projections, queries, etc.
+
+== Repository Creation
+
+Amplicode provides various ways to create repositories to make working with JPA-related objects more convenient for most users. All possible ways to generate repositories in the project are listed below.
+
+ * Right-click the JPA entity in the project tree, then select *_New_* -> *_Spring Data JPA Repository_*
+
+image::repository-creation-approach1.png[align=center]
+
+ * Use the *_+_* pictogram in the Amplicode Structure panel, then select *_Spring Data JPA Repository_*
+
+image::repository-creation-approach2.png[align=center]
+
+ * Open "Persistence" under "Structure", select the entity, right-click it and select *_New_* -> *_Spring Data JPA Repository_*
+
+image::repository-creation-approach3.png[align=center]
+
+ * Double-click the entity in the project tree, switch to the "Designer" panel and in the Palette use the "Actions" drop-down box. Select "Create JPA Repository"
+
+image::repository-creation-approach4.png[align=center]
+
+[NOTE]
+You can create a Spring Data JPA repository only for an entity with a field annotated with @Id.
+
+In the *_New JPA Repository_* window, you can set:
+
+ * Entity, which the repository will be created for
+ * Class name
+ * Parent class for the repository. It can be:
+ ** Repository from *_org.springframework.data.repository_* package
+ ** Repository from your project
+ * Whether the repository will extend JpaSpecificationExecutor or not
+ * Source root
+ * Package
+
+image::single-creation.png[align=center]
+
+When we have a lot of entities, creating Spring Data repositories one by one becomes a tedious job. With Amplicode, you can speed up this process. To create repositories for JPA entities, you need to take three steps:
+
+ * Select entities in the project tree
+ * Invoke the Amplicode wizard,
+
+image::bulk-creation-2.png[align=center]
+
+ * Adjust your selection.
+
+image::bulk-creation-3.png[align=center]
+
+That's it!
+
+You can also switch from "Single" to "Bulk" directly in the New Spring Data Repository window and then select the entities.
+
+image::bulk-creation.png[align=center]
+
+Once the repositories have been created, you can move them from one package to another in the project tree using the drag-n-drop method. Alternatively, create a separate package for repositories only and type its name in the *_"Package"_* field of the repository creation window. If the package directory doesn't exist, it will be created automatically.
+
+image::bulk-creation-4.png[align=center]
+
+== Structure Repositories
+
+For the most efficient navigation in the project, Amplicode groups all repositories for each entity. It doesn't matter if the repositories for the entity are located in different or in the same project package. All repositories related to the entity will be displayed in the *_"Repositories"_* section. From here, you can quickly move to the repository implementation or create a new one.
+
+image::structure-repositories.png[align=center]
+
+== Queries/Methods Generation
+Spring Data provides the ability to define a query with the *_@Query_* annotation. You can use the *_Palette_* to write them quickly and without any typos.
+
+image::find-collection.png[align=center]
+
+Choose a query type and configure it with a user-friendly UI.
+
+=== Example
+
+[NOTE]
+Everything that we are going to look at in the example below can be generated as @Query or as a derived query method. The only difference is that for the derived query method you can't specify its name. It will be generated automatically according to the Naming Conventions for a Query.
+
+Let's look at an example of creating a Find Collection Query.
+
+image::create-query.png[align=center]
+
+At the top of the window, you can define the wrap type for the collection and the query return type. Moreover, Amplicode allows you to generate a new Projection interface or a DTO class directly from this window (just click on the *_"+"_* button).
+
+You can also specify the method name. Still, if you leave it empty, the name will be generated automatically following the https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation[Naming Conventions] for a Query.
+
+The middle of the window contains the table for the query conditions.
+
+At the bottom of the window you can specify:
+
+ * whether the parameters will be named or not;
+ * whether to use Pageable parameter or not;
+ * and so on.
+
+Finally, you can specify fields by which the query result will be ordered.
+
+For the above configuration, the following query will be generated:
+
+[source, java]
+----
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    @Query("""
+            select distinct c from Customer c
+            where upper(c.firstName) like upper(concat(:firstName, '%')) and upper(c.lastName) like upper(concat('%', :lastName, '%'))""")
+    @Async
+    CompletableFuture<List<Customer>> findCustomer(@Param("firstName") String firstName, @Param("lastName") @NonNull String lastName, Pageable pageable);
+}
+----
+
+=== Entity Intention
+
+Amplicode also provides intention on the entity attributes leading directly to the query/method creation window. Place the cursor on the desired attribute, press *_Alt+Enter_* (or *_Opt+Enter_* on Mac), and click on the *_Create Spring Data repository method_*.
+
+image::intention1.png[align=center]
+
+In the opened window, choose the required type of query/method.
+
+image::intention2.png[align=center]
+
+=== Unresolved Reference
+
+Some developers prefer to declare a call to the method that doesn't exist yet first and  implement it afterwards. Amplicode is fully compatible with this programming style. Just write the desired signature and move to the query or method creation wizard via special actions:
+
+image::unresolved-reference.png[align=center]
+
+== Modifications of existing methods/queries
+
+To configure a method or a query, place a cursor on it and use the *_Inspector_*:
+
+image::query-modification.png[align=center]
+
+=== EntityGraph Support
+
+The *_EntityGraph_* feature has always been one of the most requested features. Entity graphs give us another layer of control over data that needs to be fetched. Amplicode supports them, so you can build graphs using a handy GUI wizard.
+
+Right-click the needed Repository file in the project tree. In the *_Inspector_* find *_Graph_* and click *_"edit"_*.
+
+image::graph-support1.png[align=center]
+
+In the *_"Entity Graph"_* window check and uncheck nested entities according to your requirements.
+
+image::graph-support2.png[align=center]
+
+The depth of nesting can vary, but the *_EntityGraph_* feature will still support the complete graph with all nesting levels. See example below:
+
+image::graph-support3.png[align=center]
+
+== Projection
+
+Sometimes you only need a subset of columns from a table. In such cases, *_Spring Data JPA Projections_* come in handy, letting you return only required fields from queries.
+
+In order to create a projection, click the + icon in the *_Designer_* panel and select *_Spring Data Projection_*.
+
+image::create-projection.png[align=center]
+
+In the *_"New Spring Projection"_* window you can:
+
+ * Define source root and package;
+ * Choose entity class;
+ * Set a name for a projection class;
+ * Select the fields you want to include.
+
+image::new-projection.png[align=center]
+
+Also, Amplicode allows you to generate Projections for the referenced entities. Select the associated entity, choose the Projection type, and pick the required fields.
+
+image::referenced-entities.png[align=center]
+
+For the above configuration the following projection will be generated:
+
+[source, java]
+----
+public interface OrderInfo {
+    Long getId();
+
+    Boolean isIsCompleted();
+}
+----
+
+=== Keep Projections in sync with its JPA entity
+
+As time passes, entities may change, and you need to change projections accordingly. JPA Buddy allows you to synchronize an entity with its projection and vice versa. Read more about this feature in the *DTO Generator* section.
+
+=== Easy Navigation between Entity and its Projections
+
+As soon as Amplicode is able to associate a Projection interface with the entity:
+
+ * The Projection interface will appear in the *_DTOs & Projections_* section in the Structure panel and in the *_Editor Toolbar_*
+
+image::switch-to-projection.png[align=center]
+
+ * The gutter icon will appear in the Projection to ease the navigation to its entity.
+
+image::gutter-icon.png[align=center]
+
+== Auditing Support
+Having auditing in a large application is a crucial aspect. With Amplicode you can effortlessly include commonly used audit fields by utilizing annotations, such as *_@CreatedBy_*, *_@CreatedDate_*, *_@LastModifiedBy_* and *_@LastModifiedDate_*. What's more, Amplicode will notify you if you forget to add the *_@EnableJpaAuditing_* annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity. This leaves even less room for a mistake!
+
+Use the *_"Add Entity Attribute"_* icon in the *_Editor Toolbar_* and select *_"Spring Auditing"_*.
+
+image::auditing1.png[align=center]
+
+We will receive the warning about missing annotations.
+
+image::auditing2.png[align=center]
+
+You can add this annotation manually to the main application file.
+
+image::auditing-enable.png[align=center]
+
+To add AuditingEntityListener it's enough to click on the link provided in the same window.
+
+image::auditing3.png[align=center]

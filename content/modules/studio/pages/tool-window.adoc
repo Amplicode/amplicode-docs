@@ -1,4 +1,4 @@
-= Amplicode Tool Window
+= Amplicode Tool Window and Entity Designer
 
 Once you install Amplicode and create your first Amplicode project, you will find its editor toolbar (1) on the right-hand side of your IntelliJ IDEA window. There will also be an additional toolbar (2) at the upper part of the window containing the source code of the file, as long as you have at least one file opened.
 
