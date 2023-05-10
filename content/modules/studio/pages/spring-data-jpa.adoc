@@ -1,8 +1,10 @@
 = Spring Data JPA
 
+[[introduction]]
 == Introduction
 *_Spring Data JPA_* is part of the larger Spring Data family that makes it easy to implement JPA-based repositories quickly. JPA Buddy provides a clear UI for generating repositories, projections, queries, etc.
 
+[[repository-creation]]
 == Repository Creation
 
 Amplicode provides various ways to create repositories to make working with JPA-related objects more convenient for most users. All possible ways to generate repositories in the project are listed below.
@@ -60,19 +62,22 @@ Once the repositories have been created, you can move them from one package to a
 
 image::bulk-creation-4.png[align=center]
 
+[[structure-repositories]]
 == Structure Repositories
 
 For the most efficient navigation in the project, Amplicode groups all repositories for each entity. It doesn't matter if the repositories for the entity are located in different or in the same project package. All repositories related to the entity will be displayed in the *_"Repositories"_* section. From here, you can quickly move to the repository implementation or create a new one.
 
 image::structure-repositories.png[align=center]
 
-== Queries/Methods Generation
+[[query-method-generation]]
+== Generation of Queries/Methods
 Spring Data provides the ability to define a query with the *_@Query_* annotation. You can use the *_Palette_* to write them quickly and without any typos.
 
 image::find-collection.png[align=center]
 
 Choose a query type and configure it with a user-friendly UI.
 
+[[query-method-generation-example]]
 === Example
 
 [NOTE]
@@ -109,6 +114,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 }
 ----
 
+[[entity-intention]]
 === Entity Intention
 
 Amplicode also provides intention on the entity attributes leading directly to the query/method creation window. Place the cursor on the desired attribute, press *_Alt+Enter_* (or *_Opt+Enter_* on Mac), and click on the *_Create Spring Data repository method_*.
@@ -119,18 +125,21 @@ In the opened window, choose the required type of query/method.
 
 image::intention2.png[align=center]
 
+[[unresolved-reference]]
 === Unresolved Reference
 
 Some developers prefer to declare a call to the method that doesn't exist yet first and  implement it afterwards. Amplicode is fully compatible with this programming style. Just write the desired signature and move to the query or method creation wizard via special actions:
 
 image::unresolved-reference.png[align=center]
 
+[[modification-of-existing]]
 == Modifications of existing methods/queries
 
 To configure a method or a query, place a cursor on it and use the *_Inspector_*:
 
 image::query-modification.png[align=center]
 
+[[entity-graph]]
 === EntityGraph Support
 
 The *_EntityGraph_* feature has always been one of the most requested features. Entity graphs give us another layer of control over data that needs to be fetched. Amplicode supports them, so you can build graphs using a handy GUI wizard.
@@ -147,6 +156,7 @@ The depth of nesting can vary, but the *_EntityGraph_* feature will still suppor
 
 image::graph-support3.png[align=center]
 
+[[projection]]
 == Projection
 
 Sometimes you only need a subset of columns from a table. In such cases, *_Spring Data JPA Projections_* come in handy, letting you return only required fields from queries.
@@ -179,10 +189,12 @@ public interface OrderInfo {
 }
 ----
 
+[[projection-sync]]
 === Keep Projections in sync with its JPA entity
 
 As time passes, entities may change, and you need to change projections accordingly. JPA Buddy allows you to synchronize an entity with its projection and vice versa. Read more about this feature in the *DTO Generator* section.
 
+[[entity-projection-navigation]]
 === Easy Navigation between Entity and its Projections
 
 As soon as Amplicode is able to associate a Projection interface with the entity:
@@ -195,6 +207,7 @@ image::switch-to-projection.png[align=center]
 
 image::gutter-icon.png[align=center]
 
+[[auditing-support]]
 == Auditing Support
 Having auditing in a large application is a crucial aspect. With Amplicode you can effortlessly include commonly used audit fields by utilizing annotations, such as *_@CreatedBy_*, *_@CreatedDate_*, *_@LastModifiedBy_* and *_@LastModifiedDate_*. What's more, Amplicode will notify you if you forget to add the *_@EnableJpaAuditing_* annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity. This leaves even less room for a mistake!
 

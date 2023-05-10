@@ -12,6 +12,7 @@ Amplicode provides the following tool windows:
 
 image::structure.png[align=center]
 
+[[structure]]
 == Structure
 The *_Structure_* tab offers a comprehensive, data-centric view of the project. You can use it for various purposes:
 
@@ -24,6 +25,7 @@ Below, you can see the upper and the lower fragments of the *_Structure_* panel 
 
 image::structure2.png[align=center]
 
+[[palette]]
 == Palette
 The *_Palette_* is located on the Designer tab, in the upper part of the panel. It can look differently in different contexts.
 
@@ -42,6 +44,7 @@ The *_Palette_* provides code-generation wizards for the following:
  * Reverse Engineering
  * Utilities – Equals/HashCode/ToString
 
+[[inspector]]
 == Inspector
 
 The *_Inspector_* is designed to edit existing code: attributes, indexes, queries, etc.
@@ -50,9 +53,7 @@ The *_Inspector_* allows you to configure JPA entities and attributes in it. Cli
 
 image::inspector-properties.png[align=center]
 
-
-
-
+[[hibernate-validations]]
 === Hibernate validations.
 For projects with Hibernate Validations, a section appears with validations that you can apply for the selected attribute:
 
@@ -60,10 +61,12 @@ image::inspector.png[align=center]
 
 Notice that the properties and validations offered by the Inspector depend on the data type of the attribute. For example, the set of properties and validations offered for an Integer attribute will be different from a String attribute, etc...
 
+[[editor-toolbar]]
 == Editor Toolbar
 
 Editor Toolbar contains relevant action depending on the file content. You can find it on top of the editor window.
 
+[[entity-generation]]
 == Entity Generation
 
 To create a new JPA entity, right-click on the desired folder and select New -> JPA Entity (1). Also, you can create a new entity from *_Structure_* (2):
@@ -74,6 +77,7 @@ After that, the following window will appear:
 
 image::new-entity-window.png[align=center]
 
+[[id-generation]]
 === ID and Its Generation Strategy
 
 According to the JPA specification, an ID attribute is required for an entity definition. Amplicode allows you to generate this attribute and choose the type (1) and generation strategy (2). Also, you can specify what sequence to use for the Sequence generation strategy (3).
@@ -102,6 +106,7 @@ The example of the generated Id code is shown below.
     }
 ----
 
+[[hibernate-types]]
 == Hibernate Types & JPA Converters
 
 Amplicode helps you to generate a blank code fragment for a *_JPA Converter_* or a *_Hibernate Custom Type_* via *_Inspector_*:
