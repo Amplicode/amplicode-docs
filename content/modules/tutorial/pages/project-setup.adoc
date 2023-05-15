@@ -1,49 +1,61 @@
 = 1. Project Setup
 
-In this chapter you will go through a few simple steps to set up a new project. You will learn how to navigate the project structure and locate essential components. Once your project is set up, you will be able to run it and explore its pre-built features.
+In this chapter you will go through a few simple steps to set up a new project. Once your project is set up, you will be able to run it and explore its pre-built features.
 
 [[dev-env]]
 == Setting Up Development Environment
 
-Visit the general xref:ROOT:setup.adoc[] page to see if you have all prerequisites set that are necessary for the tutorial. Notice that though we mention PostgreSQL as optional in the general scheme of things, it will be mandatory for this tutorial and needs to be installed.
+Visit the general xref:ROOT:setup.adoc[] page to see if you have all prerequisites set that are necessary for the tutorial.
 
 [[create-project]]
 == Creating Project
 
-In this section you will learn how to create a new Amplicode-based project from a template and how to set up a database connection.
+In this section you will learn how to create a new Amplicode-based project from a template.
 
- * If you have another project open in your IntelliJIdea, close it.
+ * If you have another project open in your IDE, close it.
 
  * Click the _**New Project**_ button in the upper right corner.
 
 image::new-project.png[align=center]
 
- * Select "Amplicode Project" from the left-side menu.
+ * Select *_Amplicode_* from the left-side menu.
 
 image::amplicode-project.png[align=center]
 
- * Choose the template version. For now, it should be 0.4.0-SNAPSHOT, since some f the other versions are still work in progress and may generate incorrect code.
+ * Choose the template version. We recommend using the template version suggested by default.
 
-image::template-version.png[align=center]
+ * Click _**Next**_.
 
- * Click _**"Next"**_.
-
- * Choose _"Amplicode Java project (Maven)"_ from the list of templates.
+ * Choose *_Amplicode Java project (Maven)_* from the list of templates.
 
 image::java-maven.png[align=center]
 
-* Click _**"Next"**_.
+* Click *_Next_*.
 
-* Name the project. In our case the name will be _doctorsdemo_.
+* Name the project. In our case the name will be `doctorsdemo`.
 
 image::doctorsdemo.png[align=center]
 
-* Click _**"Create"**_.
+* Click *_Create_*.
 
-Now Amplicode will automatically generate the new project and open it in IntelliJ IDEA.
+Now Studio will automatically generate the new project and open it in the IDE.
 
-Please pay attention to the Amplicode panel that will appear on the right side of the IntelliJ IDEA screen.
+[[amplicode-panel]]
+== Amplicode Panel
+
+Please pay attention to the *_Amplicode_* tab and the corresponding panel that will appear on the right side of the IDE screen.
 
 image::amplicode-panel.png[align=center]
 
-This panel will be actively used in the course of building our demo application, namely, *_"Data Sources"_*, *_"GraphQL"_* and the upper toolbar, from which we will use the "Add New Actions" (image:add-new-actions.png[align=center]) pictogram and the "Regenerate GraphQL Schema" (image:regenerate-graphql.png[align=center]) one. In the future, while actively using the Amplicode plugin, you will doubtless make use of the other tools contained by this panel.
+This panel will be actively used in the course of building our demo application, namely, *_GraphQL_* and the upper toolbar, from which we will use the *_Add New Actions_* (image:add-new-actions.png[align=center]) and the *_Regenerate GraphQL Schema_* (image:regenerate-graphql.png[align=center]) pictograms. In the future, while actively using the Studio, you will doubtless make use of the other tools included in this panel.
+
+[[summary]]
+== Summary
+In this section, you have set up the development environment and created a new project in the IDE.
+
+You have learned that:
+
+ * Amplicode Studio is a plugin for IntelliJ IDEA.
+ * The tutorial assumes that you have a commercial or trial subscription for IntelliJ IDEA Ultimate Edition.
+ * Studio has a wizard for creating new projects by templates.
+ * Studio has its own toolbars and panels that will help you in the course of developing your project.

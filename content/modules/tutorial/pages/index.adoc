@@ -1,8 +1,8 @@
 = Tutorial
 
-This tutorial introduces you to the essentials of Amplicode by walking you through building a simple full-stack web application. It covers the entire development process, from data modelling to creating UI.
+This tutorial introduces you to the essentials of Amplicode Studio by walking you through building a simple full-stack web application. It covers the entire development process, from data modelling to creating UI. From this moment on, Amplicode Studio will be referred to simply as *_Studio_*.
 
-To get the most out of this tutorial, you should be familiar with Java and relational databases, as well as frontend development basics, such as HTML and TypeScript.
+To get the most out of this tutorial, you should be familiar with Java and relational databases, as well as frontend development basics, such as HTML and TypeScript. We are going to use IntelliJ IDEA (Ultimate edition), which will be referred to as IDE from this moment on.
 
 [[install]]
 == Installation
@@ -12,11 +12,11 @@ Check system requirements and install Amplicode Studio and Java Development Kit 
 [[about-app]]
 == About the Sample Application
 
-The application will simulate the work of a clinic portal offering patients a service for booking appointments with doctors. For the purpose of this tutorial the business logic will be simplified and include only the most important features.
+The application will simulate the work of a clinic website that offers hospital staff a service for booking appointments between patients and doctors. For the purpose of this tutorial, the business logic will be simplified and include only the most important features.
 
-Through the step-by-step application building process the tutorial will demonstrate how to use Amplicode to create the backend part of the application, including entities, repositories, controllers and organize work with the database. We will then implement the business logic and demonstrate how to work with the frontend part by creating a simple CRUD screen and setting up the necessary connection between backend and frontend.
+Through the step-by-step application building process, the tutorial will demonstrate how to use Studio to create the backend part of the application, including entities, repositories and controllers. We will then implement the business logic and demonstrate how to work with the frontend part by creating several simple CRUD screens and setting up the necessary connection between backend and frontend.
 
-The application will make use of several types of data: String, Integer, LocalDateTime, and Enum.
+The application will make use of several types of data: a string, a number, a date and an enumeration.
 
 [[data-model]]
 === Data Model
@@ -25,10 +25,10 @@ In most cases it is necessary to design the data model before starting to develo
 
 image::data-model.png[align=center]
 
-The Patient is the entity that contains Patient's  information, such as first name and last name.
+The `Patient` is the entity that contains patient's  information, such as first name and last name.
 
-The Doctor is an entity that includes available information about every doctor that can be used to book appointments.
+The `Doctor` is an entity that includes available information about every doctor that can be used to book appointments.
 
-Finally, an Appointment connects patients with doctors and also contains additional information about every appointment, such as the start time, the status and the duration.
+Finally, an `Appointment` connects patients with doctors and also contains additional information about every appointment, such as the start time, the status and the duration.
 
 

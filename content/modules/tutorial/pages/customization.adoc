@@ -3,16 +3,22 @@
 [[appointment-creation]]
 == Appointment Creation Customized Business Logic
 
-Until now, we worked from the backend side, and then synchronized the backend code with the GraphQL schema. At the current stage it will be more convenient to modify the schema and then synchronize the alterations with the backend classes.
+Until now, we worked from the backend side, and then regenerated the GraphQL schema to reflect the changes in the backend code. At the current stage we would like to demonstrate that it's also possible to modify the schema and then reflect the alterations in the backend classes.
 
-The changes will be applied to the *_Mutation_* type description in the *_schema.graphqls_* file.
+The changes will be applied to the `Mutation` type description in the `schema.graphqls` file.
 
-Find *_type Mutation_* in the *_schema.graphqls_* file and add the following line to it:
+We are reminding you that you can open the *_schema.graphqls_* file either from the Structure tree or from the IDE's own project tree if you would like to see its code.
+
+image::open-graphqls.png[align=center]
+
+Find the `type Mutation` block in the `schema.graphqls` file and add the following line to it:
 
 [source, java]
-requestAppointment(request: AppointmentRequestInput!) AppointmentRequestResult!
+requestAppointment(request: AppointmentRequestInput!): AppointmentRequestResult!
 
-Then click *_Alt+Enter_* (or use the "red bulb" icon) and add a new *_"AppointmentRequestInput"_* input:
+This line defines a GraphQL mutation named `requestAppointment`, which accepts one mandatory parameter (the fact that it is mandatory is designated with *!*) named `request`  that has the `AppointmentRequestInput` type and has a mandatory response value of the `AppointmentRequestResult` type.
+
+Then press *_Alt+Enter_* (or *_Opt+Enter_* on a Mac, or use the *_red bulb_* icon) and add a new `AppointmentRequestInput` input:
 
 [source, java]
 ----
@@ -32,47 +38,52 @@ input AppointmentRequestInput {
 }
 ----
 
-For *_AppointmentRequestResult_* we need the following code:
+For `AppointmentRequestResult` we need the following code:
 
 [source, java]
 ----
 type AppointmentRequestResult {
-reserved: Boolean!
-appointment: Appointment!
+    reserved: Boolean!
+    appointment: Appointment
 }
 ----
 
-Here, *_reserved_* is a Boolean variable that returns *_true_* if the appointment booking was successful and *_false_* if it failed due to a detected conflict.
+Here, `reserved` is a Boolean attribute that returns `true` if the appointment booking was successful and `false` if it failed due to a detected conflict.
 
-Now we need to adjust the controller. Put your cursor on *_requestAppointment_* in the type mutation description, click Alt+Enter and select Adjust  annotated GraphQL controllers and .
-Now we need to adjust the controller. Put your cursor on *_requestAppointment_* in the type mutation description, click *_Alt+Enter_* and select *_Adjust  annotated GraphQL controllers and DTOs_*.
+[[controller-adjustment]]
+=== Controller Adjustment
+
+Now we need to adjust the controller. Put your cursor on `requestAppointment` in the mutation declaration, press *_Alt+Enter_* (or *_Opt+Enter_* on a Mac) and select *_Adjust  annotated GraphQL controllers and DTOs_*.
 
 image::adjust-controllers.png[align=center]
 
-The following wizard popup window will appear:
+The following dialog window will appear:
 
 image::adjust-controllers-wizard.png[align=center]
 
 In order to adjust the controller the following steps are necessary:
 
- * Check the *_"request"_* checkbox
- * Change the package to *_"appointment"_*
+ * Check the *_request_* checkbox
+ * Change the package to `appointment`
 
 image::change-package.png[align=center]
 
- * Check the *_"AppointmentRequestResult"_* checkbox.
+ * Check the *_AppointmentRequestResult_* checkbox.
 
 image::checkboxes.png[align=center]
 
-* Change the package to *_"appointment"_* the same way as before
- * Scroll down to *_"inputs"_*
- * Check *_doctorId_* and *_patientId_* checkboxes and choose the ID type (*_Java type_* field) for both of them as *_Long_*
+ * Change the package to `appointment` the same way as before
+ * Scroll down to *_Inputs_*
+ * Check `doctorId` and `patientId` checkboxes and choose the ID type (*_Java type_* field) for both of them as `Long`
 
 image::inputs.png[align=center]
 
- * Click *_"OK"_*.
+ * Click *_OK_*.
 
-Amplicode Studio will create new backend elements. Also, in the AppointmentController.java file a new method named "requestAppointment" will appear. It will have to be implemented. At the moment it looks like this:
+[TIP]
+We need to specify a Java type here, because *_ID type_* in the GraphQL schema can correspond to several Java types on the backend, e.g. `Long` or `String`. In this case, we know that both entities (`Patient` and `Doctor`) have Ids with the `Long` type.
+
+Studio will create new backend elements. Also, in the `AppointmentController` class a new annotated handler method named `requestAppointment` will appear. It will have to be implemented. At the moment it looks like this:
 
 [source, java]
 ----
@@ -84,17 +95,20 @@ Amplicode Studio will create new backend elements. Also, in the AppointmentContr
     }
 ----
 
+[[request-appointment]]
+=== Implementation of the requestAppointment Method
+
 In order to implement this method we will create a separate Spring bean.
 
-Right-click the "appointment" package and select New -> Spring Service.
+Right-click the `appointment` package and select *_New_* -> *_Spring Service_*.
 
 image::spring-service.png[align=center]
 
-Change *_Class name_* to *_"AppointmentService"_* and click *_"OK"_*.
+Change *_Class name_* to `AppointmentService` and click *_OK_*.
 
 image::class-name.png[align=center]
 
-A new *_AppointmentService_* class will be generated. Add the following method to the new class:
+A new `AppointmentService` class will be generated. Add the following method to the new class:
 
 [source, java]
 ----
@@ -106,23 +120,25 @@ public class AppointmentService {
 }
 ----
 
-Using the *_Designer_* panel mark the new class as *_Transactional_*.
+Using the Designer panel mark the new method as *_Transactional_*.
 
 image::transactional.png[align=center]
 
-To work with the data we will need a repository.
+This will make the method perform several data access operations, which we are going to implement consistently, in a single database transaction.
+
+To work with the data, we will need a repository.
 
 Right-click *_Autowire_* -> *_Data Access/Repositories_*.
 
 image::autowire.png[align=center]
 
-In the popup window select all three repositories: *_AppointmentRepository_*, *_DoctorRepository_*, *_PatientRepository_* (hold the *_Ctrl_* key to achieve the multi selection).
+In the popup window select all three repositories: `AppointmentRepository`, `DoctorRepository`, `PatientRepository` (hold the *_Ctrl_* key to achieve the multi selection).
 
 image::multiselection.png[align=center]
 
-Click *_"OK"_*.
+Click *_OK_*.
 
-Add the following code to the *_requestAppointment_* method:
+Add the following code to the `requestAppointment` method:
 
 [source, java]
 ----
@@ -136,7 +152,7 @@ Add the following code to the *_requestAppointment_* method:
     }
 ----
 
-Switch to the **__AppointmentRequestResult.java __**file and add two constructors to the *_AppointmentRequestResult_* class, one without arguments and the other one taking *_"reserved"_* (a boolean variable) as an argument. You can use *_Alt+Insert_* for this purpose.
+Switch to the `AppointmentRequestResult` class and add two constructors to it, one without arguments and the other one taking *_reserved_* (a boolean variable) as an argument. You can use theGenerate popup menu activated through the *_Alt+Insert_* shortcut for this purpose.
 
 [source, java]
 ----
@@ -148,7 +164,7 @@ Switch to the **__AppointmentRequestResult.java __**file and add two constructor
     }
 ----
 
-Now we can return to the *_requestAppointment_* method and finish writing its code. The final code of the method should look like this:
+Now we can return to the `requestAppointment` method and finish writing its code. The final code of the method should look like this:
 [source, java]
 ----
     public AppointmentRequestResult requestAppointment(AppointmentRequestInput request){
@@ -169,25 +185,29 @@ Now we can return to the *_requestAppointment_* method and finish writing its co
     }
 ----
 
-Click *_Alt+Enter_* on *_"CreateNewAppointment"_* and create the method. The method should have the following code:
+Press *_Alt+Enter_* (or *_Opt+Enter_* on a Mac) on `CreateNewAppointment` and create the method. The method should have the following code:
 
 [source, java]
 ----
     private Appointment createNewAppointment(AppointmentRequestInput request) {
         Appointment appointment = new Appointment();
-        appointment.setPatient(patientRepository.getReferenceById(request.getPatientId()));
+        appointment.setPatient(patientRepository.getReferenceById(request.getPatientId())); <1>
         appointment.setDoctor(doctorRepository.getReferenceById(request.getDoctorId()));
         appointment.setStartTime(request.getTime());
         appointment.setDuration(request.getDurationMinutes());
         appointment.setStatus(Status.PENDING);
 
-        return appointmentRepository.save(appointment);
+        return appointmentRepository.save(appointment); <2>
     }
 ----
+<1> Use getReferenceById() method to obtain a proxy instance of the entity using only its id, without loading it from the database.
 
-As we can see from the code, this method fills in all attributes of the *_Appointment_* entity with their respective values and saves the repository.
+<2> Use save() repository method to persist new entity to the database.
 
-Using *_Alt+Enter_* create methods for *_isAppointmentExistsForPatient_* and *_isAppointmentExistsForDoctor_*. Both methods take one boolean argument (*_reserved_*). Initially, their code should be as follows:
+
+As we can see from the code, this method fills in all attributes of the `Appointment` entity with their respective values and saves the repository.
+
+Using *_Alt+Enter_* (or *_Opt+Enter_* on a Mac), create methods for `isAppointmentExistsForPatient` and `isAppointmentExistsForDoctor`. Both methods take one boolean argument (`reserved`). Initially, their code should be as follows:
 
 [source, java]
 ----
@@ -207,20 +227,20 @@ Let us take a look at the diagram below:
 image::conflicting-appointments.png[align=center]
 
 We can see that a new appointment will conflict with the existing one if the following criteria are met:
-the *_startTime_* of the new appointment is less than the *_entTime_* of the existing one and the *_endTime_* of the new appointment is greater than the *_startTime_* of the existing one.  Also, if the existing appointment has the *_"Cancelled"_* status, it cannot create a conflict. We need to check all these conditions in order to decide whether we can accept the requested appointment or have to reject it.
+the `startTime` of the existing appointment is less than the `endTime` of the new one and the `endTime` of the existing appointment is greater than the `startTime` of the new one.  Also, if the existing appointment has the `CANCELLED` status, it cannot create a conflict. We need to check all these conditions in order to decide whether we can accept the requested appointment or have to reject it.
 
-Switch to the AppointmentRepository.java file, select Query -> Cont from the Designer panel and click "Add to Source".
+Switch to the `AppointmentRepository` class, select *_Query_* -> *_Count_* from the Designer panel and click *_Add to Source_*.
 
 image::query-count.png[align=center]
 
-Name the method: CountConflictsByDoctorAndPeriod. Add conditions:
+Name the method: `CountConflictsByDoctorAndPeriod`. Add conditions:
 
- * doctor.id -> is
- * And -> status -> in
- * And -> startTime -> LessThanEqual
- * And -> endTime -> GreaterThanEqual
+ * `doctor.id` -> *_is_*
+ * And -> `status` -> *_in_*
+ * And -> `startTime` -> *_LessThanEqual_*
+ * And -> `endTime` -> *_GreaterThanEqual_*
 
-Click *_"OK"_*.
+Click *_OK_*.
 
 image::query-conditions.png[align=center]
 
@@ -236,9 +256,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
 }
 ----
 
-Repeat exactly the same procedure for *_Patient_*.
+Repeat exactly the same procedure for `Patient` (Name the method: `CountConflictsByPatientAndPeriod`).
 
-For convenience, let us rename *_id_* into *_doctorId_* and *_patientId_*, respectively, *_startTime_* into *_maxStartTime_* and *_endTime_* into *_minEndTime_*.
+For convenience, let us rename `id` into `doctorId` and `patientId`, respectively, `startTime` into `maxStartTime` and `endTime` into `minEndTime`.
 
 The resulting code should be as follows:
 
@@ -257,19 +277,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
 }
 ----
 
-Switch to the *_AppointmentService.java_* file and add the following code:
+Switch to the `AppointmentService` class and add the following code to store a set of active appointment statuses that should cause a planning conflict:
 
 [source, java]
 ----
 private static final Set<Status> ACTIVE_STATUSES = Set.of(
-Status.PENDING,
-Status.MISSED,
-Status.IN_PROGRESS,
-Status.FINISHED
+    Status.PENDING,
+    Status.MISSED,
+    Status.IN_PROGRESS,
+    Status.FINISHED
 );
 ----
 
-Now we have everything necessary to complete the *_isAppointmentExistsForDoctor_* method. It will look like this:
+Now we have everything necessary to complete the `isAppointmentExistsForDoctor` method. It will look like this:
 
 [source, java]
 ----
@@ -284,7 +304,7 @@ Now we have everything necessary to complete the *_isAppointmentExistsForDoctor_
     }
 ----
 
-Similarly, for *_Patient_*, we have:
+Similarly, for `Patient`, we have:
 
 [source, java]
 ----
@@ -299,14 +319,17 @@ Similarly, for *_Patient_*, we have:
     }
 ----
 
-Switch to *_AppointmentController.java_*, autowire the *_requestAppointment_* method (*_Designer_* -> *_Autowire_* -> *_Services_* -> *_OK_*), delete everything from it, then add the following line of code to it:
+Switch to `AppointmentController`, autowire the `AppointmentService` class (*_Designer_* -> *_Autowire_* -> *_Services_* -> *_OK_*), delete everything from it, then add the following line of code to it:
 
 [source, java]
 return appointmentService.requestAppointment(request);
 
+[[adding-indexes]]
+=== Adding Indexes
+
 This part of the  business logic is ready. The only thing that can be done to improve it further is to add indexes to speed up interaction with the database when the amount of data grows considerably.
 
-For this purpose we switch to the *_Appointment.java_* file, select *_Indexes_* -> *_Index_* in the *_Designer_* panel and create indexes for *_doctor_id_*, *_patient_id_*, *_start_time_* and *_end_time_* (all separately).
+For this purpose we switch to the `Appointment` class, select *_Indexes_* -> *_Index_* in the *_Designer_* panel and create indexes for `doctor_id`, `patient_id`, `start_time` and `end_time` (all separately).
 
 image::index.png[align=center]
 
@@ -322,41 +345,67 @@ The following code will be generated:
 })
 ----
 
-Now we need the code for the *_"Cancel"_* functionality that cancels an existing appointment (changes its status to *_"Cancelled"_*).
+[NOTE]
+Hibernate will automatically create these indexes in the database after a restart of the application backend.
 
-Switch to the *_schema.graphqls_* file and add the following line to the mutation:
+[[cancel-appointment]]
+=== Implementation of the cancelAppointment Method
+
+Now we need the code for the *_Cancel_* functionality that cancels an existing appointment (changes its status to `CANCELLED`).
+
+Switch to the *_schema.graphqls_* file and add the following line to the mutations:
 
 [source, java]
 cancelAppointment(id: ID!): Void
 
-Using the "bulb" pictogram image:bulb.png[align=center] activate the adjustment screen for this method. Check the *_"id"_* checkbox, change the type to *_"Long"_* and click *_"OK"_*.
+image::mutations.png[align=center]
+
+Using the _*bulb*_ pictogram (image:bulb.png[align=center]) activate the adjustment screen for this method. Check the *_id_* checkbox, change the type to `Long` and click *_OK_*.
 
 image::adjust-cancel-method.png[align=center]
 
-Switch to *_AppointmentService.java_* to write the *_cancelAppointment_* operation.
+Switch to `AppointmentService` to write the `cancelAppointment` operation.
 
 [source, java]
 public void cancel (Long appointmentId)
 
-Enable "Transactional" in the Designer, then write up the following code:
+Enable _*Transactional*_ in the Designer, then write up the following code:
 
 [source, java]
 ----
     public void cancel (Long appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(EntityNotFoundException::new);
-        if(appointment.getStatus() != Status.PENDING) {
+        Appointment appointment = appointmentRepository.findById(appointmentId) <1>
+                .orElseThrow(EntityNotFoundException::new); <2>
+        if (appointment.getStatus() != Status.PENDING) {
             throw new IllegalStateException("Wrong status for appointment " + appointmentId);
         }
         appointment.setStatus(Status.CANCELLED);
-        appointmentRepository.save(appointment);
+        appointmentRepository.save(appointment); <3>
     }
 ----
 
-Switch to *_AppointmentController.java_*, go to the *_cancelAppointment_* method, remove *_"//TODO"_* and add the following line of code:
+<1> Call findById() repository method to load the entity from the database by its id.
+<2> Throw an exception to unwrap the Optional and abort the operation with an error if the entity with the given id doesn't exist.
+<3> Save the updated Appointment instance.
+
+Switch to `AppointmentController`, go to the `cancelAppointment` method, remove `//TODO` and add the following line of code:
 
 [source, java]
       appointmentService.cancel(id);
 
 Implementation of the business logic is completed.
+
+[IMPORTANT]
+Don't forget to restart the application backend, to make the changes in the code to be applied to the locally running application.
+
+[[summary]]
+== Summary
+In this section, you have created the customized business logic reflecting the peculiarities of the JPA entities included in the project.
+
+You have learned that:
+
+* Studio supports different approaches to programming: from backend to the schema or vice versa.
+* Studio provides means for controller adjustment.
+* Studio offers wizards for creating CRUD controllers.
+* The Designer panel offers handy mechanisms for writing queries and adding indexes to the database.
 
