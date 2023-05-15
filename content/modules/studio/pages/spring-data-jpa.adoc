@@ -2,12 +2,12 @@
 
 [[introduction]]
 == Introduction
-*_Spring Data JPA_* is part of the larger Spring Data family that makes it easy to implement JPA-based repositories quickly. JPA Buddy provides a clear UI for generating repositories, projections, queries, etc.
+*_Spring Data JPA_* is part of the larger Spring Data family that makes it easy to implement JPA-based repositories quickly. Studio provides a clear UI for generating repositories, projections, queries, etc.
 
 [[repository-creation]]
 == Repository Creation
 
-Amplicode provides various ways to create repositories to make working with JPA-related objects more convenient for most users. All possible ways to generate repositories in the project are listed below.
+Studio provides various ways to create repositories to make working with JPA-related objects more convenient for most users. All possible ways (there are four of them) to generate repositories in the project are listed below.
 
  * Right-click the JPA entity in the project tree, then select *_New_* -> *_Spring Data JPA Repository_*
 
@@ -17,23 +17,23 @@ image::repository-creation-approach1.png[align=center]
 
 image::repository-creation-approach2.png[align=center]
 
- * Open "Persistence" under "Structure", select the entity, right-click it and select *_New_* -> *_Spring Data JPA Repository_*
+ * Open *_Persistence_* under *_Structure_*, select the entity, right-click it and select *_New_* -> *_Spring Data JPA Repository_*
 
 image::repository-creation-approach3.png[align=center]
 
- * Double-click the entity in the project tree, switch to the "Designer" panel and in the Palette use the "Actions" drop-down box. Select "Create JPA Repository"
+ * Double-click the entity in the project tree, switch to the *_Designer_* panel and in the *_Palette_* use the *_Actions_* drop-down box. Select *_Create JPA Repository_*.
 
 image::repository-creation-approach4.png[align=center]
 
 [NOTE]
-You can create a Spring Data JPA repository only for an entity with a field annotated with @Id.
+You can create a Spring Data JPA repository only for an entity with a field annotated with `@Id`.
 
 In the *_New JPA Repository_* window, you can set:
 
  * Entity, which the repository will be created for
  * Class name
  * Parent class for the repository. It can be:
- ** Repository from *_org.springframework.data.repository_* package
+ ** Repository from `org.springframework.data.repository` package
  ** Repository from your project
  * Whether the repository will extend JpaSpecificationExecutor or not
  * Source root
@@ -41,10 +41,10 @@ In the *_New JPA Repository_* window, you can set:
 
 image::single-creation.png[align=center]
 
-When we have a lot of entities, creating Spring Data repositories one by one becomes a tedious job. With Amplicode, you can speed up this process. To create repositories for JPA entities, you need to take three steps:
+When we have a lot of entities, creating Spring Data repositories one by one becomes a tedious job. With Studio, you can speed up this process. To create repositories for JPA entities, you need to take three steps:
 
  * Select entities in the project tree
- * Invoke the Amplicode wizard,
+ * Invoke the Studio wizard,
 
 image::bulk-creation-2.png[align=center]
 
@@ -54,24 +54,24 @@ image::bulk-creation-3.png[align=center]
 
 That's it!
 
-You can also switch from "Single" to "Bulk" directly in the New Spring Data Repository window and then select the entities.
+You can also switch from *_Single_* to *_Bulk_* directly in the New Spring Data Repository window and then select the entities.
 
 image::bulk-creation.png[align=center]
 
-Once the repositories have been created, you can move them from one package to another in the project tree using the drag-n-drop method. Alternatively, create a separate package for repositories only and type its name in the *_"Package"_* field of the repository creation window. If the package directory doesn't exist, it will be created automatically.
+Once the repositories have been created, you can move them from one package to another in the project tree using the drag-n-drop method. Alternatively, create a separate package for repositories only and type its name in the *_Package_* field of the repository creation window. If the package directory doesn't exist, it will be created automatically.
 
 image::bulk-creation-4.png[align=center]
 
 [[structure-repositories]]
 == Structure Repositories
 
-For the most efficient navigation in the project, Amplicode groups all repositories for each entity. It doesn't matter if the repositories for the entity are located in different or in the same project package. All repositories related to the entity will be displayed in the *_"Repositories"_* section. From here, you can quickly move to the repository implementation or create a new one.
+For the most efficient navigation in the project, Studio groups all repositories for each entity. It doesn't matter if the repositories for the entity are located in different or in the same project package. All repositories related to the entity will be displayed in the *_Repositories_* section. From here, you can quickly move to the repository implementation or create a new one.
 
 image::structure-repositories.png[align=center]
 
 [[query-method-generation]]
 == Generation of Queries/Methods
-Spring Data provides the ability to define a query with the *_@Query_* annotation. You can use the *_Palette_* to write them quickly and without any typos.
+Spring Data provides the ability to define a query with the `@Query` annotation. You can use the Palette to write them quickly and without any typos.
 
 image::find-collection.png[align=center]
 
@@ -87,7 +87,7 @@ Let's look at an example of creating a Find Collection Query.
 
 image::create-query.png[align=center]
 
-At the top of the window, you can define the wrap type for the collection and the query return type. Moreover, Amplicode allows you to generate a new Projection interface or a DTO class directly from this window (just click on the *_"+"_* button).
+At the top of the window, you can define the wrap type for the collection and the query return type. Moreover, Studio allows you to generate a new Projection interface or a DTO class directly from this window (just click on the *_+_* button).
 
 You can also specify the method name. Still, if you leave it empty, the name will be generated automatically following the https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation[Naming Conventions] for a Query.
 
@@ -117,7 +117,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 [[entity-intention]]
 === Entity Intention
 
-Amplicode also provides intention on the entity attributes leading directly to the query/method creation window. Place the cursor on the desired attribute, press *_Alt+Enter_* (or *_Opt+Enter_* on Mac), and click on the *_Create Spring Data repository method_*.
+Studio also provides intention on the entity attributes leading directly to the query/method creation window. Place the cursor on the desired attribute, press *_Alt+Enter_* (or *_Opt+Enter_* on Mac), and click on the *_Create Spring Data repository method_*.
 
 image::intention1.png[align=center]
 
@@ -128,7 +128,7 @@ image::intention2.png[align=center]
 [[unresolved-reference]]
 === Unresolved Reference
 
-Some developers prefer to declare a call to the method that doesn't exist yet first and  implement it afterwards. Amplicode is fully compatible with this programming style. Just write the desired signature and move to the query or method creation wizard via special actions:
+Some developers prefer to declare a call to the method that doesn't exist yet first and  implement it afterwards. Studio is fully compatible with this programming style. Just write the desired signature and move to the query or method creation wizard via special actions:
 
 image::unresolved-reference.png[align=center]
 
@@ -144,11 +144,11 @@ image::query-modification.png[align=center]
 
 The *_EntityGraph_* feature has always been one of the most requested features. Entity graphs give us another layer of control over data that needs to be fetched. Amplicode supports them, so you can build graphs using a handy GUI wizard.
 
-Right-click the needed Repository file in the project tree. In the *_Inspector_* find *_Graph_* and click *_"edit"_*.
+Right-click the needed Repository file in the project tree. In the *_Inspector_* find *_Graph_* and click *_edit_*.
 
 image::graph-support1.png[align=center]
 
-In the *_"Entity Graph"_* window check and uncheck nested entities according to your requirements.
+In the *_Entity Graph_* window check and uncheck nested entities according to your requirements.
 
 image::graph-support2.png[align=center]
 
@@ -165,7 +165,7 @@ In order to create a projection, click the + icon in the *_Designer_* panel and 
 
 image::create-projection.png[align=center]
 
-In the *_"New Spring Projection"_* window you can:
+In the *_New Spring Projection_* window you can:
 
  * Define source root and package;
  * Choose entity class;
@@ -174,7 +174,7 @@ In the *_"New Spring Projection"_* window you can:
 
 image::new-projection.png[align=center]
 
-Also, Amplicode allows you to generate Projections for the referenced entities. Select the associated entity, choose the Projection type, and pick the required fields.
+Also, Studio allows you to generate *_Projections_* for the referenced entities. Select the associated entity, choose the Projection type, and pick the required fields.
 
 image::referenced-entities.png[align=center]
 
@@ -192,7 +192,7 @@ public interface OrderInfo {
 [[projection-sync]]
 === Keep Projections in sync with its JPA entity
 
-As time passes, entities may change, and you need to change projections accordingly. JPA Buddy allows you to synchronize an entity with its projection and vice versa. Read more about this feature in the *DTO Generator* section.
+As time passes, entities may change, and you need to change projections accordingly.  Studio allows you to synchronize an entity with its projection and vice versa. Read more about this feature in the *_DTO Generator_* section.
 
 [[entity-projection-navigation]]
 === Easy Navigation between Entity and its Projections
@@ -209,9 +209,9 @@ image::gutter-icon.png[align=center]
 
 [[auditing-support]]
 == Auditing Support
-Having auditing in a large application is a crucial aspect. With Amplicode you can effortlessly include commonly used audit fields by utilizing annotations, such as *_@CreatedBy_*, *_@CreatedDate_*, *_@LastModifiedBy_* and *_@LastModifiedDate_*. What's more, Amplicode will notify you if you forget to add the *_@EnableJpaAuditing_* annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity. This leaves even less room for a mistake!
+Having auditing in a large application is a crucial aspect. With Studio, you can effortlessly include commonly used audit fields by utilizing annotations, such as `@CreatedBy`, `@CreatedDate`, `@LastModifiedBy` and `@LastModifiedDate`. What's more, Studio will notify you if you forget to add the `@EnableJpaAuditing` annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity. This leaves even less room for a mistake!
 
-Use the *_"Add Entity Attribute"_* icon in the *_Editor Toolbar_* and select *_"Spring Auditing"_*.
+Use the *_Add Entity Attribute_* icon in the *_Editor Toolbar_* and select *_Spring Auditing_*.
 
 image::auditing1.png[align=center]
 

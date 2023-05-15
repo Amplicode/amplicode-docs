@@ -4,6 +4,7 @@
 ** xref:studio:project.adoc[]
 ** xref:studio:studio-ui.adoc[]
 *** xref:studio:tool-window.adoc[]
+*** xref:studio:entity-designer.adoc[]
 *** xref:studio:spring-data-jpa.adoc[]
 *** xref:studio:marketplace.adoc[]
 *** xref:studio:plugin-settings.adoc[]

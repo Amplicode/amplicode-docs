@@ -1,0 +1,101 @@
+= Entity Designer
+
+[[entity-generation]]
+== Entity Generation
+
+To create a new JPA entity, right-click on the desired folder and select *_New_* -> *_JPA Entity_* (1). Also, you can create a new entity from *_Structure_* (2):
+
+image::new-entity.png[align=center]
+
+After that, the following window will appear:
+
+image::new-entity-window.png[align=center]
+
+[[id-generation]]
+=== ID and Its Generation Strategy
+
+According to the JPA specification, an ID attribute is required for an entity definition. Studio allows you to generate this attribute and choose the type (1) and generation strategy (2). Also, you can specify what sequence to use for the Sequence generation strategy (3).
+
+image::new-entity-window-2.png[align=center]
+
+Also, you can generate an `id` attribute via Palette (1), Editor Toolbar (2) or using a quick-fix (Alt+Enter/⌥ ⏎) (3).
+
+image::create-id-attribute.png[align=center]
+
+The example of the generated `id` code is shown below.
+
+[source, java]
+----
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+----
+
+[[hibernate-types]]
+== Hibernate Types & JPA Converters
+
+Studio helps you to generate a blank code fragment for a *_JPA Converter_* or a *_Hibernate Custom Type_* via *_Inspector_*:
+
+
+
+Let's say we have an `isCompleted` attribute (Boolean) within the `Order` entity.
+
+image::jpa-converter-inspector.png[align=center]
+
+Put your cursor on this attribute in the code, then click on the *_Plus_* pictogram in the Inspector:
+
+image::jpa-converter-inspector-plus.png[align=center]
+
+The following window will appear:
+
+image::create-custom-type.png[align=center]
+
+You can also create it via *_Structure_*. Just click on the "Plus" button and choose *_JPA Converter_* or *_Hibernate Custom Type_*:
+
+image::jpa-converter.png[align=center]
+
+In the *_Create Custom Type_* window, you can configure the class name, entity attribute type and database column type.
+
+image::create-jpa-converter.png[align=center]
+
+For JPA Converter you can define whether it will be auto applicable or not.
+
+image::parametrized.png[align=center]
+
+Here is the example of a generated Hibernate Custom Type:
+
+[source, java]
+----
+package com.company.amplicodedemo.controller;
+
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.type.AbstractSingleColumnStandardBasicType;
+import org.hibernate.type.descriptor.sql.BitTypeDescriptor;
+
+public class BooleanConverter extends AbstractSingleColumnStandardBasicType<Boolean> {
+    public BooleanConverter() {
+        super(new BitTypeDescriptor(), new BooleanConverterDescriptor());
+    }
+
+    @Override
+    public String getName() {
+        return "BooleanConverter";
+    }
+
+    @Override
+    public Object resolve(Object value, SharedSessionContractImplementor session, Object owner, Boolean overridingEager) throws HibernateException {
+        return null;
+    }
+
+}
+----
