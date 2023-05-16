@@ -59,7 +59,7 @@ The following window will appear:
 
 image::create-custom-type.png[align=center]
 
-You can also create it via *_Structure_*. Just click on the "Plus" button and choose *_JPA Converter_* or *_Hibernate Custom Type_*:
+You can also create it via *_Structure_*. Just click on the *_Plus_* button and choose *_JPA Converter_* or *_Hibernate Custom Type_*:
 
 image::jpa-converter.png[align=center]
 
