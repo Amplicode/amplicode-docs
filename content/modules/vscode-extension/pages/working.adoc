@@ -1,0 +1,35 @@
+= Working with the Project
+
+In order to work with the project, we need to install npm.
+
+Open the *_Show All Commands_* window, type `terminal` and select *_Create New Terminal_*.
+
+image::create-new-terminal.png[align=center]
+
+Type *_npm install_* in the new terminal window and wait until the installation is complete.
+
+Open the package.json file and run the project in the Debug mode.
+
+image::run-debug.png[align=center]
+
+Click *_Debug_* -> *_dev vite_*.
+
+image::dev.png[align=center]
+
+Open localhost:3000 in any browser. You will see the Welcome screen of the new frontend application.
+
+image::localhost.png[align=center]
+
+You can also run a background TypeScript type generator. To do it, simply run the following command from the terminal:
+
+[source, bash]
+npm run generate:watch
+
+Now every time you add, remove or change GraphQL operations, it will trigger generation of TypeScript types.
+
+For one-time generation, run the following command:
+
+[source, bash]
+npm run generate
+
+//TODO
