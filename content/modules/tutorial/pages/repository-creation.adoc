@@ -63,7 +63,7 @@ For real-life applications, we recommend using the Liquibase library for this pu
 
 [[crud-controllers]]
 
-Now we can create the API for our backend application. Studio uses *_Spring GraphQL controllers_* as API. Studio allows us to create a controller via a wizard; the controller will be covering all simple CRUD operations.
+Now we can create the API for our backend application. Amplicode uses *_Spring GraphQL controllers_* as API. Studio allows us to create a controller via a wizard; the controller will be covering all basic CRUD operations.
 
 Let us start with the `Patient` entity. Right-click the `patient` package in the project tree and select *_New_* -> *_Spring GraphQL Controller_*.
 
@@ -71,7 +71,7 @@ In the *_Data repository_* drop-down box select *_PatientRepository_*.
 
 image::patient-repository.png[align=center]
 
-Expand the collapsible blocks at the bottom of the form. In *_Pagination And Sorting_* check the *_"Pagination"_* checkbox and add `firstName` and `lastName` in *_Fields for sorting_*.
+Expand the collapsible blocks at the bottom of the form. In *_Pagination And Sorting_* check the *_Pagination_* checkbox and add `firstName` and `lastName` in *_Fields for sorting_*.
 
 In *_Filtering_* add new attributes using the *+* pictogram amd select `firstName`, *_contains, IgnoreCase_* and `lastName`, *_contains, IgnoreCase_* as two filtering attributes as shown on the picture below. Click *_OK_*.
 
@@ -125,7 +125,7 @@ image::debug.png[align=center]
 If the application doesn't contain any errors, it will run successfully. In this case you will see a message in the console similar to the one below:
 
 [source]
-2023-05-05 20:17:10.951 INFO 43780 --- [ main] i.j.petclinic.PetclinicApplication : Started XxxApplication in 7.32 seconds (JVM running for 8.13)
+2023-05-17 15:47:18.064  INFO 22888 --- [           main] c.c.doctorsdemo.DoctorsdemoApplication   : Started DoctorsdemoApplication in 5.281 seconds (JVM running for 6.558)
 
 This means that the backend has launched successfully and is running.
 
@@ -137,5 +137,5 @@ You have learned that:
 
 * Studio offers tools for repository creation within the Structure tab.
 * There is an opportunity to create repositories in bulk.
-* Studio offers wizards for creating CRUD controllers.
-* After creating repositories and controllers it is necessary to regenerate the GraphQL schema, for which Studio provides a quick solution.
+* Studio offers wizards for creating CRUD controllers, which represent the external API of the application backend.
+* After creating repositories and controllers it is necessary to regenerate the GraphQL schema, for which Studio provides an automated action.

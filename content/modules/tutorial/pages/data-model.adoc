@@ -5,6 +5,9 @@ Once the project is created, the next step is to create the data model.
 [[entities]]
 == Creating Entities
 
+[[doctor]]
+=== Doctor
+
 We will start with creating the *_Doctor_* entity.
 
 In the project tree, right-click `src` -> `main` -> `java` -> `com.company.doctorsdemo` and select *_New_* -> *_Package_*. We will separate backend code related to each of the entities by placing all entities in different packages.
@@ -28,7 +31,7 @@ Click *_OK_*. Studio will generate a new Java class for the new entity.
 image::doctor-java-class.png[align=center]
 
 [[designer]]
-== Designer Tab
+==== Designer Tab
 
 Besides, now we have a *_Designer_* tab added. Let us click on it and see what it offers.
 
@@ -37,9 +40,6 @@ image::designer.png[align=center]
 The upper part of the Designer panel is called a *_Palette_*; the lower one is an *_Inspector_*. The Palette contains all possible actions that can be carried out with the entities, and the Inspector allows us to view and edit the properties of the selected component.
 
 These tools will help us add the attributes to the `Doctor` entity.
-
-[[attributes]]
-== Creating Attributes
 
 Right-click *_Attribute_* -> *_Basic Type_* and select *_Add to Source_*.
 
@@ -63,7 +63,7 @@ image::min-length.png[align=center]
 Repeat the same steps to create a `lastName` attribute.
 
 [[enum]]
-=== Creating an ENUM Attribute
+==== Creating an ENUM Attribute
 
 The last attribute we need, `specialty`, is an Enum, and it will require a slightly different procedure.
 Right-click the `Doctor` entity in the project tree and select *_New_* -> *_Java Class_*.
@@ -107,6 +107,9 @@ image::enum-attribute-creation.png[align=center]
 [TIP]
 By changing Enum type to String, we have instructed the JPA library (Hibernate) to store enumeration values by using string representation of the enumeration constant.
 
+[[patient]]
+=== Patient
+
 Now we need to create the `Patient` entity. In order to do this, simply repeat all the steps you've just done for the `Doctor` entity, starting with the new package, but excluding the `Enum`-related part. Namely:
 
  * Create a new package named `patient`
@@ -114,17 +117,20 @@ Now we need to create the `Patient` entity. In order to do this, simply repeat a
  * Create a firstName attribute, make it Mandatory, NotNull and set the min length to 2
  * Create a lastName attribute, make it Mandatory, NotNull and set the min length to 2.
 
-Notice that instead of right-clicking *_Basic Type_* in Palette and then choosing *_Add to Source_*, you can either double-click *_Basic Type_* or drag-and-drop it to the window containing the code of your class. We suggest that you try out these alternative methods while creating the attrobutes for the `Patient` entity.
+Notice that instead of right-clicking *_Basic Type_* in Palette and then choosing *_Add to Source_*, you can either double-click *_Basic Type_* or drag-and-drop it to the window containing the code of your class. We suggest that you try out these alternative methods while creating the attributes for the `Patient` entity.
 
 [TIP]
 The same is true for any other Palette item. Examples will be given below.
 
- The result is shown below:
+The result is shown below:
 
 image::patient-class.png[align=center]
 
+[[appointment]]
+=== Appointment
+
 [[association-attributes]]
-=== Creating Association Attributes
+==== Creating Association Attributes
 
 The next step is to create an `Appointment` entity to complete our data model. Create the `appointment` package and the `Appointment` JPA Entity inside it as you did for the previous two entities.
 
@@ -161,7 +167,7 @@ Repeat exactly the same steps for the `Patient`:
 
 Now we need to create the remaining attributes. Since they are not associations, we will once again use the already familiar *_Basic Type_* attribute creation procedure.
 
-Select *_Attribute_* -> *_Basic Type_* -> .*_Add to Source_*, fill in the fields as shown on the image below and click *_OK_*.
+Select *_Attribute_* -> *_Basic Type_* -> *_Add to Source_*, fill in the fields as shown on the image below and click *_OK_*.
 
 image::time.png[align=center]
 
@@ -202,7 +208,7 @@ Make it *_NotNull_* and *_Positive_* in the Inspector.
 image::duration-validations.png[align=center]
 
 [[calculated]]
-=== Creating a Calculated Attribute
+==== Creating a Calculated Attribute
 
 We are also going to need another attribute, `endTime`. It will not be specified directly by the user, but it will be calculated from `startTime` and `duration`. It will be necessary to efficiently search for possible conflicting appointments in the database, since our application will be programmed to be able to reject conflicting appointments.
 
@@ -213,7 +219,7 @@ image::endTime.png[align=center]
 
 This attribute doesn't have to be designated as Mandatory.
 
- We are going to need another Palette entry named *_Lifecycle Callbacks_* to create a calculated attribute.
+We are going to need another Palette entry named *_Lifecycle Callbacks_* to create a calculated attribute.
 
 image::callbacks.png[align=center]
 

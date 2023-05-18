@@ -1,6 +1,6 @@
 = 1. Project Setup
 
-In this chapter you will go through a few simple steps to set up a new project. Once your project is set up, you will be able to run it and explore its pre-built features.
+In this chapter you will go through a few simple steps to set up a new project.
 
 [[dev-env]]
 == Setting Up Development Environment

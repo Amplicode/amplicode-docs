@@ -7,7 +7,7 @@ Until now, we worked from the backend side, and then regenerated the GraphQL sch
 
 The changes will be applied to the `Mutation` type description in the `schema.graphqls` file.
 
-We are reminding you that you can open the *_schema.graphqls_* file either from the Structure tree or from the IDE's own project tree if you would like to see its code.
+As we have already mentioned, you can open the *_schema.graphqls_* file either from the Structure tree or from the IDE's own project tree if you would like to see its code.
 
 image::open-graphqls.png[align=center]
 
@@ -120,7 +120,7 @@ public class AppointmentService {
 }
 ----
 
-Using the Designer panel mark the new method as *_Transactional_*.
+Using the Inspector withing the Designer panel, mark the new method as *_Transactional_*.
 
 image::transactional.png[align=center]
 
@@ -128,7 +128,7 @@ This will make the method perform several data access operations, which we are g
 
 To work with the data, we will need a repository.
 
-Right-click *_Autowire_* -> *_Data Access/Repositories_*.
+Right-click *_Autowire_* -> *_Data Access/Repositories_* -> *_Add to Source_*.
 
 image::autowire.png[align=center]
 
@@ -152,7 +152,7 @@ Add the following code to the `requestAppointment` method:
     }
 ----
 
-Switch to the `AppointmentRequestResult` class and add two constructors to it, one without arguments and the other one taking *_reserved_* (a boolean variable) as an argument. You can use theGenerate popup menu activated through the *_Alt+Insert_* shortcut for this purpose.
+Switch to the `AppointmentRequestResult` class and add two constructors to it, one without arguments and the other one taking `reserved` (a boolean variable) as an argument. You can use the *_Generate_* popup menu activated through the *_Alt+Insert_* shortcut (*_Opt+Insert_* on a Mac) for this purpose.
 
 [source, java]
 ----
@@ -185,7 +185,7 @@ Now we can return to the `requestAppointment` method and finish writing its code
     }
 ----
 
-Press *_Alt+Enter_* (or *_Opt+Enter_* on a Mac) on `CreateNewAppointment` and create the method. The method should have the following code:
+Press *_Alt+Enter_* (or *_Opt+Enter_* on a Mac) on `createNewAppointment` and create the method. The method should have the following code:
 
 [source, java]
 ----
@@ -205,7 +205,7 @@ Press *_Alt+Enter_* (or *_Opt+Enter_* on a Mac) on `CreateNewAppointment` and cr
 <2> Use save() repository method to persist new entity to the database.
 
 
-As we can see from the code, this method fills in all attributes of the `Appointment` entity with their respective values and saves the repository.
+As we can see from the code, this method fills in all attributes of the `Appointment` entity with their respective values and saves them via the repository.
 
 Using *_Alt+Enter_* (or *_Opt+Enter_* on a Mac), create methods for `isAppointmentExistsForPatient` and `isAppointmentExistsForDoctor`. Both methods take one boolean argument (`reserved`). Initially, their code should be as follows:
 
@@ -256,7 +256,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long>,
 }
 ----
 
-Repeat exactly the same procedure for `Patient` (Name the method: `CountConflictsByPatientAndPeriod`).
+Repeat exactly the same procedure for `Patient` (Name the method: `countConflictsByPatientAndPeriod`).
 
 For convenience, let us rename `id` into `doctorId` and `patientId`, respectively, `startTime` into `maxStartTime` and `endTime` into `minEndTime`.
 
@@ -360,7 +360,7 @@ cancelAppointment(id: ID!): Void
 
 image::mutations.png[align=center]
 
-Using the _*bulb*_ pictogram (image:bulb.png[align=center]) activate the adjustment screen for this method. Check the *_id_* checkbox, change the type to `Long` and click *_OK_*.
+Using the *_bulb_* pictogram (image:bulb.png[align=center]) activate the adjustment screen for this method. Check the *_id_* checkbox, change the type to `Long` and click *_OK_*.
 
 image::adjust-cancel-method.png[align=center]
 
@@ -369,14 +369,15 @@ Switch to `AppointmentService` to write the `cancelAppointment` operation.
 [source, java]
 public void cancel (Long appointmentId)
 
-Enable _*Transactional*_ in the Designer, then write up the following code:
+Enable *_Transactional_* in the Designer, then write up the following code:
 
 [source, java]
 ----
+    @Transactional
     public void cancel (Long appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId) <1>
+        Appointment appointment = appointmentRepository.findById (appointmentId) <1>
                 .orElseThrow(EntityNotFoundException::new); <2>
-        if (appointment.getStatus() != Status.PENDING) {
+        if(appointment.getStatus() != Status.PENDING) {
             throw new IllegalStateException("Wrong status for appointment " + appointmentId);
         }
         appointment.setStatus(Status.CANCELLED);
@@ -400,12 +401,12 @@ Don't forget to restart the application backend, to make the changes in the code
 
 [[summary]]
 == Summary
-In this section, you have created the customized business logic reflecting the peculiarities of the JPA entities included in the project.
+In this section, you have created customized business logic reflecting the business/functional requirements included in the project.
 
 You have learned that:
 
-* Studio supports different approaches to programming: from backend to the schema or vice versa.
+* Studio supports different approaches to developing the API layer of the application: from backend to the schema or vice versa.
 * Studio provides means for controller adjustment.
-* Studio offers wizards for creating CRUD controllers.
+* Studio offers designer items and actions that help us implement business logic on the backend in the form of Spring beans.
 * The Designer panel offers handy mechanisms for writing queries and adding indexes to the database.
 
