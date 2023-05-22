@@ -1,0 +1,141 @@
+= 3. Repositories and Controllers
+
+[[database-access]]
+== Database Access
+
+The recommended way to access relational databases in Amplicode applications is to use *_Spring Data_* repositories.  Now we are going to create repositories to work with our freshly created entities.
+
+[[repository-creation]]
+== Creating Repositories
+
+In order to do this, we need to execute the following steps:
+
+ * Switch from *_Designer_* to *_Structure_* in the tool window header
+
+ * Click on the *+* pictogram
+
+image::add-repository.png[align=center]
+
+ * Click *_Spring Data JPA Repository_*
+
+image::spring-data-jpa-rep.png[align=center]
+
+ * Switch from *_Single_* to *_Bulk_*, then check the necessary entity checkboxes and the *_Criteria API specification_* checkbox.
+
+image::bulk-creation.png[align=center]
+
+ * click *_OK_*.
+
+All repositories will appear in the same directory in the project tree.
+
+image::same-package.png[align=center]
+
+Use drag-and-drop to move repositories to different packages according to their entities. When the IDE asks you to confirm the move, click *_Refactor_*.
+
+image::refactor.png[align=center]
+
+The correct tree should look like this:
+
+image::different-packages.png[align=center]
+
+[[database-update]]
+== Updating the Database Structure
+
+[TIP]
+
+Every project created with the help of Amplicode Studio uses the H2 database by default. This database is stored in a local folder (the `h2` subfolder in the project's folder). This database does not require any setup and is therefore routinely used for prototyping and small projects like ours. If necessary, the database type can be changed by using *_Data Sources_* -> *_dataSource_* element in the Structure tree.
+
+image::datasource.png[align=center]
+
+[[auto-ddl]]
+=== Auto DDL Setting
+In order to ensure that the application will automatically update the database according to our changes of the data model, we will use the Hibernate setting called *_Auto DDL_*.
+
+Select *_Configurations_* -> *_Spring Data JPA_*, right click it and click *_Configure_*. Then, in the popup window, set *_Auto DDL_* to *_update_*.
+
+image::update-database.png[align=center]
+
+Click *_Next_*, then click *_Finish_*.
+
+For real-life applications, we recommend using the Liquibase library for this purpose. The Liquibase library is preconfigured in every Amplicode-based application. But for the purpose of this tutorial we have used the simpler, faster option described above.
+
+== Creating CRUD Controllers
+
+[[crud-controllers]]
+
+Now we can create the API for our backend application. Amplicode uses *_Spring GraphQL controllers_* as API. Studio allows us to create a controller via a wizard; the controller will be covering all basic CRUD operations.
+
+Let us start with the `Patient` entity. Right-click the `patient` package in the project tree and select *_New_* -> *_Spring GraphQL Controller_*.
+
+In the *_Data repository_* drop-down box select *_PatientRepository_*.
+
+image::patient-repository.png[align=center]
+
+Expand the collapsible blocks at the bottom of the form. In *_Pagination And Sorting_* check the *_Pagination_* checkbox and add `firstName` and `lastName` in *_Fields for sorting_*.
+
+In *_Filtering_* add new attributes using the *+* pictogram amd select `firstName`, *_contains, IgnoreCase_* and `lastName`, *_contains, IgnoreCase_* as two filtering attributes as shown on the picture below. Click *_OK_*.
+
+image::sorting-filtering.png[align=center]
+
+A new Java class will be created that contains all the code necessary to support four basic CRUD operations.
+
+[TIP]
+As you may have noticed, Studio requires you to specify the exact set of sorting and filtering options for the entity load list operation in the development time. That is, these options are defined statically during development, and they determine maximum capabilities of the application backend API.
+
+Repeat the same steps for `Doctor`. The only difference will be the `Specialty` field. Add it to the Filtering section as shown below:
+
+image::doctor-filtering.png[align=center]
+
+For the `Appointment` entity a few things will be different.
+
+To begin with, we uncheck repository methods `save` and `delete`. They are not necessary, because we are not going to provide standard means to create or delete appointments in the UI.
+
+image::appointment-repository.png[align=center]
+
+Pagination will be enabled as for the two other entities, but for sorting we choose `doctor.firstName`, `patient.firstName` and `startTime`.
+
+For Filtering, we add the following constructions:
+
+ * `doctor.lastName`, *_contains, IgnoreCase_*
+ * `patient.lastName`, *_contains, IgnoreCase_*
+ * `startTime`, *_>=_*
+ * `startTime`, *_<_*.
+
+image::appointment-filtering.png[align=center]
+
+[[schema-update]]
+== Updating GraphQL schema
+
+In the right-hand side of the screen, where the Studio tools are located (the *_Structure_* tab), expand the *_GraphQL_* section.
+
+image::graphql-schema.png[align=center]
+
+Click the *_Regenerate GraphQL Schema_* pictogram in the upper toolbar. The source code of the file will change to reflect the alterations we have done to the project, such as queries, mutations, data types and so on.
+
+image::update-schema.png[align=center]
+
+You can open the *_schema.graphqls_* file either from the Structure tree or from the IDE's own project tree if you would like to see its code.
+
+image::schema-graphql-file.png[align=center]
+
+At this stage we can run the backend application to check if we have any errors. Click the *_Debug_* pictogram in the IDE's own toolbar in the top right corner.
+
+image::debug.png[align=center]
+
+If the application doesn't contain any errors, it will run successfully. In this case you will see a message in the console similar to the one below:
+
+[source]
+2023-05-17 15:47:18.064  INFO 22888 --- [           main] c.c.doctorsdemo.DoctorsdemoApplication   : Started DoctorsdemoApplication in 5.281 seconds (JVM running for 6.558)
+
+This means that the backend has launched successfully and is running.
+
+[[summary]]
+== Summary
+In this section, you have created the repositories and controllers for the JPA Entities existing within the project.
+
+You have learned that:
+
+* Studio offers tools for repository creation within the Structure tab.
+* There is an opportunity to create repositories in bulk.
+* Studio offers wizards for creating CRUD controllers, which represent the external API of the application backend.
+* After creating repositories and controllers it is necessary to regenerate the GraphQL schema, for which Studio provides an automated action.
