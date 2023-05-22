@@ -1,0 +1,254 @@
+= 2. Data Model
+
+Once the project is created, the next step is to create the data model.
+
+[[entities]]
+== Creating Entities
+
+[[doctor]]
+=== Doctor
+
+We will start with creating the *_Doctor_* entity.
+
+In the project tree, right-click `src` -> `main` -> `java` -> `com.company.doctorsdemo` and select *_New_* -> *_Package_*. We will separate backend code related to each of the entities by placing all entities in different packages.
+
+image::new-package.png[align=center]
+
+A window will pop up. Name the new package `doctor` and press *_Enter_*.
+
+image::new-package-naming.png[align=center]
+
+Now, right-click the newly created package folder in the project tree and select *_New_* -> *_JPA Entity_*.
+
+image::new-jpa-entity.png[align=center]
+
+In the popup window put `Doctor` into the *_Name_* field, select `Long` from the *_Id_* drop-down and select the *_Identity_* radio button for *_Id generation_*.
+
+image::entity-completion.png[align=center]
+
+Click *_OK_*. Studio will generate a new Java class for the new entity.
+
+image::doctor-java-class.png[align=center]
+
+[[designer]]
+==== Designer Tab
+
+Besides, now we have a *_Designer_* tab added. Let us click on it and see what it offers.
+
+image::designer.png[align=center]
+
+The upper part of the Designer panel is called a *_Palette_*; the lower one is an *_Inspector_*. The Palette contains all possible actions that can be carried out with the entities, and the Inspector allows us to view and edit the properties of the selected component.
+
+These tools will help us add the attributes to the `Doctor` entity.
+
+Right-click *_Attribute_* -> *_Basic Type_* and select *_Add to Source_*.
+
+image::add-to-source.png[align=center]
+
+Put `firstName` into the *_Name_* field and check the *_Mandatory_* checkbox. Click *_OK_*.
+
+image::firstname.png[align=center]
+
+Now we can use the Inspector to finish setting up the `firstName` attribute. We will carry out the following
+actions:
+
+ * Make the attribute a *_Not Null_*
+
+image::not-null.png[align=center]
+
+ * Set the minimum length of the String to 2.
+
+image::min-length.png[align=center]
+
+Repeat the same steps to create a `lastName` attribute.
+
+[[enum]]
+==== Creating an ENUM Attribute
+
+The last attribute we need, `specialty`, is an Enum, and it will require a slightly different procedure.
+Right-click the `Doctor` entity in the project tree and select *_New_* -> *_Java Class_*.
+
+image::new-enum.png[align=center]
+
+Select *_Enum_* in the popup window.
+
+image::enum.png[align=center]
+
+Type *_Specialty_* in the *_Name_* field above. Press *_Enter_*.
+
+image::specialty.png[align=center]
+
+The IDE will create an empty class for the new ENUM.
+
+image::enum-template.png[align=center]
+
+Fill it in as shown below. To save time, you can copy and paste the code directly from this page.
+
+[source,java]
+public enum Specialty {
+    GP,
+    ALLERGY_AND_IMMUNOLOGY,
+    DERMATOLOGY,
+    OPHTALMOLOGY,
+    NEUROLOGY,
+    PSYCHIATRY
+}
+
+Now we can add a new attribute for the `Doctor` entity, which will be based on this enum class.
+
+Double-click the `Doctor` entity in the project tree to return to the `Doctor` class, then  select *_Attribute_* -> *_Enum_* -> *_Add to Source_* from the Palette.
+
+image::enum-attribute.png[align=center]
+
+Select *_Specialty_* from the Type drop-down list and check the *_Mandatory_* checkbox. Change *_Enum type_* to *_STRING_*. Click *_OK_*. Studio will generate the necessary source code.
+
+image::enum-attribute-creation.png[align=center]
+
+[TIP]
+By changing Enum type to String, we have instructed the JPA library (Hibernate) to store enumeration values by using string representation of the enumeration constant.
+
+[[patient]]
+=== Patient
+
+Now we need to create the `Patient` entity. In order to do this, simply repeat all the steps you've just done for the `Doctor` entity, starting with the new package, but excluding the `Enum`-related part. Namely:
+
+ * Create a new package named `patient`
+ * Create a new JPA Entity named `Patient` inside this package
+ * Create a firstName attribute, make it Mandatory, NotNull and set the min length to 2
+ * Create a lastName attribute, make it Mandatory, NotNull and set the min length to 2.
+
+Notice that instead of right-clicking *_Basic Type_* in Palette and then choosing *_Add to Source_*, you can either double-click *_Basic Type_* or drag-and-drop it to the window containing the code of your class. We suggest that you try out these alternative methods while creating the attributes for the `Patient` entity.
+
+[TIP]
+The same is true for any other Palette item. Examples will be given below.
+
+The result is shown below:
+
+image::patient-class.png[align=center]
+
+[[appointment]]
+=== Appointment
+
+[[association-attributes]]
+==== Creating Association Attributes
+
+The next step is to create an `Appointment` entity to complete our data model. Create the `appointment` package and the `Appointment` JPA Entity inside it as you did for the previous two entities.
+
+image::appointment-entity.png[align=center]
+
+This entity needs two attributes - `patient` and `doctor` - which are actually references to our two previously created classes. In order to create these attributes, we will have to use the *_Association_* attribute type.
+
+Select *_Attributes_* and double-click *_Association_*.
+
+image::association-create.png[align=center]
+
+Select *_Doctor_* from the *_Type_* drop-down box, leave the *_Cardinality_* with the default value of *_Many to One_* and check the *_Mandatory_* check box. Click *_OK_*.
+
+image::many-to-one.png[align=center]
+
+Studio will generate the necessary code for the `doctor` attribute.
+
+image::private-doctor.png[align=center]
+
+Put your cursor on the `doctor` attribute in the source code. Change the *_Fetch type_* from *_EAGER_* to *_LAZY_* in the Inspector. Make the attribute *_NotNull_*.
+
+image::lazy.png[align=center]
+
+image::mandatory.png[align=center]
+
+These changes will be reflected in the source code.
+
+Repeat exactly the same steps for the `Patient`:
+
+ * Add a new Association attribute to source (for training purposes, feel free to try the drag-and-drop method this time).
+ * Set the type to `Patient`
+ * Leave the Cardinality with the default value of Many to One and check the Mandatory check box
+ * Make the new attribute NotNull and change Fetch type to LAZY.
+
+Now we need to create the remaining attributes. Since they are not associations, we will once again use the already familiar *_Basic Type_* attribute creation procedure.
+
+Select *_Attribute_* -> *_Basic Type_* -> *_Add to Source_*, fill in the fields as shown on the image below and click *_OK_*.
+
+image::time.png[align=center]
+
+Make this field *_NotNull_* and *_Future_* in the Inspector (appointments cannot be booked for the past).
+
+image::time-validations.png[align=center]
+
+For the `status` attribute create a new Enum. Set the Enum type to ORDINAL. Add the possible values (you can copy and paste the code below):
+
+[source, java]
+----
+public enum Status {
+    PENDING,
+    MISSED,
+    IN_PROGRESS,
+    CANCELLED,
+    FINISHED
+}
+----
+
+[TIP]
+By using a ORDINAL enum type, we have instructed the JPA library (Hibernate) to store enumeration values as ordinal number of their constants in the enum class definition.
+
+Return to the `Appointment` class and create the `status` attribute.
+
+image::status-enum.png[align=center]
+
+Make it *_NotNull_* in the Inspector.
+
+Lastly, we create the `duration` attribute, which means the duration of the appointment in minutes.
+
+It is a Basic Type attribute with the `Integer` type. It should also be mandatory.
+
+image::duration.png[align=center]
+
+Make it *_NotNull_* and *_Positive_* in the Inspector.
+
+image::duration-validations.png[align=center]
+
+[[calculated]]
+==== Creating a Calculated Attribute
+
+We are also going to need another attribute, `endTime`. It will not be specified directly by the user, but it will be calculated from `startTime` and `duration`. It will be necessary to efficiently search for possible conflicting appointments in the database, since our application will be programmed to be able to reject conflicting appointments.
+
+Select *_Attributes_* -> *_Basic Type_* -> *_Add to Source_*, then from the *_Type_* drop-down box select *_LocalDateTime_*, the same way as we did for `startTime`, name the new attribute `endTime`
+and click *_OK_*.
+
+image::endTime.png[align=center]
+
+This attribute doesn't have to be designated as Mandatory.
+
+We are going to need another Palette entry named *_Lifecycle Callbacks_* to create a calculated attribute.
+
+image::callbacks.png[align=center]
+
+In this particular case we need only one callback called `PrePersist`. Double-click it, and Studio will create an empty method for calculations.
+
+The `@PrePersist` method is invoked by the JPA framework (Hibernate) just before the newly created entity is being saved to the database. It provides a convenient place to fill values for calculated attributes.
+
+image::prepersist.png[align=center]
+
+To calculate `endTime`, we need to add `duration` in minutes to `startTime`. The Java code to do it looks as follows:
+
+[source, java]
+----
+    @PrePersist
+    public void prePersist() {
+        if (startTime != null)
+            endTime = startTime.plusMinutes(duration);
+    }
+----
+
+The implementation of our data model has been completed.
+
+[[summary]]
+== Summary
+In this section, you have created the data model for the project.
+
+You have learned that:
+
+* Studio's Designer tab consists of the Palette and the Inspector.
+* Palette can be used to create attributes for entities.
+* Inspector can be used to fine-tune the settings for attributes.
+* Apart from basic type attributes it is also possible to create custom type attributes (such as enum), association attributes and calculated attributes.
