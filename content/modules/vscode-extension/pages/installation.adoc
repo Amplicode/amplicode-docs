@@ -17,5 +17,3 @@ Close the IDE and reopen it. Open the *_Extensions_* section. The Amplicode exte
 image::extension-installed.png[align=center]
 
 The installation is complete.
-
-//TODO
