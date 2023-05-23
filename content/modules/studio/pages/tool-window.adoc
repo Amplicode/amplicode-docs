@@ -1,6 +1,6 @@
-= Amplicode Studio Tool Window
+= Tool Window
 
-Once you install Amplicode and create your first Amplicode project, you will find its editor toolbar (1) on the right-hand side of your IDE window. There will also be an additional toolbar (2) at the upper part of the window containing the source code of the file, as long as you have at least one file opened.
+Once you install Amplicode and create your first Amplicode project (or download en existing project and open it), you will find its Tool Window (1) on the right-hand side of your IDE window. There will also be an additional toolbar (2) at the upper part of the window containing the source code of the file, as long as you have at least one file opened.
 
 image::amplicode-toolbars.png[align=center]
 
