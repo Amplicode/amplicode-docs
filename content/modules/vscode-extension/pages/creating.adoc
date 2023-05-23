@@ -1,10 +1,8 @@
 = Creating a Project
 
-Before creating a new frontend project in VS Code, you will need to run the corresponding backend application in IntelliJ IDEA using the debug icon (image:debug.png[align=center]).
+One essential thing you need to have before creating the project is the GraphQL schema file, which is developed as a part of the backend. This schema file describes the capabilities of the application backend.
 
-We also recommend to make a copy of the `schema.graphqls` file from the backend project (located in `<project folder>\src\main\resources\graphql`), put it in a separate folder (e.g. *_Downloads_*) and rename it (the project we are using for demonstration is named *_Petclinic_*, so we name the file `petclinic.graphqls`).
-
-Now we go to VS Code and start creating the frontend project.
+After making sure that we have it, we go to VS Code and start creating the frontend project.
 
 From the VS Code start screen press *_Ctrl+Shift+P_* to make the *_Show All Commands_* window appear.
 
@@ -20,7 +18,7 @@ The result will look as below. Press *_Enter_*.
 
 image::destination.png[align=center]
 
-The next parameter to choose will be Client Type. Select *_Ant Design Based_*.
+The next parameter to choose will be Client Type. Select *_React Admin Based_*.
 
 image::client-type.png[align=center]
 
@@ -30,11 +28,11 @@ image::project-name.png[align=center]
 
 The next step will be to upload the `.graphqls` file. Choose the file that we previously stored (petclinic.graphqls) in a separate folder and upload it.
 
-For *_Backend Port_* keep the default value of 8080. For *_Generator Version_* use the current default value of 0.39.0. Click *_Generate_*.
+For *_Backend Port_* keep the default value of 8080. For *_Generator Version_* use the current default value. Click *_Generate_*.
 
 image::generate.png[align=center]
 
-Wait while the plugin installs all the necessary packages.
+Wait while the extension installs all the necessary packages.
 
 Click on the *_Explorer_* icon.
 
@@ -44,5 +42,4 @@ Open the folder (there will be a prompt), click *_Trust the Author_*. The projec
 
 image::project-tree.png[align=center]
 
-//TODO
 

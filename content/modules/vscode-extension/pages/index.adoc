@@ -4,9 +4,9 @@
 == Intro
 
 *_Visual Studio Code_* (a.k.a. VS Code)
-is a free open-source IDE that supports frontend development and can be used as a free alternative to *_IntelliJ IDEA Ultimate Edition_*. In terms of Amplicode development, VS Code is a handy tool allowing us to develop frontend parts of Amplicode-based projects without having to pay for the IntelliJ IDEA Ultimate Edition license. For backend development, *_IntelliJ IDEA Community edition_* is still the IDE of choice.
+is a free open-source IDE that supports frontend development and can be used as a free alternative to *_IntelliJ IDEA Ultimate Edition_*. In terms of Amplicode development, VS Code is a handy tool allowing us to develop frontend parts of Amplicode-based projects without depending on a commercial IDE. For backend development, *_IntelliJ IDEA Community edition_* is still the IDE of choice.
 
-Therefore, an Amplicode extension for VS Code IDE has been developed as part of the Amplicode software family. In order to use it, first you will need to download and install Visual Studio Code IDE.
+Therefore, an Amplicode extension for VS Code IDE has been developed as part of the Amplicode platform. In order to use it, first you will need to download and install Visual Studio Code IDE.
 
 https://code.visualstudio.com/[Download Visual Studio Code]
 

@@ -1,14 +1,22 @@
 = Working with the Project
 
-In order to work with the project, we need to install npm.
+[[npm-install]]
+== Running npm install
+
+In order to work with the project, we need to run the `npm install` command first.
 
 Open the *_Show All Commands_* window, type `terminal` and select *_Create New Terminal_*.
 
 image::create-new-terminal.png[align=center]
 
-Type *_npm install_* in the new terminal window and wait until the installation is complete.
+Type `npm install` in the new terminal window and wait until the process is complete.
 
-Open the package.json file and run the project in the Debug mode.
+[[run-debug]]
+== Running the Project in the Debug Mode
+
+Before running the new frontend project in VS Code, you will need to run the corresponding backend application in IntelliJ IDEA using the debug icon (image:debug.png[align=center]).
+
+Return to VS Code, open the `package.json` file and run the project in the Debug mode.
 
 image::run-debug.png[align=center]
 
@@ -16,11 +24,14 @@ Click *_Debug_* -> *_dev vite_*.
 
 image::dev.png[align=center]
 
-Open localhost:3000 in any browser. You will see the Welcome screen of the new frontend application.
+Open localhost:3000 in any browser. You will see the Welcome screen of the new frontend application. An alternative way to launch the frontend is to execute `npm run dev` in the terminal.
 
 image::localhost.png[align=center]
 
-You can also run a background TypeScript type generator. To do it, simply run the following command from the terminal:
+[[typescript]]
+== Running the TypeScript type Generator
+
+You can also run the background TypeScript type generator. To do it, simply run the following command from the terminal:
 
 [source, bash]
 npm run generate:watch
@@ -31,5 +42,3 @@ For one-time generation, run the following command:
 
 [source, bash]
 npm run generate
-
-//TODO
