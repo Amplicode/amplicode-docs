@@ -1,5 +1,18 @@
 = JPA Entities
 
+As we mentioned before, the *_Designer_* tab of the Tool Window contains two panels: the *_Palette_* and the *_Inspector_*.
+
+The *_Palette_* provides code-generation wizards for the following:
+
+* Attributes
+* Lifecycle Callbacks
+* Indexes
+* Named Query
+* Reverse Engineering
+* Utilities – Equals/HashCode/ToString
+
+The *_Inspector_* allows you to configure JPA entities and attributes in it.
+
 [[entity-generation]]
 == Entity Generation
 
@@ -39,6 +52,23 @@ The example of the generated `id` code is shown below.
         this.id = id;
     }
 ----
+
+[[hibernate-validations]]
+=== Hibernate validations
+
+Amplicode projects by default have the Hibernate Validator library enabled. It allows us to define a metadata model and API for entity and method validation.
+
+Inspector contains a section with validations, which you can apply to an attribute. To make it appear, select an attribute in the source code:
+
+image::inspector.png[align=center]
+
+Note that the properties and validations offered by the Inspector depend on the data type of the attribute. For example, the set of properties and validations offered for an Integer attribute will be different from a String attribute, etc...
+
+You can find more information by following the links below:
+
+* https://docs.jboss.org/hibernate/validator/7.0/reference/en-US/html_single/[Hibernate Validator]
+
+* https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html[Spring support for Bean Validation]
 
 [[hibernate-types]]
 == Hibernate Types & JPA Converters

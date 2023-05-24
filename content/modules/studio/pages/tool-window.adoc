@@ -27,7 +27,7 @@ image::structure2.png[align=center]
 
 [[palette]]
 == Palette
-The *_Palette_* is located on the Designer tab, in the upper part of the panel. It can look differently in different contexts.
+The *_Palette_* is located on the Designer tab, in the upper part of it. It can look differently in different contexts.
 
 The version of the *_Palette_* for JPA entities is shown below:
 
@@ -35,40 +35,18 @@ image::palette.png[align=center]
 
 The *_Palette_* aims to generate code appropriate in the current context. For an entity, it can be an attribute or an index; for a repository - a query method, etc. Hence, the different look of the *_Palette_* depending on the type of the file that you are editing.
 
-The *_Palette_* provides code-generation wizards for the following:
-
- * Attributes
- * Lifecycle Callbacks
- * Indexes
- * Named Query
- * Reverse Engineering
- * Utilities – Equals/HashCode/ToString
-
 [[inspector]]
 == Inspector
 
-The *_Inspector_* is designed to edit existing code: attributes, indexes, queries, etc.
+The *_Inspector_* is designed to edit existing code: attributes, indexes, queries, etc. All changes made in the Inspector are reflected immediately in the source code. Likewise, all the changes done manually in the source code will be reflected in the Inspector.
 
-The *_Inspector_* allows you to configure JPA entities and attributes in it. Click on any element that you need to configure, and change the required properties:
+Click on any element that you need to configure, and change the required properties. Note that the Inspector has a very different look depending on whether you are working with Entities or with Repositories. Below is an example of the Inspector that deals with Entity attributes.
 
 image::inspector-properties.png[align=center]
 
-[[hibernate-validations]]
-=== Hibernate validations
+For a Repository, the Inspector acquires a completely different look:
 
-Amplicode projects by default have the Hibernate Validator library enabled. It allows us to define a metadata model and API for entity and method validation.
-
-Inspector contains a section with validations, which you can apply to an attribute. To make it appear, select an attribute in the source code:
-
-image::inspector.png[align=center]
-
-Note that the properties and validations offered by the Inspector depend on the data type of the attribute. For example, the set of properties and validations offered for an Integer attribute will be different from a String attribute, etc...
-
-You can find more information by following the links below:
-
- * https://docs.jboss.org/hibernate/validator/7.0/reference/en-US/html_single/[Hibernate Validator]
-
- * https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html[Spring support for Bean Validation]
+image::inspector-for-repository.png[align=center]
 
 [[editor-toolbar]]
 == Editor Toolbar
@@ -76,3 +54,62 @@ You can find more information by following the links below:
 Editor Toolbar contains relevant actions depending on the file content. You can find it on top of the editor window.
 
 image::editor-toolbar.png[align=center]
+
+The toolbar contains the following icons:
+
+ * Show DDL image:show-ddl.png[align=center]
+
+ * Select in JPA Structure image:select-in-jpa-structure.png[align=center]
+
+ * References image:references.png[align=center]
+
+ * Add Entity Attribute image:add-entity-attribute.png[align=center]
+
+ * Add Lifecycle Callback Method image:add-lifecycle-callback-method.png[align=center]
+
+ * Add Index image:add-index.png[align=center]
+
+ * Add Named Query image:add-named-query.png[align=center]
+
+ * Spring Data Repositories image:spring-data-repositories.png[align=center]
+
+ * DTOs and Spring Data Projections image:dtos-and-spring-data-projections.png[align=center]
+
+[[icon-functions]]
+=== Icon Functions
+
+*_Show DDL_* displays database-related information for the currently opened Entity.
+
+image::show-ddl-output.png[align=center]
+
+You can also choose a different database for the Entity using this popup window.
+
+*_Select in JPA Structure_* automatically shows the currently selected object in the Structure panel. If you are currently working with the Designer tab, the Tool Window will switch to Structure.
+
+The *_References_* icon displays references for the currently selected object in the source code.
+
+image::references-output.png[align=center]
+
+*_Add Entity Attribute_*, as the name suggests, provides means for creating attributes for the current Entity (an alternative to the Palette).
+
+image::add-entity-attribute-output.png[align=center]
+
+*_Add Lifecycle Callback Method_*, again, as is obvious from the name, provides an interface for creating lifecycle callback methods.
+
+image::add-lifecycle-callback-output.png[align=center]
+
+With *_Add Index_* you can add indexes or unique constraints to the database.
+
+image::add-index-output.png[align=center]
+
+*_Add Named Query_* provides an interface for creating different types of named queries.
+
+image::add-named-query-output.png[align=center]
+
+The icon named *_Spring Data Repositories_* shows the repository related to the currently opened Entity and offers an opportunity to create more repositories.
+
+image::spring-data-repositories-output.png[align=center]
+
+Finally, DTOs and Spring Data Projections is the icon that gives us access to various actions that are necessary for working with Spring Data Projections and DTOs.
+
+image::dtos-and-spring-data-projections-output.png[align=center]
