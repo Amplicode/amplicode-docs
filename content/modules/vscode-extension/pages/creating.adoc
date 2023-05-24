@@ -26,7 +26,7 @@ On the next step, you name the project.
 
 image::project-name.png[align=center]
 
-The next step will be to upload the `.graphqls` file. Choose the file that we previously stored (petclinic.graphqls) in a separate folder and upload it.
+The next step will be to upload the `.graphqls` file. Upload the GraphQL schema file that you have in your backend project.
 
 For *_Backend Port_* keep the default value of 8080. For *_Generator Version_* use the current default value. Click *_Generate_*.
 
@@ -38,7 +38,15 @@ Click on the *_Explorer_* icon.
 
 image::explorer.png[align=center]
 
-Open the folder (there will be a prompt), click *_Trust the Author_*. The project has been created. You can see the project tree on the left now.
+Open the folder by clicking *_Open Folder_* button.
+
+image::open-the-folder.png[align=center]
+
+If you are opening this folder for the first time, VS Code will ask you if you trust the authors of the project. Click *_Yes, I trust the authors_*.
+
+image::trust-the-author.png[align=center]
+
+The project has been created. You can see the project tree on the left now.
 
 image::project-tree.png[align=center]
 
