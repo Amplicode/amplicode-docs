@@ -1,8 +1,10 @@
-= Spring Data JPA
+= Spring Data Repositories
 
 [[introduction]]
 == Introduction
 *_Spring Data JPA_* is part of the larger Spring Data family that makes it easy to implement JPA-based repositories quickly. Studio provides a clear UI for generating repositories, projections, queries, etc.
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories[Working with Spring Data Repositories]
 
 [[repository-creation]]
 == Repository Creation
@@ -28,7 +30,7 @@ image::repository-creation-approach4.png[align=center]
 [NOTE]
 You can create a Spring Data JPA repository only for an entity with a field annotated with `@Id`.
 
-In the *_New JPA Repository_* window, you can set:
+In the *_New Spring Data Repository_* window, you can set:
 
  * Entity, which the repository will be created for
  * Class name
@@ -36,6 +38,10 @@ In the *_New JPA Repository_* window, you can set:
  ** Repository from `org.springframework.data.repository` package
  ** Repository from your project
  * Whether the repository will extend JpaSpecificationExecutor or not
+
+[TIP]
+It is recommended to turn this setting on, in order to be able to use the filtering ability when creating a Spring GraphQL controller later for this entity.
+
  * Source root
  * Package
 
@@ -63,7 +69,7 @@ Once the repositories have been created, you can move them from one package to a
 image::bulk-creation-4.png[align=center]
 
 [[structure-repositories]]
-== Structure Repositories
+== Repositories on the Structure Panel
 
 For the most efficient navigation in the project, Studio groups all repositories for each entity. It doesn't matter if the repositories for the entity are located in different or in the same project package. All repositories related to the entity will be displayed in the *_Repositories_* section. From here, you can quickly move to the repository implementation or create a new one.
 
@@ -152,14 +158,42 @@ In the *_Entity Graph_* window check and uncheck nested entities according to yo
 
 image::graph-support2.png[align=center]
 
+Click *_OK_*. The resulting code will look as follows:
+
+[source, java]
+----
+public interface AppointmentRepository extends JpaRepository<Appointment, Long>, JpaSpecificationExecutor<Appointment> {
+    @EntityGraph(attributePaths = {"doctor", "patient"})
+    @Query("""
+            select count(a) from Appointment a
+            where a.doctor.id = ?1 and a.status in ?2 and a.startTime <= ?3 and a.endTime >= ?4""")
+    long countConflictsByDoctorAndPeriod(Long doctorId, Collection<Status> statuses, LocalDateTime maxStartTime, LocalDateTime minEndTime);
+
+    @Query("""
+            select count(a) from Appointment a
+            where a.patient.id = ?1 and a.status in ?2 and a.startTime <= ?3 and a.endTime >= ?4""")
+    long countConflictsByPatientAndPeriod(Long patientId, Collection<Status> statuses, LocalDateTime maxStartTime, LocalDateTime minEndTime);
+
+}
+----
+
+You can see the added `@EntityGraph` annotation in the first query.
+
 The depth of nesting can vary, but the *_EntityGraph_* feature will still support the complete graph with all nesting levels. See example below:
 
 image::graph-support3.png[align=center]
+
+See also:
+
+ * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.entity-graph[Configuring Fetch- and LoadGraphs]
+ * https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#fetching-strategies-dynamic-fetching-entity-graph[Dynamic fetching via Jakarta Persistence entity graph]
 
 [[projection]]
 == Projection
 
 Sometimes you only need a subset of columns from a table. In such cases, *_Spring Data JPA Projections_* come in handy, letting you return only required fields from queries.
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections[Read more about projections here]
 
 In order to create a projection, click the + icon in the *_Designer_* panel and select *_Spring Data Projection_*.
 
@@ -182,11 +216,16 @@ For the above configuration the following projection will be generated:
 
 [source, java]
 ----
-public interface OrderInfo {
-    Long getId();
+    /**
+     * Projection for {@link io.jmix2mvp.petclinic.entity.PetType}
+     */
+    interface PetTypeInfo {
+        Long getId();
 
-    Boolean isIsCompleted();
-}
+        String getName();
+
+        ProtectionStatus getDefenseStatus();
+    }
 ----
 
 [[projection-sync]]
@@ -209,7 +248,9 @@ image::gutter-icon.png[align=center]
 
 [[auditing-support]]
 == Auditing Support
-Having auditing in a large application is a crucial aspect. With Studio, you can effortlessly include commonly used audit fields by utilizing annotations, such as `@CreatedBy`, `@CreatedDate`, `@LastModifiedBy` and `@LastModifiedDate`. What's more, Studio will notify you if you forget to add the `@EnableJpaAuditing` annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity. This leaves even less room for a mistake!
+Having auditing in a large application is a crucial aspect. With Studio, you can effortlessly include commonly used audit fields by utilizing annotations, such as `@CreatedBy`, `@CreatedDate`, `@LastModifiedBy` and `@LastModifiedDate`. What's more, Studio will notify you if you forget to add the `@EnableJpaAuditing` annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity.
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#auditing[Read more about Spring Data Auditing here]
 
 Use the *_Add Entity Attribute_* icon in the *_Editor Toolbar_* and select *_Spring Auditing_*.
 
@@ -226,3 +267,4 @@ image::auditing-enable.png[align=center]
 To add AuditingEntityListener it's enough to click on the link provided in the same window.
 
 image::auditing3.png[align=center]
+

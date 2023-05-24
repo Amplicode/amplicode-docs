@@ -1,4 +1,4 @@
-= Entity Designer
+= JPA Entities
 
 [[entity-generation]]
 == Entity Generation

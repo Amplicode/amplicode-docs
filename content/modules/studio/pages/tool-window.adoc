@@ -1,10 +1,10 @@
 = Tool Window
 
-Once you install Amplicode and create your first Amplicode project (or download en existing project and open it), you will find its Tool Window (1) on the right-hand side of your IDE window. There will also be an additional toolbar (2) at the upper part of the window containing the source code of the file, as long as you have at least one file opened.
+Once you install Amplicode and create your first Amplicode project (or download en existing project and open it), you will find its Tool Window (1) on the right-hand side of your IDE window. There will also be an additional toolbar (2) at the upper part of the window containing the source code of the file, as long as you have at least one file opened. This is called *_Editor Toolbar_*.
 
 image::amplicode-toolbars.png[align=center]
 
-Amplicode Studio (from now on we are going to refer to it simply as *_Studio_*) provides the following tool windows:
+Amplicode Studio (from now on we are going to refer to it simply as *_Studio_*) provides the following panels within the Tool Window:
 
  * Structure (1)
  * Palette (2)
@@ -56,15 +56,23 @@ image::inspector-properties.png[align=center]
 [[hibernate-validations]]
 === Hibernate validations
 
-For projects with Hibernate Validations, a section appears with validations that you can apply for the selected attribute:
+Amplicode projects by default have the Hibernate Validator library enabled. It allows us to define a metadata model and API for entity and method validation.
+
+Inspector contains a section with validations, which you can apply to an attribute. To make it appear, select an attribute in the source code:
 
 image::inspector.png[align=center]
 
-Notice that the properties and validations offered by the Inspector depend on the data type of the attribute. For example, the set of properties and validations offered for an Integer attribute will be different from a String attribute, etc...
+Note that the properties and validations offered by the Inspector depend on the data type of the attribute. For example, the set of properties and validations offered for an Integer attribute will be different from a String attribute, etc...
+
+You can find more information by following the links below:
+
+ * https://docs.jboss.org/hibernate/validator/7.0/reference/en-US/html_single/[Hibernate Validator]
+
+ * https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html[Spring support for Bean Validation]
 
 [[editor-toolbar]]
 == Editor Toolbar
 
-Editor Toolbar contains relevant action depending on the file content. You can find it on top of the editor window.
+Editor Toolbar contains relevant actions depending on the file content. You can find it on top of the editor window.
 
 image::editor-toolbar.png[align=center]
