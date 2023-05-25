@@ -1,0 +1,72 @@
+= Spring GraphQL Controllers
+
+[][[intro-about]]
+== About Spring for GraphQL API
+
+GraphQL is a query language whose development started in 2012. It is open-source and supports query and data manipulation for APIs. GraphQL has been implemented in several programming languages, including Java, by different teams, and its Java implementation is named *_GraphQL Java_*.
+
+*_Spring for GraphQL_* has been developed to support Spring-based applications that use GraphQL Java and  is the successor of the *_GraphQL Java Spring_* project from the GraphQL Java team. This product has found its place in the Amplicode project where it is routinely used to manage data access and modification.
+
+See also:
+
+ * https://docs.spring.io/spring-graphql/docs/current/reference/html/#overview[Spring for GraphQL Overview]
+
+ * https://www.graphql-java.com/documentation/getting-started[GraphQL Java Documentation]
+
+ * https://en.wikipedia.org/wiki/GraphQL[Wikipedia Article about GraphQL]
+
+//TODO
+
+[[empty-controller]]
+== Creating an Empty Controller
+
+//TODO
+
+[[create-crud-controller]]
+== Creating CRUD controller by Spring Data repository
+
+//TODO
+
+[[designer]]
+== Designer:
+
+[[palette-items]]
+=== Palette items
+
+//TODO
+
+[[inspector-items]]
+=== Inspector items
+
+//TODO
+
+[[schema-first]]
+== Schema-first creation of controllers and DTOs
+
+//TODO
+
+[[scalars]]
+== Supported types and scalars
+
+By default, Spring for GraphQL supports scalar types mentioned in the GraphQL specification, namely:
+
+Int - 32-bit signed.
+Float - IEEE 754.
+String - UTF-8.
+Boolean - true/false.
+ID - serialized representation - String
+
+Besides, Spring for GraphQL offers an opportunity to add our own scalar types.
+
+Spring for GraphQL is based on GraphQL Java, where the mapping between scalar types and Java types is defined as follows:
+
+|===
+|Scalar Type	|Java Type
+|Int	|Integer
+|Float	|Double
+|String	|String
+|Boolean	|Boolean
+|ID	|String, Integer, Long, UUID, BigInteger
+
+
+//TODO
