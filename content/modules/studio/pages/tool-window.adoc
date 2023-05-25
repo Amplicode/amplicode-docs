@@ -40,7 +40,7 @@ The *_Palette_* aims to generate code appropriate in the current context. For an
 
 The *_Inspector_* is designed to edit existing code: attributes, indexes, queries, etc. All changes made in the Inspector are reflected immediately in the source code. Likewise, all the changes done manually in the source code will be reflected in the Inspector.
 
-Click on any element that you need to configure, and change the required properties. Note that the Inspector has a very different look depending on whether you are working with Entities or with Repositories. Below is an example of the Inspector that deals with Entity attributes.
+Click on any element that you need to configure and change the required properties. Note that the Inspector has a very different look depending on whether you are working with Entities or with Repositories. Below is an example of the Inspector that deals with Entity attributes.
 
 image::inspector-properties.png[align=center]
 
@@ -55,61 +55,13 @@ Editor Toolbar contains relevant actions depending on the file content. You can 
 
 image::editor-toolbar.png[align=center]
 
-The toolbar contains the following icons:
+It will look very differently depending on what kind of file is currently open in the editor window. The above example demonstrates what the Editor Toolbar looks like when we are working with an Entity.
 
- * Show DDL image:show-ddl.png[align=center]
+For a Liquibase script the Editor Toolbar will look as follows:
 
- * Select in JPA Structure image:select-in-jpa-structure.png[align=center]
+image::editor-toolbar-liquibase.png[align=center]
 
- * References image:references.png[align=center]
+Overall, we can say that the Editor Toolbar offers us quick access to certain popular actions, which otherwise might be hard to find. Most of them are duplicated in the Tool Window or context menus, but the Editor Toolbar provides us with a convenient shortcut.
 
- * Add Entity Attribute image:add-entity-attribute.png[align=center]
 
- * Add Lifecycle Callback Method image:add-lifecycle-callback-method.png[align=center]
 
- * Add Index image:add-index.png[align=center]
-
- * Add Named Query image:add-named-query.png[align=center]
-
- * Spring Data Repositories image:spring-data-repositories.png[align=center]
-
- * DTOs and Spring Data Projections image:dtos-and-spring-data-projections.png[align=center]
-
-[[icon-functions]]
-=== Icon Functions
-
-*_Show DDL_* displays database-related information for the currently opened Entity.
-
-image::show-ddl-output.png[align=center]
-
-You can also choose a different database for the Entity using this popup window.
-
-*_Select in JPA Structure_* automatically shows the currently selected object in the Structure panel. If you are currently working with the Designer tab, the Tool Window will switch to Structure.
-
-The *_References_* icon displays references for the currently selected object in the source code.
-
-image::references-output.png[align=center]
-
-*_Add Entity Attribute_*, as the name suggests, provides means for creating attributes for the current Entity (an alternative to the Palette).
-
-image::add-entity-attribute-output.png[align=center]
-
-*_Add Lifecycle Callback Method_*, again, as is obvious from the name, provides an interface for creating lifecycle callback methods.
-
-image::add-lifecycle-callback-output.png[align=center]
-
-With *_Add Index_* you can add indexes or unique constraints to the database.
-
-image::add-index-output.png[align=center]
-
-*_Add Named Query_* provides an interface for creating different types of named queries.
-
-image::add-named-query-output.png[align=center]
-
-The icon named *_Spring Data Repositories_* shows the repository related to the currently opened Entity and offers an opportunity to create more repositories.
-
-image::spring-data-repositories-output.png[align=center]
-
-Finally, DTOs and Spring Data Projections is the icon that gives us access to various actions that are necessary for working with Spring Data Projections and DTOs.
-
-image::dtos-and-spring-data-projections-output.png[align=center]

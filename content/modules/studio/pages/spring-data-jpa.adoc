@@ -4,7 +4,7 @@
 == Introduction
 *_Spring Data JPA_* is part of the larger Spring Data family that makes it easy to implement JPA-based repositories quickly. Studio provides a clear UI for generating repositories, projections, queries, etc.
 
-https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories[Working with Spring Data Repositories]
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories[Working with Spring Data Repositories (Spring documentation)]
 
 [[repository-creation]]
 == Repository Creation
@@ -185,15 +185,15 @@ image::graph-support3.png[align=center]
 
 See also:
 
- * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.entity-graph[Configuring Fetch- and LoadGraphs]
- * https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#fetching-strategies-dynamic-fetching-entity-graph[Dynamic fetching via Jakarta Persistence entity graph]
+ * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.entity-graph[Configuring Fetch- and LoadGraphs (Spring documentation)]
+ * https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#fetching-strategies-dynamic-fetching-entity-graph[Dynamic fetching via Jakarta Persistence entity graph (Hibernate user guide)]
 
 [[projection]]
 == Projection
 
 Sometimes you only need a subset of columns from a table. In such cases, *_Spring Data JPA Projections_* come in handy, letting you return only required fields from queries.
 
-https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections[Read more about projections here]
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections[Read more about projections here (Spring documentation)]
 
 In order to create a projection, click the + icon in the *_Designer_* panel and select *_Spring Data Projection_*.
 
@@ -216,6 +216,13 @@ For the above configuration the following projection will be generated:
 
 [source, java]
 ----
+public interface OwnerInfo {
+    Long getId();
+
+    String getLastName();
+
+    PetTypeInfo getPetType();
+
     /**
      * Projection for {@link io.jmix2mvp.petclinic.entity.PetType}
      */
@@ -223,9 +230,8 @@ For the above configuration the following projection will be generated:
         Long getId();
 
         String getName();
-
-        ProtectionStatus getDefenseStatus();
     }
+}
 ----
 
 [[projection-sync]]
@@ -250,7 +256,7 @@ image::gutter-icon.png[align=center]
 == Auditing Support
 Having auditing in a large application is a crucial aspect. With Studio, you can effortlessly include commonly used audit fields by utilizing annotations, such as `@CreatedBy`, `@CreatedDate`, `@LastModifiedBy` and `@LastModifiedDate`. What's more, Studio will notify you if you forget to add the `@EnableJpaAuditing` annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity.
 
-https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#auditing[Read more about Spring Data Auditing here]
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#auditing[Read more about Spring Data Auditing here (Spring documentation)]
 
 Use the *_Add Entity Attribute_* icon in the *_Editor Toolbar_* and select *_Spring Auditing_*.
 
