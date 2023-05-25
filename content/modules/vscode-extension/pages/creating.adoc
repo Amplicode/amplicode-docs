@@ -32,7 +32,20 @@ For *_Backend Port_* keep the default value of 8080. For *_Generator Version_* u
 
 image::generate.png[align=center]
 
-Wait while the extension installs all the necessary packages.
+[[opening-project]]
+== Opening the Project
+
+Wait while the extension installs all the necessary packages. Once the process is completed, you will get a prompt to open the freshly generated project.
+
+image::prompt.png[align=center]
+
+Click *_Open generated project_*.
+
+[IMPORTANT]
+You will have to be extremely quick to use this prompt, since it only stays on the screen for a few seconds. If you have missed it, there is still an alternative way described below.
+
+[[alternative-opening]]
+=== The Alternative
 
 Click on the *_Explorer_* icon.
 
@@ -42,11 +55,11 @@ Open the folder by clicking *_Open Folder_* button.
 
 image::open-the-folder.png[align=center]
 
-If you are opening this folder for the first time, VS Code will ask you if you trust the authors of the project. Click *_Yes, I trust the authors_*.
+Whichever way you use to open the project, if you are opening this folder for the first time, VS Code will ask you if you trust the authors of the project. Click *_Yes, I trust the authors_*.
 
 image::trust-the-author.png[align=center]
 
-The project has been created. You can see the project tree on the left now.
+VS Code will proceed to open the project that you have just created. You should see the project tree on the left now.
 
 image::project-tree.png[align=center]
 
