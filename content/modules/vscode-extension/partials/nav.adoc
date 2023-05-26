@@ -1,0 +1,4 @@
+* xref:vscode-extension:index.adoc[]
+** xref:vscode-extension:installation.adoc[]
+** xref:vscode-extension:creating.adoc[]
+** xref:vscode-extension:working.adoc[]

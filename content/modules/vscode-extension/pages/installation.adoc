@@ -1,0 +1,19 @@
+= Installation
+
+Once you have installed VS Code, you can now proceed to installing the Amplicode extension to VS Code.
+
+Start Your IDE. Open the *_Extensions_* section.
+
+image::extensions.png[align=center]
+
+Open the upper drop-down menu and select *_Install from VSIX_*.
+
+image::install-from-vsix.png[align=center]
+
+Select the .vsix file with extension and click *_Install_*.
+
+Close the IDE and reopen it. Open the *_Extensions_* section. The Amplicode extension will be listed as installed.
+
+image::extension-installed.png[align=center]
+
+The installation is complete.

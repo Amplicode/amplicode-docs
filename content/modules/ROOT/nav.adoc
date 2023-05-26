@@ -3,6 +3,7 @@
 * xref:ROOT:setup.adoc[]
 include::tutorial:partial$nav.adoc[]
 include::studio:partial$nav.adoc[]
+include::vscode-extension:partial$nav.adoc[]
 include::core-libraries:partial$nav.adoc[]
 
 * xref:ROOT:add-ons.adoc[]
