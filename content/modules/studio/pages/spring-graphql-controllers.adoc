@@ -67,6 +67,46 @@ Spring for GraphQL is based on GraphQL Java, where the mapping between scalar ty
 |String	|String
 |Boolean	|Boolean
 |ID	|String, Integer, Long, UUID, BigInteger
+|===
+
+To implement scalar types, Amplicode uses an approach requiring that each scalar type corresponds to one JS type and one Java type. This approach involves using scalar types from existing libraries: *_graphql-scalars_* for *_JavaScript_* and  *_Extended Scalars_* for *_Java_*. It is also true that:
+
+ * Knowing a scalar type we can unambiguously define the validation rules and the representation rules for the type in UI.
+
+ * It is possible to generate type-safe TypeScript and Java clients for a scalar type, since the correspondence is one-to-one.
+
+The mapping between scalar types and Java types is given in the table below:
+
+ * *_Scalar Type_* - Scalar type name in the GraphQL schema
+
+ * *_Java Type_* - Java type used for this scalar type
+
+ * *_JSON presentation_* - the description of how the value is stored
+
+ * *_JSON Sample_* - value example.
+
+|===
+|Scalar Type	|Java Type	|JSON presentation	|JSON Sample
+|Standard types |||
+|Int	|Integer, int, Byte, byte, Short, short, char	|A signed 32‐bit integer	|5
+|Float	|Double, double, Float, float	|A signed double-precision floating-point value	|5.5
+|String	|String, UUID	|An UTF‐8 string	|"valueString"
+|Boolean	|Boolean, boolean	|true or false	|true
+|ID	|String, Integer, Long, UUID	|An UTF‐8 string	|"code"
+|Extended types |||
+|BigInteger	|BigInteger	|A value as string	|"120 000"
+|Long	|Long, long	|A value as UTF‐8 string	|"120 000"
+|BigDecimal	|BigDecimal	|value as string	|"123.505"
+|Date	|LocalDate	|A date string, full-date format RFC3339	|"2007-12-03"
+|Time	|OffsetTime	|A time string with offset, full-time format RFC3339	|"14:10:20+01:00"
+|DateTime	|OffsetDateTime	|A date time string with offset, date-time format RFC3339	|"2016-01-01T14:10:20+01:00"
+|Url	|URL	|URL format as specified in RFC3986	|"http://yandex.ru"
+|Void	|Void	|null	|null
+|LocalTime	|LocalTime	|A local time string (i.e., with no associated timezone) in 24-hr HH:mm[:ss[.SSS]] format	|"14:25 or 14:25:06 or 14:25:06.123"
+|LocalDateTime	|LocalDateTime	|A local datetime string in full-date"T"partial-time format RFC3339	|"2007-12-03T14:25:06"
+|Timestamp	|Date	|A value as string of number of milliseconds from start of UNIX epoch	|"1644399147756"
+|===
+
 
 
 //TODO
