@@ -1,3 +1,67 @@
-= Amplicode Tool Window
+= Tool Window
 
-TODO
+Once you install Amplicode and create your first Amplicode project (or download en existing project and open it), you will find its Tool Window (1) on the right-hand side of your IDE window. There will also be an additional toolbar (2) at the upper part of the window containing the source code of the file, as long as you have at least one file opened. This is called *_Editor Toolbar_*.
+
+image::amplicode-toolbars.png[align=center]
+
+Amplicode Studio (from now on we are going to refer to it simply as *_Studio_*) provides the following panels within the Tool Window:
+
+ * Structure (1)
+ * Palette (2)
+ * Inspector (3)
+
+image::structure.png[align=center]
+
+[[structure]]
+== Structure
+The *_Structure_* tab offers a comprehensive, data-centric view of the project. You can use it for various purposes:
+
+ * Traverse through the data model and observe the entity structure represented hierarchically. This feature allows for easy navigation to entities referencing the current one, as well as ones that the current entity refers to. This is an extremely useful feature, especially for those who are new to an existing project with a large entity graph or for code reviewers who have limited time to understand how the data model is designed.
+ * Create data-related objects: entities, JPA converters / Hibernate custom types, Spring Data repositories and Liquibase changelog.
+ * Observe related Spring Data repositories, DTOs and projections for each entity.
+ * Edit additional project artifacts such as DB connections, persistence units, and other artifacts that the plugin could not detect automatically.
+
+Below, you can see the upper and the lower fragments of the *_Structure_* panel side by side with sections partially expanded.
+
+image::structure2.png[align=center]
+
+[[palette]]
+== Palette
+The *_Palette_* is located on the Designer tab, in the upper part of it. It can look differently in different contexts.
+
+The version of the *_Palette_* for JPA entities is shown below:
+
+image::palette.png[align=center]
+
+The *_Palette_* aims to generate code appropriate in the current context. For an entity, it can be an attribute or an index; for a repository - a query method, etc. Hence, the different look of the *_Palette_* depending on the type of the file that you are editing.
+
+[[inspector]]
+== Inspector
+
+The *_Inspector_* is designed to edit existing code: attributes, indexes, queries, etc. All changes made in the Inspector are reflected immediately in the source code. Likewise, all the changes done manually in the source code will be reflected in the Inspector.
+
+Click on any element that you need to configure and change the required properties. Note that the Inspector has a very different look depending on whether you are working with Entities or with Repositories. Below is an example of the Inspector that deals with Entity attributes.
+
+image::inspector-properties.png[align=center]
+
+For a Repository, the Inspector acquires a completely different look:
+
+image::inspector-for-repository.png[align=center]
+
+[[editor-toolbar]]
+== Editor Toolbar
+
+Editor Toolbar contains relevant actions depending on the file content. You can find it on top of the editor window.
+
+image::editor-toolbar.png[align=center]
+
+It will look very differently depending on what kind of file is currently open in the editor window. The above example demonstrates what the Editor Toolbar looks like when we are working with an Entity.
+
+For a Liquibase script the Editor Toolbar will look as follows:
+
+image::editor-toolbar-liquibase.png[align=center]
+
+Overall, we can say that the Editor Toolbar offers us quick access to certain popular actions, which otherwise might be hard to find. Most of them are duplicated in the Tool Window or context menus, but the Editor Toolbar provides us with a convenient shortcut.
+
+
+

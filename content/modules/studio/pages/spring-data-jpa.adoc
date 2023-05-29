@@ -1,0 +1,256 @@
+= Spring Data Repositories
+
+[[introduction]]
+== Introduction
+*_Spring Data JPA_* is part of the larger Spring Data family that makes it easy to implement JPA-based repositories quickly. Studio provides a clear UI for generating repositories, projections, queries, etc.
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories[Working with Spring Data Repositories (Spring documentation)]
+
+[[repository-creation]]
+== Repository Creation
+
+Studio provides various ways to create repositories to make working with JPA-related objects more convenient for most users. All possible ways (there are four of them) to generate repositories in the project are listed below.
+
+ * Right-click the JPA entity in the project tree, then select *_New_* -> *_Spring Data JPA Repository_*
+
+image::repository-creation-approach1.png[align=center]
+
+ * Use the *_+_* pictogram in the Amplicode Structure panel, then select *_Spring Data JPA Repository_*
+
+image::repository-creation-approach2.png[align=center]
+
+ * Open *_Persistence_* under *_Structure_*, select the entity, right-click it and select *_New_* -> *_Spring Data JPA Repository_*
+
+image::repository-creation-approach3.png[align=center]
+
+ * Double-click the entity in the project tree, switch to the *_Designer_* panel and in the *_Palette_* use the *_Actions_* drop-down box. Select *_Create JPA Repository_*.
+
+image::repository-creation-approach4.png[align=center]
+
+[NOTE]
+You can create a Spring Data JPA repository only for an entity with a field annotated with `@Id`.
+
+In the *_New Spring Data Repository_* window, you can set:
+
+ * Entity, which the repository will be created for
+ * Class name
+ * Parent class for the repository. It can be:
+ ** Repository from `org.springframework.data.repository` package
+ ** Repository from your project
+ * Whether the repository will extend JpaSpecificationExecutor or not
+
+[TIP]
+It is recommended to turn this setting on, in order to be able to use the filtering ability when creating a Spring GraphQL controller later for this entity.
+
+ * Source root
+ * Package
+
+image::single-creation.png[align=center]
+
+When we have a lot of entities, creating Spring Data repositories one by one becomes a tedious job. With Studio, you can speed up this process. To create repositories for JPA entities, you need to take three steps:
+
+ * Select entities in the project tree
+ * Invoke the Studio wizard,
+
+image::bulk-creation-2.png[align=center]
+
+ * Adjust your selection.
+
+image::bulk-creation-3.png[align=center]
+
+That's it!
+
+You can also switch from *_Single_* to *_Bulk_* directly in the New Spring Data Repository window and then select the entities.
+
+image::bulk-creation.png[align=center]
+
+Once the repositories have been created, you can move them from one package to another in the project tree using the drag-n-drop method. Alternatively, create a separate package for repositories only and type its name in the *_Package_* field of the repository creation window. If the package directory doesn't exist, it will be created automatically.
+
+image::bulk-creation-4.png[align=center]
+
+[[structure-repositories]]
+== Repositories on the Structure Panel
+
+For the most efficient navigation in the project, Studio groups all repositories for each entity. It doesn't matter if the repositories for the entity are located in different or in the same project package. All repositories related to the entity will be displayed in the *_Repositories_* section. From here, you can quickly move to the repository implementation or create a new one.
+
+image::structure-repositories.png[align=center]
+
+[[query-method-generation]]
+== Generation of Queries/Methods
+Spring Data provides the ability to define a query with the `@Query` annotation. You can use the Palette to write them quickly and without any typos.
+
+image::find-collection.png[align=center]
+
+Choose a query type and configure it with a user-friendly UI.
+
+[[query-method-generation-example]]
+=== Example
+
+[NOTE]
+Everything that we are going to look at in the example below can be generated as @Query or as a derived query method. The only difference is that for the derived query method you can't specify its name. It will be generated automatically according to the Naming Conventions for a Query.
+
+Let's look at an example of creating a Find Collection Query.
+
+image::create-query.png[align=center]
+
+At the top of the window, you can define the wrap type for the collection and the query return type. Moreover, Studio allows you to generate a new Projection interface or a DTO class directly from this window (just click on the *_+_* button).
+
+You can also specify the method name. Still, if you leave it empty, the name will be generated automatically following the https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation[Naming Conventions] for a Query.
+
+The middle of the window contains the table for the query conditions.
+
+At the bottom of the window you can specify:
+
+ * whether the parameters will be named or not;
+ * whether to use Pageable parameter or not;
+ * and so on.
+
+Finally, you can specify fields by which the query result will be ordered.
+
+For the above configuration, the following query will be generated:
+
+[source, java]
+----
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    @Query("""
+            select distinct c from Customer c
+            where upper(c.firstName) like upper(concat(:firstName, '%')) and upper(c.lastName) like upper(concat('%', :lastName, '%'))""")
+    @Async
+    CompletableFuture<List<Customer>> findCustomer(@Param("firstName") String firstName, @Param("lastName") @NonNull String lastName, Pageable pageable);
+}
+----
+
+[[entity-intention]]
+=== Entity Intention
+
+Studio also provides intention on the entity attributes leading directly to the query/method creation window. Place the cursor on the desired attribute, press *_Alt+Enter_* (or *_Opt+Enter_* on Mac), and click on the *_Create Spring Data repository method_*.
+
+image::intention1.png[align=center]
+
+In the opened window, choose the required type of query/method.
+
+image::intention2.png[align=center]
+
+[[unresolved-reference]]
+=== Unresolved Reference
+
+Some developers prefer to declare a call to the method that doesn't exist yet first and  implement it afterwards. Studio is fully compatible with this programming style. Just write the desired signature and move to the query or method creation wizard via special actions:
+
+image::unresolved-reference.png[align=center]
+
+[[modification-of-existing]]
+== Modifications of existing methods/queries
+
+To configure a method or a query, place a cursor on it and use the *_Inspector_*:
+
+image::query-modification.png[align=center]
+
+[[entity-graph]]
+=== EntityGraph Support
+
+The *_EntityGraph_* feature has always been one of the most requested features. Entity graphs give us another layer of control over data that needs to be fetched. Amplicode supports them, so you can build graphs using a handy GUI wizard.
+
+Right-click the needed Repository file in the project tree. In the *_Inspector_* find *_Graph_* and click *_edit_*.
+
+image::graph-support1.png[align=center]
+
+In the *_Entity Graph_* window check and uncheck nested entities according to your requirements.
+
+image::graph-support2.png[align=center]
+
+Click *_OK_*. The resulting code will look as follows:
+
+[source, java]
+----
+public interface AppointmentRepository extends JpaRepository<Appointment, Long>, JpaSpecificationExecutor<Appointment> {
+    @EntityGraph(attributePaths = {"doctor", "patient"})
+    @Query("""
+            select count(a) from Appointment a
+            where a.doctor.id = ?1 and a.status in ?2 and a.startTime <= ?3 and a.endTime >= ?4""")
+    long countConflictsByDoctorAndPeriod(Long doctorId, Collection<Status> statuses, LocalDateTime maxStartTime, LocalDateTime minEndTime);
+
+    @Query("""
+            select count(a) from Appointment a
+            where a.patient.id = ?1 and a.status in ?2 and a.startTime <= ?3 and a.endTime >= ?4""")
+    long countConflictsByPatientAndPeriod(Long patientId, Collection<Status> statuses, LocalDateTime maxStartTime, LocalDateTime minEndTime);
+
+}
+----
+
+You can see the added `@EntityGraph` annotation in the first query.
+
+The depth of nesting can vary, but the *_EntityGraph_* feature will still support the complete graph with all nesting levels. See example below:
+
+image::graph-support3.png[align=center]
+
+See also:
+
+ * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.entity-graph[Configuring Fetch- and LoadGraphs (Spring documentation)]
+ * https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#fetching-strategies-dynamic-fetching-entity-graph[Dynamic fetching via Jakarta Persistence entity graph (Hibernate user guide)]
+
+[[projection]]
+== Projection
+
+Sometimes you only need a subset of columns from a table. In such cases, *_Spring Data JPA Projections_* come in handy, letting you return only required fields from queries.
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections[Read more about projections here (Spring documentation)]
+
+In order to create a projection, click the + icon in the *_Designer_* panel and select *_Spring Data Projection_*.
+
+image::create-projection.png[align=center]
+
+In the *_New Spring Projection_* window you can:
+
+ * Define source root and package;
+ * Choose entity class;
+ * Set a name for a projection class;
+ * Select the fields you want to include.
+
+image::new-projection.png[align=center]
+
+Also, Studio allows you to generate *_Projections_* for the referenced entities. Select the associated entity, choose the Projection type, and pick the required fields.
+
+image::referenced-entities.png[align=center]
+
+For the above configuration the following projection will be generated:
+
+[source, java]
+----
+public interface OwnerInfo {
+    Long getId();
+
+    String getLastName();
+
+    PetTypeInfo getPetType();
+
+    /**
+     * Projection for {@link io.jmix2mvp.petclinic.entity.PetType}
+     */
+    interface PetTypeInfo {
+        Long getId();
+
+        String getName();
+    }
+}
+----
+
+[[projection-sync]]
+=== Keep Projections in sync with its JPA entity
+
+As time passes, entities may change, and you need to change projections accordingly.  Studio allows you to synchronize an entity with its projection and vice versa. Read more about this feature in the *_DTO Generator_* section.
+
+[[entity-projection-navigation]]
+=== Easy Navigation between Entity and its Projections
+
+As soon as Amplicode is able to associate a Projection interface with the entity:
+
+ * The Projection interface will appear in the *_DTOs & Projections_* section in the Structure panel and in the *_Editor Toolbar_*
+
+image::switch-to-projection.png[align=center]
+
+ * The gutter icon will appear in the Projection to ease the navigation to its entity.
+
+image::gutter-icon.png[align=center]
+
+
+

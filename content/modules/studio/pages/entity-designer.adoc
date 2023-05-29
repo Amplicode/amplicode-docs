@@ -1,0 +1,217 @@
+= JPA Entities
+
+As we mentioned before, the *_Designer_* tab of the Tool Window contains two panels: the *_Palette_* and the *_Inspector_*.
+
+The *_Palette_* provides code-generation wizards for the following:
+
+* Attributes
+* Lifecycle Callbacks
+* Indexes
+* Named Query
+* Reverse Engineering
+* Utilities – Equals/HashCode/ToString.
+
+We are going to see various examples of how to use the Palette and the *_Inspector_* as we proceed to learn how to work with Entities and their attributes.
+
+[[editor-toolbar]]
+== Editor Toolbar for Entities
+
+We have already seen the *_Editor Toolbar_* on the previous page; now let us talk about it in more detail and describe each icon (a.k.a. pictogram) separately.
+
+The toolbar for *_Entities_* contains the following icons:
+
+* Show DDL image:show-ddl.png[align=center]
+
+* Select in JPA Structure image:select-in-jpa-structure.png[align=center]
+
+* References image:references.png[align=center]
+
+* Add Entity Attribute image:add-entity-attribute.png[align=center]
+
+* Add Lifecycle Callback Method image:add-lifecycle-callback-method.png[align=center]
+
+* Add Index image:add-index.png[align=center]
+
+* Add Named Query image:add-named-query.png[align=center]
+
+* Spring Data Repositories image:spring-data-repositories.png[align=center]
+
+* DTOs and Spring Data Projections image:dtos-and-spring-data-projections.png[align=center]
+
+[[icon-functions]]
+=== Icon Functions
+
+*_Show DDL_* displays database-related information for the currently opened Entity.
+
+image::show-ddl-output.png[align=center]
+
+You can also choose a different database for the Entity using this popup window.
+
+*_Select in JPA Structure_* automatically shows the currently selected object in the Structure panel. If you are currently working with the Designer tab, the Tool Window will switch to Structure.
+
+The *_References_* icon displays references for the currently selected object in the source code.
+
+image::references-output.png[align=center]
+
+*_Add Entity Attribute_*, as the name suggests, provides means for creating attributes for the current Entity (an alternative to the Palette).
+
+image::add-entity-attribute-output.png[align=center]
+
+*_Add Lifecycle Callback Method_*, again, as is obvious from the name, provides an interface for creating lifecycle callback methods.
+
+image::add-lifecycle-callback-output.png[align=center]
+
+With *_Add Index_* you can add indexes or unique constraints to the database.
+
+image::add-index-output.png[align=center]
+
+*_Add Named Query_* provides an interface for creating different types of named queries.
+
+image::add-named-query-output.png[align=center]
+
+The icon named *_Spring Data Repositories_* shows the repository related to the currently opened Entity and offers an opportunity to xref:studio:spring-data-jpa.adoc[create more repositories].
+
+image::spring-data-repositories-output.png[align=center]
+
+Finally, DTOs and Spring Data Projections is the icon that gives us access to various actions that are necessary for working with xref:studio:spring-data-jpa.adoc#projection[Spring Data Projections] and DTOs.
+
+image::dtos-and-spring-data-projections-output.png[align=center]
+
+[[entity-generation]]
+== Entity Generation
+
+To create a new JPA entity, right-click on the desired folder and select *_New_* -> *_JPA Entity_* (1). Also, you can create a new entity from *_Structure_* (2):
+
+image::new-entity.png[align=center]
+
+After that, the following window will appear:
+
+image::new-entity-window.png[align=center]
+
+[[id-generation]]
+=== ID and Its Generation Strategy
+
+According to the JPA specification, an ID attribute is required for an entity definition. Studio allows you to generate this attribute and choose the type (1) and generation strategy (2). Also, you can specify what sequence to use for the Sequence generation strategy (3).
+
+image::new-entity-window-2.png[align=center]
+
+Also, you can generate an `id` attribute via Palette (1), Editor Toolbar (2) or using a quick-fix (Alt+Enter/⌥ ⏎) (3).
+
+image::create-id-attribute.png[align=center]
+
+The example of the generated `id` code is shown below.
+
+[source, java]
+----
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+----
+
+[[hibernate-validations]]
+=== Hibernate validations
+
+Amplicode projects by default have the Hibernate Validator library enabled. It allows us to define a metadata model and API for entity and method validation.
+
+Inspector contains a section with validations, which you can apply to an attribute. To make it appear, select an attribute in the source code:
+
+image::inspector.png[align=center]
+
+Note that the properties and validations offered by the Inspector depend on the data type of the attribute. For example, the set of properties and validations offered for an Integer attribute will be different from a String attribute, etc...
+
+You can find more information by following the links below:
+
+* https://docs.jboss.org/hibernate/validator/7.0/reference/en-US/html_single/[Hibernate Validator (Hibernate Validator documentation)]
+
+* https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html[Spring support for Bean Validation (Spring documentation)]
+
+[[hibernate-types]]
+== Hibernate Types & JPA Converters
+
+Studio helps you to generate a blank code fragment for a *_JPA Converter_* or a *_Hibernate Custom Type_* via *_Inspector_*:
+
+
+
+Let's say we have an `isCompleted` attribute (Boolean) within the `Order` entity.
+
+image::jpa-converter-inspector.png[align=center]
+
+Put your cursor on this attribute in the code, then click on the *_Plus_* pictogram in the Inspector:
+
+image::jpa-converter-inspector-plus.png[align=center]
+
+The following window will appear:
+
+image::create-custom-type.png[align=center]
+
+You can also create it via *_Structure_*. Just click on the *_Plus_* button and choose *_JPA Converter_* or *_Hibernate Custom Type_*:
+
+image::jpa-converter.png[align=center]
+
+In the *_Create Custom Type_* window, you can configure the class name, entity attribute type and database column type.
+
+image::create-jpa-converter.png[align=center]
+
+For JPA Converter you can define whether it will be auto applicable or not.
+
+image::parametrized.png[align=center]
+
+Here is the example of a generated Hibernate Custom Type:
+
+[source, java]
+----
+package com.company.amplicodedemo.controller;
+
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.type.AbstractSingleColumnStandardBasicType;
+import org.hibernate.type.descriptor.sql.BitTypeDescriptor;
+
+public class BooleanConverter extends AbstractSingleColumnStandardBasicType<Boolean> {
+    public BooleanConverter() {
+        super(new BitTypeDescriptor(), new BooleanConverterDescriptor());
+    }
+
+    @Override
+    public String getName() {
+        return "BooleanConverter";
+    }
+
+    @Override
+    public Object resolve(Object value, SharedSessionContractImplementor session, Object owner, Boolean overridingEager) throws HibernateException {
+        return null;
+    }
+
+}
+----
+
+[[auditing-support]]
+== Auditing Support
+Having auditing in a large application is a crucial aspect. With Studio, you can effortlessly include commonly used audit fields by utilizing annotations, such as `@CreatedBy`, `@CreatedDate`, `@LastModifiedBy` and `@LastModifiedDate`. What's more, Studio will notify you if you forget to add the `@EnableJpaAuditing` annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity.
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#auditing[Read more about Spring Data Auditing here (Spring documentation)]
+
+Use the *_Add Entity Attribute_* icon in the *_Editor Toolbar_* and select *_Spring Auditing_*.
+
+image::auditing1.png[align=center]
+
+We will receive the warning about missing annotations.
+
+image::auditing2.png[align=center]
+
+You can add this annotation manually to the main application file.
+
+image::auditing-enable.png[align=center]
+
+To add AuditingEntityListener it's enough to click on the link provided in the same window.
+
+image::auditing3.png[align=center]
