@@ -194,5 +194,31 @@ owner(id: ID!): OwnerDTO
 Technically, several ID fields can be declared for an object; in this case, the user has to select in the wizard which field to use as the ID.
 
 
+[[define-id]]
+== Defining the ID while generating the GraphQL schema
 
+[[query-id]]
+=== Defining the ID for id-based queries/mutatuins
+As we generate a method for a query/mutation in a Spring for GraphQL controller, where the Id property is an argument, it is necessary to add the  `com.amplicode.core.graphql.annotation.GraphQLId` annotation to the method's argument. This annotation means that this argument must have the `ID` type in the GraphQL schema.
+
+
+[[return-id]]
+=== Defining the ID for the returned object
+If a method in a Spring for GraphQL controller the returned object is marked with the `com.amplicode.core.graphql.annotation.GraphQLId` annotation, the type of the returned object (for query/mutation) should be `ID` in the schema.
+
+[[id-type]]
+=== Defining the ID for a type
+The source of the GraphQL type at the time of schema generation can be:
+
+. an Entity (JPA/Mongo/Redis)
+
+. a DTO
+
+If a field belonging to the DTO or Entity complies with the `Id` property condition, this field  must have the `ID` type in the GraphQL schema.
+
+[[jpa]]
+=== JPA
+==== Defining the Id for JPA Entities
+
+For JPA Entities (a class with the `javax.persistence.Entity` annotation) the `Id` property is the field annotated `javax.persistence.Id`.
 //TODO
