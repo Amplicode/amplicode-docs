@@ -252,25 +252,5 @@ image::switch-to-projection.png[align=center]
 
 image::gutter-icon.png[align=center]
 
-[[auditing-support]]
-== Auditing Support
-Having auditing in a large application is a crucial aspect. With Studio, you can effortlessly include commonly used audit fields by utilizing annotations, such as `@CreatedBy`, `@CreatedDate`, `@LastModifiedBy` and `@LastModifiedDate`. What's more, Studio will notify you if you forget to add the `@EnableJpaAuditing` annotation to your configuration or if the *_AuditingEntityListener_* is not added to the current entity.
 
-https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#auditing[Read more about Spring Data Auditing here (Spring documentation)]
-
-Use the *_Add Entity Attribute_* icon in the *_Editor Toolbar_* and select *_Spring Auditing_*.
-
-image::auditing1.png[align=center]
-
-We will receive the warning about missing annotations.
-
-image::auditing2.png[align=center]
-
-You can add this annotation manually to the main application file.
-
-image::auditing-enable.png[align=center]
-
-To add AuditingEntityListener it's enough to click on the link provided in the same window.
-
-image::auditing3.png[align=center]
 
