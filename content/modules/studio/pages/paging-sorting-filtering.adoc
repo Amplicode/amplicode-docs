@@ -1,0 +1,309 @@
+= Paging, Sorting, Filtering
+
+[[list]]
+== List
+Standard Amplicode method of getting a list of objects.
+
+[[requirements]]
+=== Requirements
+
+ . *General*
+
+ .. All three components - *_Pagination_*, *_Sorting_* and *_Filtering_* - are optional and can be present in the API independently.
+ .. The format of the returned value depends on the Pagination model.
+
+. *Pagination*
+
+ .. It is necessary to support the following API models:
+ ... *No pagination:* all the data is returned together without breaking it up into pages.
+ ... *Offset-based:* loading of a randomly selected page.
+ ... *Cursor-based:* sequential loading with the help of cursors.
+
+ .. Parametres
+ ... Parameters are presented as a wrapper-argument named `page`:
+ .... In the case of *no pagination*, the `page` argument is absent in the method signature.
+ .... In the case of *offset-based*, он должен it must contain the number of the page that is being loaded  (the `number` property) and the page size (the `size` property).
+ .... In the case of *_cursor-based_*, it must contain the cursor value and the page size.
+ ... The method that supports pagination must have default values for its parameters :
+ .... Loading of the first page of a fixed size should be supported.
+ ....It must be possible not to specify either the components (`number`, `size`), or the whole `page` argument in the query.
+ .... Setting the default value takes place on the backend.
+ .... The exact value of the page size is by default the same for all Entities. It is set as an  application property.
+ .. Returned value:
+ ... In the case of *pagination*, the result is the list of found objects.
+ ... In the case of *offset-based*, the result is a wrapper-object as a set of found objects and the total number of objects that match the given search criterion (to provide for the pagination UI functionality).
+ ... In the case of *cursor-based*, the result is a `Connection` object created according to a corresponding specification. The Connection structure can be expanded if there is a need to add more fields (e.g. the total number of the found objects).
+
+ . *Sorting*
+
+ .. It is necessary to support sorting by N fields as well as the possibility to set the sorting direction separately for each field.
+ .. The GraphQL schema must declare properties that can be used for sorting  (case Strict fields).
+ ... The incoming argument is named `sort`, and it is a list of objects with the following structure:
+ .... `property`: an enum value of one of the properties available for sorting
+ .... `direction`: an enum value of the sorting direction. Its possible values are `Ascending`\`Descending`. The default value is `Ascending`.
+
+ . *Filtering*
+
+ .. It is necessary to support the following API models:
+ ... No filtration
+ ... Values for filtration are presented as separate arguments
+ ... Values for filtration are wrapped into one wrapper argument named `filter`.
+
+[[scenarios]]
+== Scenarios
+General objects of the GraphQL schema, participating in the scenarios, are given below:
+
+[source, java]
+----
+type OwnerDTO {
+  address: String
+  city: String
+  email: String
+  firstName: String
+  id: ID
+  lastName: String
+  telephone: String
+}
+
+type OwnerPage  {
+  content: [OwnerDTO!]!
+  totalElements: Long
+}
+
+input OffsetPageInput {
+  number: Int
+  size: Int
+}
+
+input OwnerFilterInput {
+  firstName: String
+  lastName: String
+}
+
+input OwnerOrderByInput {
+  property: OwnerOrderByProperty
+  direction: SortDirection
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+enum OwnerOrderByProperty {
+  FIRST_NAME
+  LAST_NAME
+  CITY
+}
+----
+
+[[loading-two-filters]]
+=== Loading all data with filtration by two fields as API arguments
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListByNamesProperties(firstName: String, lastName: String): [OwnerDTO]
+}
+----
+
+Controller:
+[source, java]
+----
+Контроллер:
+
+@QueryMapping(name = "ownerListByNamesProperties")
+@Transactional
+public List<OwnerDTO> ownerListByNamesProperties(@Argument String firstName, @Argument String lastName) {
+    return crudRepository.findByFirstNameContainsAndLastNameContains(firstName, lastName).stream()
+            .map(mapper::ownerToDTO)
+            .collect(Collectors.toList());
+}
+----
+
+[[all-data]]
+=== Loading all the data with a filter
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListByNamesFilter(filter: OwnerFilterInput): [OwnerDTO]
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListByNamesFilter")
+@Transactional
+public List<OwnerDTO> ownerListByNamesFilter(@Argument OwnerFilter filter) {
+    Specification<Owner> specification = OwnerSpecifications.byFilter(filter);
+    return crudRepository.findAll(specification).stream()
+            .map(mapper::ownerToDTO)
+            .collect(Collectors.toList());
+}
+----
+
+[[offset-based-sorting]]
+=== Loading one page of data (offset-based) with sorting
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListOffsetPageSorted(page: OffsetPageInput, sort: [OwnerOrderByInput]): OwnerPage
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListOffsetPageSorted")
+@Transactional
+public PageWrapper<OwnerDTO> ownerListOffsetPageSorted(@Argument OffsetPageInput page,
+                                                       @Argument List<OwnerOrderByInput> sort) {
+    PageRequest pageRequest = createPageRequest(page, sort);
+    Page<Owner> resultPage = crudRepository.findAll(pageRequest);
+    long totalElements = resultPage.getTotalElements();
+    List<OwnerDTO> content = resultPage.getContent().stream()
+            .map(mapper::ownerToDTO)
+            .collect(Collectors.toList());
+    return PageWrapper.of(content, totalElements);
+}
+----
+
+[[offset-based-filtering]]
+=== Loading one page of data (offset-based) with a filter
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListByNamesFilterOffsetPage(page: OffsetPageInput, filter: OwnerFilterInput): OwnerPage
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListByNamesFilterOffsetPage")
+@Transactional
+public PageWrapper<OwnerDTO> ownerListByNamesFilterOffsetPage(@Argument OffsetPageInput page,
+                                                              @Argument OwnerFilter filter) {
+    Specification<Owner> specification = OwnerSpecifications.byFilter(filter);
+    PageRequest pageRequest = createPageRequest(page);
+    Page<Owner> resultPage = crudRepository.findAll(specification, pageRequest);
+    long totalElements = resultPage.getTotalElements();
+    List<OwnerDTO> content = resultPage.getContent().stream()
+            .map(mapper::ownerToDTO)
+            .collect(Collectors.toList());
+    return PageWrapper.of(content, totalElements);
+}
+----
+
+It is done similarly for filtration using separate API arguments.
+
+[[all-data-sorting-filter]]
+=== Loading all data with sorting and filtering
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListByNamesFilterSorted(sort: [OwnerOrderByInput], filter: OwnerFilterInput): [OwnerDTO]
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListByNamesFilterSorted")
+@Transactional
+public List<OwnerDTO> ownerListByNamesFilterSorted(@Argument List<OwnerOrderByInput> sort,
+                                                   @Argument OwnerFilter filter) {
+    Specification<Owner> specification = OwnerSpecifications.byFilter(filter);
+    Sort sortRequest = createSort(sort);
+    return crudRepository.findAll(specification, sortRequest).stream()
+            .map(mapper::ownerToDTO)
+            .collect(Collectors.toList());
+}
+----
+It is done similarly for filtration using separate API arguments.
+
+[[offset-based-sort-filter]]
+=== Loading one page (offset-based) with sorting and filtering
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListByNamesFilterOffsetPageSorted(
+    page: OffsetPageInput,
+    sort: [OwnerOrderByInput],
+    filter: OwnerFilterInput
+  ): OwnerPage
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListByNamesFilterOffsetPageSorted")
+@Transactional
+public PageWrapper<OwnerDTO> ownerListByNamesFilterOffsetPageSorted(@Argument OffsetPageInput page,
+                                                                    @Argument List<OwnerOrderByInput> sort,
+                                                                    @Argument OwnerFilter filter) {
+    Specification<Owner> specification = OwnerSpecifications.byFilter(filter);
+    PageRequest pageRequest = createPageRequest(page, sort);
+    Page<Owner> resultPage = crudRepository.findAll(specification, pageRequest);
+    long totalElements = resultPage.getTotalElements();
+    List<OwnerDTO> content = resultPage.getContent().stream()
+            .map(mapper::ownerToDTO)
+            .collect(Collectors.toList());
+    return PageWrapper.of(content, totalElements);
+}
+----
+It is done similarly for filtration using separate API arguments.
+
+[[additionally]]
+== Additionally
+[[strict-field]]
+=== Strict-field sorting
+Enum elements of the sorted properties are generated without the real name of the property. Its definition takes place in the methods that form final `Sort` objects:
+
+[source, java]
+----
+public enum OwnerOrderByProperty {
+    FIRST_NAME,
+    LAST_NAME,
+    CITY;
+}
+
+protected Sort createSort(List<OwnerOrderByInput> sortInput) {
+    if (sortInput != null && !sortInput.isEmpty()) {
+        List<Sort.Order> orders = sortInput.stream()
+                .map(item -> {
+                    Sort.Direction direction = item.getDirection();
+                    switch (item.getProperty()) {
+                        case CITY:
+                            return Sort.Order.by("city").with(direction);
+                        case FIRST_NAME:
+                            return Sort.Order.by("firstName").with(direction);
+                        case LAST_NAME:
+                            return Sort.Order.by("lastName").with(direction);
+                        default:
+                            return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return Sort.by(orders);
+    } else {
+        return Sort.unsorted();
+    }
+}
+----
+
+While customizing the code, the developer can add new constants to the Enum and handle them in the  `createSort()` method and in the method that loads the list randomly, without necessarily sorting it by the persistent JPA attribute.

@@ -1,0 +1,65 @@
+= Defining the ID while generating the GraphQL schema
+
+[[query-id]]
+== Defining the ID for id-based queries/mutations
+As we generate a method for a query/mutation in a Spring for GraphQL controller, where the Id property is an argument, it is necessary to add the  `com.amplicode.core.graphql.annotation.GraphQLId` annotation to the method's argument. This annotation means that this argument must have the `ID` type in the GraphQL schema.
+
+
+[[return-id]]
+== Defining the ID for the returned object
+If a method in a Spring for GraphQL controller the returned object is marked with the `com.amplicode.core.graphql.annotation.GraphQLId` annotation, the type of the returned object (for query/mutation) should be `ID` in the schema.
+
+[[id-type]]
+== Defining the ID for a type
+The source of the GraphQL type at the time of schema generation can be:
+
+. an Entity (JPA/Mongo/Redis)
+
+. a DTO
+
+If a field belonging to the DTO or Entity complies with the `Id` property condition, this field  must have the `ID` type in the GraphQL schema.
+
+[[jpa]]
+== JPA
+
+[[defining-jpa-entity]]
+=== Defining the Id for JPA Entities
+
+For *_JPA Entities_* (a class with the `javax.persistence.Entity` annotation) the `Id` property is the field annotated `javax.persistence.Id`.
+
+[[defining-dto]]
+=== Defining the Id for a DTO
+
+while generating a *_DTO_* for a JPA Entity, it is necessary to transfer the `javax.persistence.Id` annotation onto the `Id` field in the DTO.
+
+If the DTO is created, for example, not for a JPA Entity, it is possible to use the `com.amplicode.core.graphql.annotation.GraphQLId` annotation or the  `org.springframework.data.annotation.Id` annotation to mark the `Id` field.
+
+If the DTO doesn't contain a field annotated  `javax.persistence.Id` , `org.springframework.data.annotation.Id` or `com.amplicode.core.graphql.annotation.GraphQLId`, then it is necessary to determine whether the DTO is connected with any Entity and define the `Id` property within the connected Entity.
+
+=== Defining the Connection between the DTO and the Entity
+
+Connection between the DTO and the Entity should be defined implicitly in the following way, assuming that *_MapStruct_* is used in the project:
+
+In the interface or abstract class annotated  `org.mapstruct.Mapper`, there should be at least one of the following methods:
+
+ . A method with one argument, whose type is the Entity class, and the method returns an object of the DTO class, see example below:
+[source, java]
+@Mapper(componentModel = "spring")
+public interface PetMapper {
+   PetDTO petToDTO(Pet pet);
+}
+
+ . A method with one argument, whose type is the DTO class, and the method returns an object of the Entity class, see example below:
+[source, java]
+@Mapper(componentModel = "spring")
+public interface PetMapper {
+   Pet petDTOToEntity(PetInputDTO dto);
+}
+
+
+ . A method with two arguments, one of which is an object of the DTO class, and the other one is an object of the Entity class; one of the arguments is annotated org.mapstruct.MappingTarget, see example below:
+[source, java]
+@Mapper(componentModel = "spring")
+public interface PetMapper {
+    void petDTOToEntity(PetInputDTO dto, @MappingTarget Pet entity);
+}

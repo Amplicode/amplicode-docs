@@ -1,0 +1,36 @@
+= GraphQL Ignore
+
+To exclude certain DTO fields from the GraphQL schema generation procedure it is necessary to use the following annotation: `com.amplicode.core.graphql.annotation.GraphQLIgnore`. The fields marked by this annotation won't be included in the final GraphQL types.
+
+[source, java]
+----
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface GraphQLIgnore {
+  String reason() default "";
+}
+----
+
+DTO:
+[source, java]
+----
+public class SomeDTO {
+    private Long id;
+    private String name;
+    @GraphQLIgnore
+    private UUID internalCode;
+
+    ...
+}
+----
+
+Schema:
+[source, java]
+----
+...
+type SomeDTO {
+    id: ID
+    name: String
+}
+...
+----
