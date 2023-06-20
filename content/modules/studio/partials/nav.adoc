@@ -6,5 +6,6 @@
 *** xref:studio:tool-window.adoc[]
 *** xref:studio:entity-designer.adoc[]
 *** xref:studio:spring-data-jpa.adoc[]
+*** xref:studio:working-with-dtos.adoc[]
 *** xref:studio:marketplace.adoc[]
 *** xref:studio:plugin-settings.adoc[]
