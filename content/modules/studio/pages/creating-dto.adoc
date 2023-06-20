@@ -6,7 +6,23 @@ Right-click your Entity in the project tree and select *_New_* -> *_DTO_*.
 
 image::new-dto.png[align=center]
 
-//TODO describe DTO creation
+The following pop-up window will appear:
+
+image::create-dto.png[align=center]
+
+Clicking the *_Plus_* icon near the MapStruct interface field will provide us with the interface for creating a mapper.
+
+Studio will suggest the default name for the mapper in accordance with the naming convention, which we recommend to preserve. Click *_OK_*.
+
+The next step is to choose the attributes that will be included in the DTO. As we switch between arguments, the interface on the right side of the window changes to provide the necessary interfaces for adding settings. For example, for an associated attribute it will look as below:
+
+image::associated-attribute.png[align=center]
+
+For the purposes of our project, we choose *_Existing Class_* for *_DTO type_* and *_Country_* for *_Class_*.
+
+image::existing-class.png[align=center]
+
+Click *_OK_*. Two new classes for the DTO and for the Mapper will be generated. The DTO class will contain only those attributes, which we checked in the DTO creation window.
 
 A DTO class is an ordinary POJO. The set of fields doesn't have to precisely match the set of the Entity's fields: some types can be different, new fields can be added, and it is also possible not to include some of the fields from the original Entity. Once we have added the DTO object, we need to build the project, and the annotation processor will generate the necessary additional code.
 

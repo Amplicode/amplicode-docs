@@ -1,5 +1,5 @@
 = Spring for GraphQL Controllers
-
+//
 [[intro-about]]
 == About Spring for GraphQL API
 
