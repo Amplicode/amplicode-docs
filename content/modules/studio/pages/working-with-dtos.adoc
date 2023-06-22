@@ -103,8 +103,6 @@ If you want to create immutable DTOs, a https://jenkov.com/tutorials/java/record
 
 image::dto-java-record.png[align=center]
 
-//TODO find out why the annotations are not applied to the entities
-
 *Example:*
 
 For this example, we create a separate package named `dtos` and check the Java Record checkbox in the *_New DTO_* window. We also choose the New Class option for the associates. For the `startDate` attribute we add a validation (*_PastOrPresent_*) to generate an annotation.
@@ -118,7 +116,7 @@ Since the entity and the DTO will be in different packages, the following commen
  * DTO for {@link com.company.citycountrydemo.event.Event}
  */
 
-Studio will generate it automatically. The gutter icon will appear to help us navigate between the DTO and the entity.
+Studio will generate it automatically. The gutter icon will appear to help us navigate between the DTO and the entity. If the original entity has validation annotations, they will be copied into the DTO.
 
 [[entities-from-pojos]]
 == Generate Entities from POJOs
