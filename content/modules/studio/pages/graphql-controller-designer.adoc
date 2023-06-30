@@ -296,7 +296,7 @@ The mutation generated as a result will have the following code:
 
 Now it is necessary to autowire the mapper into the DTO and finish the implementation of the method. Use *_Autowire_* -> *_Project Components_* in the Palette.
 
-Then we use the Inspector to add a new argument `eventId` of the `Long` type. For that, use *_Actions_* -> *_Add GraphQL @Argument_* in the Inspector. Mark the argument `reason` as `@NotNull` and `eventId` as `@GraphQLId`.
+Then we use the xref:#actions[Inspector] to add a new argument `eventId` of the `Long` type. For that, use *_Actions_* -> *_Add GraphQL @Argument_* in the Inspector. Mark the argument `reason` as `@NotNull` and `eventId` as `@GraphQLId`.
 
 image::arguments.png[align=center]
 
