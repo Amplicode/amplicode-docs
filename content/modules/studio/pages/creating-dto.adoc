@@ -1,6 +1,6 @@
-= Creating a DTO Object
+= Creating a DTO
 
-DTO objects allow us to separate the API from the data model. There are different reasons why you might prefer to use them, e.g. for refactoring purposes or for hiding some of the attributes.
+DTOs allow us to separate the API from the data model. There are different reasons why you might prefer to use them, e.g. for refactoring purposes or for hiding some of the attributes.
 
 Right-click your Entity in the project tree and select *_New_* -> *_DTO_*.
 
@@ -24,9 +24,9 @@ image::existing-class.png[align=center]
 
 Click *_OK_*. Two new classes for the DTO and for the Mapper will be generated. The DTO class will contain only those attributes, which we checked in the DTO creation window.
 
-A DTO class is an ordinary POJO. The set of fields doesn't have to precisely match the set of the Entity's fields: some types can be different, new fields can be added, and it is also possible not to include some of the fields from the original Entity. Once we have added the DTO object, we need to build the project, and the annotation processor will generate the necessary additional code.
+A DTO class is an ordinary POJO. The set of fields doesn't have to precisely match the set of the Entity's fields: some types can be different, new fields can be added, and it is also possible not to include some of the fields from the original Entity. Once we have added the DTO, we need to build the project, and the annotation processor will generate the necessary additional code.
 
 Now we have a Spring bean (the mapper), which can be autowired (injected into other Spring beans).
 
-xref:studio:spring-graphql-controllers.adoc#back-from-dto[Back to Spring for GraphQL Controllers]
+xref:studio:graphql-controllers.adoc#back-from-dto[Back to Spring for GraphQL Controllers]
 

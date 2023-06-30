@@ -1,4 +1,4 @@
-= GraphQL naming rules
+= GraphQL Naming Rules
 
 [[naming]]
 == Naming
@@ -10,39 +10,26 @@
  . *_Queries._* Use nouns for query names and `camelCase`. GraphQL is about asking for specific fields on objects, therefore it's essential that the query has exactly the same shape as the result. Naming queries the same as the type will help with that.
  . *_Queries._* Use postfix `List` for queries that return a collection of objects.
 
-[[usages-references]]
-== Usages and References
-
-1-4 - https://www.apollographql.com/docs/apollo-server/schema/schema/#naming-conventions[Apollo GraphQL naming conventions]
-
-5 - https://www.apollographql.com/blog/graphql/basics/designing-graphql-mutations/[Apollo Designing GraphQL mutations], GitHub schema from https://docs.github.com/en/graphql/overview/about-the-graphql-api[GitHub GraphQL API] and https://docs.amplify.aws/lib/graphqlapi/getting-started/q/platform/js/#enable-queries-mutations-and-subscriptions[Amazon Amplify].
-
-6 - the rule is not stated explicitly in the form of a sentence; there are only implicit examples:
-
- * GitHub schema from https://docs.github.com/en/graphql/overview/about-the-graphql-api[GitHub GraphQL API]
- * Samples from http://spec.graphql.org/October2021/#example-081b4[GraphQL specification]
- * Samples from https://www.apollographql.com/docs/apollo-server/schema/schema/#the-query-type[Apollo documentation].
-
-7 - https://docs.amplify.aws/lib/graphqlapi/getting-started/q/platform/js/#enable-queries-mutations-and-subscriptions[Amazon Amplify] uses `List` in a query prefix, e.g. `listOwners`. GitHub schema from https://docs.github.com/en/graphql/overview/about-the-graphql-api[GitHub GraphQL API] uses the plural form of type or single object query.
-
 [[naming-examples]]
-== Amplicode queries and mutations naming examples
+== Examples
 
 [source, java]
 ----
 type Query {
-//load Owner by ID
-owner(id: BigInteger): OwnerDTO
+  //load Owner by ID
+  owner(id: ID): OwnerDTO
 
   //load Owners list
   ownerList: [OwnerDTO]
 }
 
 type Mutation {
-//delete Owner by id
-deleteOwner(id: BigInteger!): Void
-//update or create Owner
-updateOwner(input: OwnerInputDTOInput): OwnerDTO
+  //delete Owner by id
+  deleteOwner(id: ID!): Void
+  //update or create Owner
+  updateOwner(input: OwnerInputDTO): OwnerDTO
+  //custom business operation
+  banOwner(id: ID!, reason: String): Void
 }
 ----
 
