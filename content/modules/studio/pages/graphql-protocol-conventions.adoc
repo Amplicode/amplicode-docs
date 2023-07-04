@@ -1,3 +1,4 @@
 = GraphQL Protocol Conventions
 
-//TODO
+* xref:studio:graphql-naming-rules.adoc[Naming Rules]
+* xref:studio:paging-sorting-filtering.adoc[Pagination, Sorting and Filtering]

@@ -17,7 +17,7 @@ All three aspects - *_Pagination_*, *_Sorting_* and *_Filtering_* - are optional
  .. *No pagination:* all the data is returned together without breaking it up into pages.
  .. *Offset-based:* loading of a randomly selected page.
 
- . Parametres
+ . Parameters
  .. Parameters are presented as a wrapper-argument named `page`:
  ... In the case of *no pagination*, the `page` argument is absent in the method signature.
  ... In the case of *offset-based*, it must contain the number of the page that is being loaded  (the `number` property) and the page size (the `size` property).
@@ -31,7 +31,7 @@ All three aspects - *_Pagination_*, *_Sorting_* and *_Filtering_* - are optional
 [[sorting]]
 === Sorting
  . Sorting is not mandatory, but if we do specify it, we can specify several sorting fields.
- . The GraphQL schema must declare properties that can be used for sorting  (case Strict fields).
+ . The GraphQL schema must declare properties that can be used for sorting.
  .. The incoming argument is named `sort`; it is not mandatory, and it is a list of objects with the following structure:
  ... `property`: an enum value of one of the properties available for sorting
  ... `direction`: an enum value of the sorting direction. Its possible values are `Ascending` or `Descending`. The default value is `Ascending`. This list can contain one or more fields for sorting.
@@ -108,7 +108,9 @@ Controller:
 [source, java]
 ----
 @QueryMapping(name = "ownerListByNamesProperties")
-public List<OwnerDTO> ownerListByNamesProperties(@Argument String firstName, @Argument String lastName) {
+public List<OwnerDTO> ownerListByNamesProperties(
+            @Argument String firstName,
+            @Argument String lastName) {
   //
 }
 ----

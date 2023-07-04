@@ -5,7 +5,7 @@
 
 There are three ways to create a controller in Studio:
 
- * Create an empty controller and then fill it in using the native Palette elements
+ * Create an empty controller and then fill it in using the Palette items
  * Create a controller based on an existing repository, an action that allows us to implement basic CRUD operations for an Entity
  * Using the schema-first approach. This approach means that we develop the API layer starting from the GraphQL schema and moving towards the backend. This method is the most convenient for implementing customized business logic.
 
@@ -14,7 +14,7 @@ Let us look at all three ways in detail.
 [[empty-controller]]
 == Creating an Empty Controller
 
-In order to create an empty controller, you need to use the *_Plus_* pictogram (image:add-new-actions.png[align=center]) in the *_Amplicode Studio Tool Window_* and select *_MVC Controller_*.
+In order to create an empty controller, you need to use the *_Plus_* pictogram (image:add-new-actions.png[align=center]) in the *_Amplicode Tool Window_* and select *_MVC Controller_*.
 
 image::new-mvc-controller.png[align=center]
 
@@ -26,7 +26,7 @@ In the code that will be generated, delete the @RequestMapping annotation. The r
 
 image::mvc-controller.png[align=center]
 
-Now we can use the Palette elements for Spring for GraphQL controllers to develop our Controller further. This process will be described in more detail below.
+Now we can use the Palette elements for Spring for GraphQL controllers to develop our controller further. This process will be described in more detail below.
 
 image::palette-for-controllers.png[align=center]
 
@@ -36,16 +36,16 @@ A Spring for GraphQL controller is, in essence, a Spring MVC controller. Which m
 [[create-crud-controller]]
 == Creating CRUD Controller by Spring Data Repository
 
-In this case, we need an already created *_Spring Data repository_*. This action allows us to create a CRUD controller, which implements all the necessary CRUD operations for an entity and to delegate all these operations to a Spring Data repository. The entity can be a JPA entity or, for example, a Mongo DB entity.
+In this case, we need an already created *_Spring Data repository_*. This action allows us to create a CRUD controller, which implements all the necessary CRUD operations for an entity and to delegate all these operations to a Spring Data repository. The entity can be a JPA entity or, for example, a MongoDB entity.
 
-*_CRUD_* means that we are going to create operations for **C**reating, **R**eading, **U**pdating and **D**eleting entities. The controller will delegate these operations to a repository, which can be a JPA repository or a repository working with other kinds of entities, e.g. Mongo DB entities.
+*_CRUD_* means that we are going to create operations for **C**reating, **R**eading, **U**pdating and **D**eleting entities. The controller will delegate these operations to a repository, which can be a JPA repository or a repository working with other kinds of entities, e.g. MongoDB entities.
 
 In order to create this controller, you will have to xref:studio:spring-data-jpa.adoc#repository-creation[create a repository] first. If you prefer to use DTOs, you will need to create a DTO class also.
 
 [TIP]
-If you are planning on supplying _filtering_ possibilities for this Entity in the Spring for GraphQL API, then the *_Criteria API Specification_* checkbox has to be checked. Otherwise, filtering options will not be available.
+If you are planning on supplying _filtering_ possibilities for this entity in the Spring for GraphQL API, then the *_Criteria API Specification_* checkbox has to be checked. Otherwise, filtering options will not be available.
 
-xref:studio:creating-dto.adoc[How to create a DTO]. Visit this page if you have decided to use DTOs in your controller. Otherwise, skip it.
+Visit our xref:studio:creating-dto.adoc[How to create a DTO] page if you have decided to use DTOs in your controller. Otherwise, skip it.
 
 [[back-from-dto]]
 
@@ -61,7 +61,7 @@ In the table under the controller name we can choose, which operations we are go
 
 image::operations-unchecked.png[align=center]
 
-By default, all four basic CRUD operations are checked. Any new customized operations cannot be created here.
+By default, all four basic CRUD operations are checked. Any new customized operations cannot be created here, but can be added later to the created controller using Palette items.
 
 [[mapping]]
 === Mapping
@@ -70,7 +70,7 @@ Then we select the mapping option. If we are using DTOs in this particular contr
 
 image::mapstruct.png[align=center]
 
-Once we checked the Mapstruct radio button, two new fields will appear: *_DTO class_* and *_Input DTO class_*. We can choose the same class for both roles or use two different DTo classes. Also, the *_Plus_* icon allows us to create a DTO on the fly.
+Once we checked the Mapstruct radio button, two new fields will appear: *_DTO class_* and *_Input DTO class_*. We can choose the same class for both roles or use two different DTO classes. Also, the *_Plus_* icon allows us to create a DTO on the fly.
 
 image::dto-classes.png[align=center]
 
@@ -83,7 +83,7 @@ image::sources.png[align=center]
 [[pagination-sorting-filtering]]
 === Pagination, Sorting, Filtering
 
-The section that contains *_Filtering_*, *_Pagination_* and *_Sorting_* is available only if we check the `findAll()` method. When this method is unchecked, these options disappear. This section allows us to set all the filtering, pagination and sorting functionality that will be given to the `findAll()` operation. The clients of our GraphQL service will be able to use all these options if they want to. But if we don't add a particular field to our choice, the clients won't be able to use it.
+The section that contains *_Filtering_*, *_Pagination_* and *_Sorting_* is available only if we check the `findAll()` method. When this method is unchecked, these options disappear. This section allows us to set all the filtering, pagination and sorting functionality that will be given to the `findAll()` operation. The clients of our GraphQL API will be able to use all these options if they want to. But if we don't add a particular field to our choice, the clients won't be able to use it.
 
 In Pagination and Sorting, the options are the following: we can turn Pagination on and off, set the default size of the page (which will be used of the client doesn't pass the page size) and the drop-down list that shows all attributes available for sorting.
 
@@ -96,23 +96,19 @@ image::pagination-and-sorting-ready.png[align=center]
 [[filtering]]
 The Filtering section defined the maximum functionality for filtering on the client side. This section is available only if `findAll()` is selected, only for JPA Entities and only if the repository implements the `JpaSpecificationExecutor` interface, since filtering is based on this interface.
 
-image::filtration.png[align=center]
-
-In this section, we need to create a set of the filtering conditions , which the GraphQL controller will pass to the API clients (for example, to a user interface). In the first column (*_Attribute_*) we select either one of the Entity's main attributes or one of the associated attributes.
+In this section, we need to create a set of the filtering conditions, which the GraphQL controller will provide to the API clients (for example, to a user interface). In the first column (*_Attribute_*) we select either one of the Entity's main attributes or one of the associated attributes.
 
 image::filtration-table.png[align=center]
 
 In the *_Operation_* column we select the operations. For different types of attributes different operations will be available. For example, the *_contains_* operation will be available for strings, but not for numbers.
 
-image::contains.png[align=center]
-
 The *_IgnoreCase_* option makes sense only for strings, therefore, it becomes enabled only when you select a string attribute. If this option is activated, then the attribute value and the value for comparison will be converted to the same case. This way we carry out case-insensitive search.
 
-All conditions entered into the filtering table will be combined via the logical `AND`. If, for example, we enter three parameters and all three parameters are passed by the client, they will all have to be true. But each of these conditions is optional.
+All conditions entered into the filtering table will be combined via the logical `AND`. If, for example, we enter three parameters and all three parameters are passed by the client, they will all have to be fulfilled. But each of these conditions is optional.
 
 image::three-parameters.png[align=center]
 
-If one of these parameters is not passed by the client, is it not counted among the conditions; therefor, it cannot hinder the search. The code that provide for it will be as follows:
+If one of these parameters is not passed by the client, is it not counted among the conditions; therefore, it cannot hinder the search. The code that Studio will provide for it will be as follows:
 
 [source, java]
 ----

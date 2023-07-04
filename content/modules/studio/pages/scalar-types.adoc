@@ -6,6 +6,9 @@ There are also certain limitations on the kinds of data that can be used in the 
 
 Scalar types are the types that resolve to a single scalar object and can't have sub-selections in the query.
 
+[[scalar-types]]
+== Scalar Types
+
 By default, Spring for GraphQL supports scalar types mentioned in the GraphQL specification, namely:
 
  * *Int* - 32-bit signed.
@@ -48,7 +51,8 @@ Below is the table to scalar types supported by Amplicode out of the box.
 |Timestamp	|Date	|A value as string of number of milliseconds from start of UNIX epoch	|"1644399147756"
 |===
 
-https://datatracker.ietf.org/doc/html/rfc3339#section-5.6[RFC3339 date time formats]
+Read https://datatracker.ietf.org/doc/html/rfc3339#section-5.6[here] about RFC3339 date time formats.
+
 
 [[collections-arrays]]
 == Collections and Arrays
@@ -76,7 +80,7 @@ Java enums are represented as enums in the GraphQL schema. Each constant is repr
 
 [[generic]]
 == Generic Classes and Interfaces
-In the case when a generic class parametrized by another class is the result of an operation, then for each combination of the two types there will be a separate type generated
+In the case when a generic class parametrized by another class is the result of an operation, then for each combination of the two types there will be a separate type generated.
 
 *Example:*
 [source, java]

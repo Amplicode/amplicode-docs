@@ -1,6 +1,6 @@
-= GraphQL Controller Designer:
+= GraphQL Controller Designer
 
-The *_Designer_* tab of the Amplicode Studio tool window contains two separate panels: the *_Palette_* at the top and the *_Inspector_* nearer the bottom.
+The *_Designer_* tab of the Amplicode tool window contains two separate panels: the *_Palette_* at the top and the *_Inspector_* nearer the bottom.
 
 [[palette-items]]
 == Palette items
@@ -9,9 +9,9 @@ The *_Palette_* consists of various elements, some of which are common for all S
 
 image::palette1.png[align=center]
 
-The Palette's items such as *_LifeCycle Callbacks_*, *_Autowire_* and *_Event Listeners_* can be used for all types of Spring beans. *_Request Handling_* is for Spring MVC. The last item, *_Spring for GraphQL_*, is for working with GraphQL controllers.
+The Palette's items such as *_Lifecycle Callbacks_*, *_Autowire_* and *_Event Listeners_* can be used for all types of Spring beans. *_Request Handling_* is for Spring MVC. The last item, *_Spring for GraphQL_*, is for working with GraphQL controllers.
 
-*_LifeCycle Callbacks_* contains various elements for creating methods that ensure that the bean can properly respond to all events of the application's lifecycle, suc as, for example, servlet context events, bean lifecycle events or the application start event.
+*_Lifecycle Callbacks_* contains various elements for creating methods that ensure that the bean can properly respond to all events of the application's lifecycle, such as, for example, servlet context events, bean lifecycle events or the application start event.
 
 *_Autowire_* allows us to inject (autowire) various other beans originating either from the project itself or from libraries. For example, it can be repositories (under *_Data Access/Repositories_*) or your project's own beans (under *_Project Components_*).
 
@@ -141,7 +141,7 @@ xref:#query-load-item-by-id-example[See example].
 
 This operation can be used by the standard screen template, such as, for example, an *_Entity list_*.
 
-//TODO link to common options
+First of all, we recommend that you read about the  xref:#common-features[Common Features], if you haven't done so before.
 
 If we need to support Pagination, but at the first step we have selected the `findAll()` method that doesn't support pagination, the Studio will warn us about it by a pop-up message.
 
@@ -155,9 +155,7 @@ Then we specify the list of fields for sorting. These can be both direct attribu
 
 image::attributes.png[align=center]
 
-On the next step we configure filtering. If it is necessary to choose a different method, Studio will warn us. Here we can specify one or more conditions.
-
-image::warning.png[align=center]
+On the next step we configure filtering. If it is necessary to choose a different method, Studio will warn us by displaying another *_Reselect Method_* pop-up window. Here we can specify one or more conditions.
 
 xref:#filtering[The detailed description of the filtering functionality] can be found above in the section dedicated to creating CRUD controllers. The same basic principles apply here.
 
@@ -174,7 +172,7 @@ image::mutation-save.png[align=center]
 
 If you haven't done so already, we recommend that you visit the xref:#common-features[Common Features] section first.
 
-This type of mutation is also used by the screen template. It can have Empty implementation, in which case we enter *_Type of "output"_* and *_Result type_*. Or we can delegate the operation to a bean (a repository), as described under Common Features.  If the operation needs to use DTOs for data transfers, then we should use the *_Type of "input" _* and *_Add mapping to "input"_* options to specify the input DTO and *_Result type_* to specify the type of the output DTO. If the DTOs comply with naming conventions, they get recognized automatically.
+This type of mutation is also used by the screen template. It can have Empty implementation, in which case we enter *_Type of "output"_* and *_Result type_*. Or we can delegate the operation to a bean (a repository), as described under Common Features.  If the operation needs to use DTOs for data transfers, then we should use the *_Type of "input"_* and *_Add mapping to "input"_* options to specify the input DTO and *_Result type_* to specify the type of the output DTO. If the DTOs comply with naming conventions, they get recognized automatically.
 
 image::mutation-save-step-2.png[align=center]
 
@@ -184,7 +182,13 @@ image::mutation-delete.png[align=center]
 
 If we delegate the operation to the repository, a fully-functional method gets generated.
 
-xref:#mutation-delete-item-example[See example].
+[source, java]
+----
+    @MutationMapping(name = "deleteEvent1")
+    public void delete(@Argument @NonNull @GraphQLId Long id) {
+        eventRepository.deleteById(id);
+    }
+----
 
 [[Subscription]]
 === Subscription Mapping
@@ -195,9 +199,7 @@ For *_Wrap Type_* we select the type of the wrapper.
 
 image::subscription.png[align=center]
 
-Subscription is an asynchronous request for real-time updates, which are used, e.g., in chats.
-
-https://www.graphql-java.com/documentation/subscriptions/[Subscriptions - GraphQL Java Documentation]
+Subscription is an asynchronous request for real-time updates, which are used, e.g., in chats. You can read more about them in https://www.graphql-java.com/documentation/subscriptions/[GraphQL Java Documentation].
 
 [[schema-mapping]]
 === Schema Mapping
@@ -206,7 +208,29 @@ Visit https://docs.spring.io/spring-graphql/docs/current/reference/html/#control
 
 *_Schema Mapping_* allows us to implement loading of one field of the *_GraphQL schema_* type.
 
-xref:#schema-mapping-example[See example].
+
+In the pop-up window that appears when we choose this option, we have to specify *_Type name_*, *_Field_* and *_Result type_*. Their meanings are as follows:
+
+ * *_Type name_* - an existing type of the GraphQL schema
+ * *_Field_* - an existing or a new field of the selected type. A generated method will be automatically called to load this field.
+ * *_Result type_* - the field type for the new field.
+
+image::schema-mapping.png[align=center]
+
+We can select one of already existing fields or generate a new one.
+
+image::schema-mapping1.png[align=center]
+
+[source, java]
+----
+    @SchemaMapping(typeName = "UserInfo", field = "groupId")
+    public Long groupId(@Argument UserInfoController.UserInfo userInfo) {
+        Long result = 25L;
+        return result;
+    }
+----
+
+Next time we regenerate the schema, the new `groupId` field will be added to it.
 
 [[batch-mapping]]
 === Batch Mapping
@@ -228,9 +252,9 @@ The method takes a list of objects as an argument and outputs a map that allows 
 [[inspector-items]]
 == Inspector items
 
-The Inspector allows us either edit and fine-tune the properties of an already existing object, or carry out certain actions with an object using the Actions drop-down box.
+The Inspector allows us either edit and fine-tune the properties of an already existing object, or carry out certain actions with an object using the *_Actions_* drop-down box.
 
-When we work with GraphQL Controller methods, the Inspector changes its look to include an additional section named *_GraphQL_*.
+When we work with GraphQL controller methods, the Inspector changes its look to include an additional section named *_GraphQL_*.
 
 image::inspector-with-graphql.png[align=center]
 
@@ -305,7 +329,9 @@ The final code of the `cancel` method should look like this:
 [source, java]
 ----
     @MutationMapping(name = "cancelEvent")
-    public EventDto cancel(@Argument @NonNull String reason, @Argument @GraphQLId Long eventId) {
+    public EventDto cancel(
+                @Argument @NonNull String reason,
+                @Argument @GraphQLId Long eventId) {
         Event eventParam = eventRepository.findById(eventId).orElseThrow();
         Event event = eventService.cancelEvent(eventParam, reason);
         EventDto result = eventMapper.toDto(event);
@@ -337,37 +363,4 @@ At the end a fully functional method will be generated to load an object by its 
         return eventMapper.toDto(optional.orElseThrow());
     }
 ----
-
-[[mutation-delete-item-example]]
-=== Mutation (delete item) Example
-
-[source, java]
-----
-    @MutationMapping(name = "deleteEvent1")
-    public void delete(@Argument @NonNull @GraphQLId Long id) {
-        eventRepository.deleteById(id);
-    }
-----
-
-[[schema-mapping-example]]
-=== Schema Mapping Example
-
-In the pop-up window that appears when we choose this option, we have to specify *_Type name_*, *_Field_* and *_Result type_*.
-
-image::schema-mapping.png[align=center]
-
-We can select one of already existing fields or generate a new one.
-
-image::schema-mapping1.png[align=center]
-
-[source, java]
-----
-    @SchemaMapping(typeName = "UserInfo", field = "groupId")
-    public Long groupId(@Argument UserInfoController.UserInfo userInfo) {
-        Long result = 25L;
-        return result;
-    }
-----
-
-Next time we regenerate the schema, the new `groupId` field will be added to it.
 

@@ -40,7 +40,7 @@ In this case, the `id` field will be an identifier for `OwnerDTO`, since it has 
       owner(id: ID!): OwnerDTO
     }
 
-Technically, several ID fields can be declared for an object; in this case, the user has to select in the wizard, which field to use as the ID.
+Technically, several ID fields can be declared for an object.
 
 [[naming-convention]]
 == React-admin Naming Convention
@@ -88,7 +88,7 @@ If a method in a Spring for GraphQL controller the returned object is marked wit
 *Declaration:*
 [source, java]
     @GraphQLId
-    @QueryMapping(DefaultOwnerId)
+    @QueryMapping(name = "DefaultOwnerId")
     public String getDefaultOwnerId() {
         //...
     }

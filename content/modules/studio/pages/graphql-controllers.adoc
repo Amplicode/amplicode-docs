@@ -3,9 +3,7 @@
 [[intro-about]]
 == About Spring for GraphQL API
 
-The main library used by Amplicode applications for creating the API layer is *_Spring for GraphQL_*.
-
-* https://docs.spring.io/spring-graphql/docs/current/reference/html/#overview[Spring for GraphQL Overview - Spring Documentation]
+The main library used by Amplicode applications for creating the API layer is *_Spring for GraphQL_*. See https://docs.spring.io/spring-graphql/docs/current/reference/html/#overview[Spring Documentation] to learn more about the library.
 
 The application's API is defined by https://docs.spring.io/spring-graphql/docs/current/reference/html/#controllers[annotated controllers], i.e. classes annotated as `@Controller` and containing annotations belonging to Spring for GraphQL, e.g. `@MutationMapping`, `@QueryMapping`, etc.
 

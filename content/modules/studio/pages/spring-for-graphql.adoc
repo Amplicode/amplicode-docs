@@ -10,6 +10,6 @@
 ** xref:studio:graphql-ignore.adoc[Excluding a Field from Schema]
 * xref:studio:graphql-protocol-conventions.adoc[GraphQL Protocol Conventions]
 ** xref:studio:graphql-naming-rules.adoc[Naming Rules]
-** xref:studio:paging-sorting-filtering.adoc[Paging, Sorting, Filtering]
+** xref:studio:paging-sorting-filtering.adoc[Pagination, Sorting and Filtering]
 
 //TODO

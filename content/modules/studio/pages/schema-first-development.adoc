@@ -2,7 +2,7 @@
 
 [[intro]]
 == Introduction
-The third way of creating a Spring for GraphQL Controller is to change the GraphQL schema first and then use a quick fix for code generation. This method is the most convenient for creating customized business operations implementing the business logic of the application.
+On of the ways of creating a Spring for GraphQL Controller is to change the GraphQL schema first and then use a quick fix for code generation. This method is the most convenient for creating customized business operations implementing the business logic of the application.
 
 The code in the GraphQL schema is written manually, so, for a detailed description of the syntax we recommend you to visit this resource:
 https://graphql.org/learn/schema/[Schemas and Types - GraphQL Documentation]
@@ -17,7 +17,10 @@ This quick fix allows the developer to add a new query, a new mutation, a new ty
 Open the `schema.graphqls` file, find the Query Root block and add the following line:
 
 [source, java]
-eventEmptyWindows(date:Date!): [LocalDateTime]
+type Query {
+  ...
+  eventEmptyWindows(date:Date!): [LocalDateTime]
+}
 
 Press *_Alt+Enter_* (or *_Opt+Enter_* on a Mac) and select *_Adjust annotated GraphQL controllers and DTOs_*.
 
@@ -25,7 +28,7 @@ The following window will appear:
 
 image::adjust-window.png[align=center]
 
-This window contains all queries, mutations, types, enums, etc... The new elements will be marked with a green word *_new_*.
+This window contains all queries, mutations, types, enums, etc, corresponding to existing controllers on the backend. The new elements will be marked with a green word *_new_*.
 
 image::green-new.png[align=center]
 
@@ -55,7 +58,7 @@ The quick fix window will let us choose the package and the root for the new typ
 
 image::new-types.png[align=center]
 
-It is necessary to chck the checkbox corresponding to the new type.
+It is necessary to check the checkbox corresponding to the new type.
 
 image::checkbox.png[align=center]
 
@@ -71,13 +74,11 @@ The schema also allows us to add new arguments to types.
 
 [source, java]
 type EventResponse {
-options: [LocalDateTime]
-timeSpent: Long
+    options: [LocalDateTime]
+    timeSpent: Long
 }
 
-Let us mark the new argument timeSpent as @SchemaMapping method. In this case we will need to specify the controller, to which this method will be placed.
-
-image::schema-mapping-method.png[align=center]
+Let us mark the new argument `timeSpent` as *_@SchemaMapping method_*. In this case we will need to specify the controller, to which this method will be placed, in the *_Controller_* drop-down box.
 
 The new method will be created within the `EventController` class.
 
