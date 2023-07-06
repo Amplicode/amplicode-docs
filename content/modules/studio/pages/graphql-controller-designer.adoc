@@ -1,0 +1,366 @@
+= GraphQL Controller Designer
+
+The *_Designer_* tab of the Amplicode tool window contains two separate panels: the *_Palette_* at the top and the *_Inspector_* nearer the bottom.
+
+[[palette-items]]
+== Palette items
+
+The *_Palette_* consists of various elements, some of which are common for all Spring beans. Actually, the controller is also a Spring bean, whose role is to define an external API.
+
+image::palette1.png[align=center]
+
+The Palette's items such as *_Lifecycle Callbacks_*, *_Autowire_* and *_Event Listeners_* can be used for all types of Spring beans. *_Request Handling_* is for Spring MVC. The last item, *_Spring for GraphQL_*, is for working with GraphQL controllers.
+
+*_Lifecycle Callbacks_* contains various elements for creating methods that ensure that the bean can properly respond to all events of the application's lifecycle, such as, for example, servlet context events, bean lifecycle events or the application start event.
+
+*_Autowire_* allows us to inject (autowire) various other beans originating either from the project itself or from libraries. For example, it can be repositories (under *_Data Access/Repositories_*) or your project's own beans (under *_Project Components_*).
+
+The *_Event Listeners_* section allows adding a listener (an event handler method) to a bean. For example, the listener can listen to the application initialization event, application lifecycle events or authentication.
+
+The *_Request Handling_* section contains elements that allow us to create Spring MVC endpoints.
+
+The last section, *_Spring for GraphQL_*, contains elements that allow creation of various annotated handler methods for working with the Spring for GraphQL library. It contains both the low-level and the high-level elements for quick creation of CRUD operation handlers.
+
+//TODO change screenshot when the item is properly renamed
+
+Below, we are going to look at this section in detail.
+
+image::palette2.png[align=center]
+
+[[common-features]]
+=== Common Features
+
+All items in the right menu of the section have certain features in common: they launch a wizard that helps us create a corresponding method by means of going through certain steps. The steps may differ for different items, but there are also similarities.
+
+At the first step we have to make a choice whether we are creating a method with empty implementation or a handler method that delegates its operation to an existing Spring bean.
+
+image::wizard-step-1.png[align=center]
+
+Depending on whether we choose *_Empty Implementation_* or *_Expose method of Spring Bean_*, the logic and the scenario of further steps will be different. To illustrate the difference between these approaches, we will be using the Create Query wizard, but the principles will be the same for Mutation and other items.
+
+[[empty-implementation]]
+==== *Empty Implementation*
+
+Let's say we have chosen *_Empty implementation_*. In this case the first step will contain the *_Response class_*.
+
+image::wizard-step-2.png[align=center]
+
+Supposing we have chosen BigDecimal (use the *_Find_* link to choose the class), the textarea containing the code preview will reflect the change:
+
+image::code-preview.png[align=center]
+
+On the third step we enter *_Method name_* and *_Operation name_*. The former is the name of the Java method, and the latter is the name of the GraphQL operation. The Operation name has to be unique throughout the entire project; otherwise it won't be accepted.
+
+image::wizard-step-3.png[align=center]
+
+Once we click *_Create_*, a method will be created with a signature marked with the `@QueryMapping` annotation. The implementation will have to be written by the developer. Example below.
+
+[source, java]
+----
+@Controller
+public class EventController {
+
+    @QueryMapping(name = "vatRate")
+    public BigDecimal getVatRate() {
+        BigDecimal result = GlobalConstants.VAT_TAX_RATE_PERCENT;
+        return result;
+    }
+}
+----
+
+We can still add more arguments to this method using xref:#actions[one of the Inspector's actions].
+
+[[expose-method]]
+==== *Expose Method of Spring Bean*
+
+Now, instead of *_Empty implementation_* we choose *_Expose method of Spring Bean_*.
+
+image::wizard-2-step-1.png[align=center]
+
+In this case we have to select the bean, to which we delegate the operation, as well as the method that contains the necessary implementation.
+
+The simplest choice for the bean would be the corresponding Spring Data repository.
+
+image::select-bean.png[align=center]
+
+Then we select one of the standard or customized methods available in the bean class.
+
+image::select-method.png[align=center]
+
+On the next step we get a table that includes all parameters of the delegate method. For each parameter we will be able to check or uncheck the *_Expose as @Argument_* checkbox.
+
+image::wizard-2-step-2.png[align=center]
+
+If the checkbox is checked, then the method parameters are added as GraphQL operation arguments. If the checkbox is unchecked, then these parameters are not added as GraphQL operation arguments, and the developer has to initialize them inside the method's body.
+
+The third step contains the Response class, and on the fourth step we choose the names for Method and Operation, as we did in the case of xref:#empty-implementation[*_Empty implementation_*].
+
+Once we create the method, Studio will create a method signature for us. We will have to modify the method's body to implement the needed functionality. An example of a fully developed method is given below:
+
+[source, java]
+----
+ @QueryMapping(name = "futureEventCount")
+    public Long countFutureEvents() {
+        long eventCount = eventRepository.countByStartDateGreaterThanEqual(LocalDate.now().plusDays(1));
+        Long result = eventCount;
+        return result;
+    }
+----
+
+[query]
+=== Query
+*_Query_* is the element allowing us to create a `@QueryMapping` handler method for a GraphQL query.
+
+When this item is chosen, a wizard launches.
+
+image::wizard-step-1.png[align=center]
+
+Here, we choose either Empty Implementation or Expose method of Spring Bean and act as described in xref:#common-features[Common Features].
+
+[[mutation]]
+=== Mutation
+
+*_Mutation_* is the element allowing us to create a `@MutationMapping` handler method for a GraphQL mutation. We have the same two options for mutations as for any other Palette item in this section: *_Empty Implementation_* and *_Expose method of Spring Bean_*. The difference between these two options is explained in xref:#common-features[Common Features].
+
+xref:#mutation-example[You can see a detailed example of how to create a mutation method below].
+
+[[crud-components]]
+=== CRUD Palette Components
+
+image::palette2.png[align=center]
+
+Using Palette components named *_Query (load item by id)_*, *_Query (load list of items)_*, *_Mutation (save item)_* and *_Mutation (delete item)_*, it is possible to create a CRUD controller from scratch.
+
+*_Query (load item by id)_* allows us to create an annotated handler method that loads an object by its unique identifier. This method, once created, can, for example, be used by standard screen templates while generating the application's UI.
+
+If you haven't done so already, we recommend that you visit the xref:#common-features[Common Features] section first.
+
+xref:#query-load-item-by-id-example[See example].
+
+*_Query (load list of items)_* allows us to create a query that loads up a list of objects (a collection). It also offers to API clients functionality for filtering, sorting and pagination.
+
+This operation can be used by the standard screen template, such as, for example, an *_Entity list_*.
+
+First of all, we recommend that you read about the  xref:#common-features[Common Features], if you haven't done so before.
+
+If we need to support Pagination, but at the first step we have selected the `findAll()` method that doesn't support pagination, the Studio will warn us about it by a pop-up message.
+
+image::reselect-method.png[align=center]
+
+If we answer *_Yes_*, the method will be replaced by another method that has the same name, but supports pagination.
+
+Then we need to choose the Default page size, which will be used if the page size is not passed explicitly by the client.
+
+Then we specify the list of fields for sorting. These can be both direct attributes belonging to the Entity in question and the associated attributes.
+
+image::attributes.png[align=center]
+
+On the next step we configure filtering. If it is necessary to choose a different method, Studio will warn us by displaying another *_Reselect Method_* pop-up window. Here we can specify one or more conditions.
+
+xref:#filtering[The detailed description of the filtering functionality] can be found above in the section dedicated to creating CRUD controllers. The same basic principles apply here.
+
+image::filtering-step.png[align=center]
+
+On the last step we enter the method name and the operation name and click *_Create_*. A fully functional method gets generated along with auxiliary methods and classes, which implement the filtering, pagination and sorting functionality.
+
+[NOTE]
+Filtering will be available only if the repository supports `JpaSpecificationExecutor`.
+
+*_Mutation (save item)_* allows us to create a mutation that saves modifications for a new or already existing object. It returns the updated state of the object.
+
+image::mutation-save.png[align=center]
+
+If you haven't done so already, we recommend that you visit the xref:#common-features[Common Features] section first.
+
+This type of mutation is also used by the screen template. It can have Empty implementation, in which case we enter *_Type of "output"_* and *_Result type_*. Or we can delegate the operation to a bean (a repository), as described under Common Features.  If the operation needs to use DTOs for data transfers, then we should use the *_Type of "input"_* and *_Add mapping to "input"_* options to specify the input DTO and *_Result type_* to specify the type of the output DTO. If the DTOs comply with naming conventions, they get recognized automatically.
+
+image::mutation-save-step-2.png[align=center]
+
+*_Mutation (delete item)_* allows us to create a mutation that deletes the object by its unique identifier. It is used by the *_Entity List_* template and the *_Entity Management_* template.
+
+image::mutation-delete.png[align=center]
+
+If we delegate the operation to the repository, a fully-functional method gets generated.
+
+[source, java]
+----
+    @MutationMapping(name = "deleteEvent1")
+    public void delete(@Argument @NonNull @GraphQLId Long id) {
+        eventRepository.deleteById(id);
+    }
+----
+
+[[Subscription]]
+=== Subscription Mapping
+
+*_Subscription Mapping_* allows us to create a Subscription handler. The wizard contains only one step.
+
+For *_Wrap Type_* we select the type of the wrapper.
+
+image::subscription.png[align=center]
+
+Subscription is an asynchronous request for real-time updates, which are used, e.g., in chats. You can read more about them in https://www.graphql-java.com/documentation/subscriptions/[GraphQL Java Documentation].
+
+[[schema-mapping]]
+=== Schema Mapping
+
+Visit https://docs.spring.io/spring-graphql/docs/current/reference/html/#controllers.schema-mapping[@SchemaMapping - Spring for GraphQL Documentation] to read more about Schema Mapping.
+
+*_Schema Mapping_* allows us to implement loading of one field of the *_GraphQL schema_* type.
+
+
+In the pop-up window that appears when we choose this option, we have to specify *_Type name_*, *_Field_* and *_Result type_*. Their meanings are as follows:
+
+ * *_Type name_* - an existing type of the GraphQL schema
+ * *_Field_* - an existing or a new field of the selected type. A generated method will be automatically called to load this field.
+ * *_Result type_* - the field type for the new field.
+
+image::schema-mapping.png[align=center]
+
+We can select one of already existing fields or generate a new one.
+
+image::schema-mapping1.png[align=center]
+
+[source, java]
+----
+    @SchemaMapping(typeName = "UserInfo", field = "groupId")
+    public Long groupId(@Argument UserInfoController.UserInfo userInfo) {
+        Long result = 25L;
+        return result;
+    }
+----
+
+Next time we regenerate the schema, the new `groupId` field will be added to it.
+
+[[batch-mapping]]
+=== Batch Mapping
+
+Visit https://docs.spring.io/spring-graphql/docs/current/reference/html/#controllers.batch-mapping[@BatchMapping - Spring for GraphQL Documentation] to read more about Batch Mapping and see examples.
+
+*_Batch Mapping_* is similar to Schema Mapping and was created to solve the so-called *_N+1 problem_*. For example, every Country within the demo application can have census statuses saved in a separate database, so, if we want to load the census status for each country, we will need a large number of small queries. To be able to use one large query instead, we use Batch Mapping.
+
+Batch Mapping also supports various *_Wrap Types_*, such as Collection, Map, Callable, etc..., which defines the result type.
+
+To create a new Batch Mapping we choose the GraphQL schema type, to which the new field will be added (or in which the existing field is located), enter the field name and specify the Wrap Type.
+
+image::batch-step-1.png[align=center]
+
+Click *_OK_* to generate the Batch Mapping code.
+
+The method takes a list of objects as an argument and outputs a map that allows us to load up all the necessary data withing the same query. This approach improves the application's performance.
+
+[[inspector-items]]
+== Inspector items
+
+The Inspector allows us either edit and fine-tune the properties of an already existing object, or carry out certain actions with an object using the *_Actions_* drop-down box.
+
+When we work with GraphQL controller methods, the Inspector changes its look to include an additional section named *_GraphQL_*.
+
+image::inspector-with-graphql.png[align=center]
+
+This sections allows us to:
+
+ * Change the name of the operation (the *_Name_* field)
+ * Choose one or more of three annotations for each argument:
+ ** `@NonNull` (meaning that the argument is mandatory); if the argument is marked an @NonNull, it will be also marked as not null (with an exclamation mark) in the schema after schema synchronization;
+ ** `@Valid` - an annotation that turns on the bean validation mechanism for this argument;
+ ** `@GraphQLId` for scalar arguments (if the argument is marked with this annotation, it will also have the xref:studio:id-type.adoc[id type] in the schema after the synchronization).
+
+[[actions]]
+=== Actions
+
+The *_Actions_* drop-down box contains actions that can be applied to the selected operation. It looks differently in different contexts, but for a GraphQL operation it will have the following set of actions:
+
+image::inspector-with-actions.png[align=center]
+
+*_Add GraphQL @Argument_* allows us to add a new argument. The same action can be carried out as an intention action using *_Alt+Enter_* (or *_Opt+Enter_* on a Mac).
+
+image::intention-action.png[align=center]
+
+*_Add System Parameter_* allows us to add a system parameter. These parameters are not passed by the client, and they are absent in the schema. They just contain some useful information, for example, the `Locale` parameter tells us which language the client is using. All types of system parameters are described in the https://docs.spring.io/spring-graphql/docs/current/reference/html/#controllers.schema-mapping.signature[Spring for GraphQL documentation].
+
+//TODO third item
+
+[[examples]]
+== Examples
+
+[[mutation-example]]
+=== Mutation Example
+
+Below is the example of how to use *_Expose method of Spring Bean_* to create the event cancellation functionality.
+
+We are going to delegate the implementation to a Spring service named `EventService`.
+
+image::mutation-step-1.png[align=center]
+
+Step 2:
+
+image::mutation-step-2.png[align=center]
+
+Step 3:
+
+image::mutation-step-3.png[align=center]
+
+Step 4:
+
+image::mutation-step-4.png[align=center]
+
+The mutation generated as a result will have the following code:
+
+[source, java]
+----
+   @MutationMapping(name = "cancelEvent")
+    public EventDto cancel(@Argument String reason) {
+        Event eventParam = null; // TODO: initialize parameter
+        Event event = eventService.cancelEvent(event, reason);
+        EventDto result = null; // TODO: initialize result value
+        return result;
+    }
+----
+
+Now it is necessary to autowire the mapper into the DTO and finish the implementation of the method. Use *_Autowire_* -> *_Project Components_* in the Palette.
+
+Then we use the xref:#actions[Inspector] to add a new argument `eventId` of the `Long` type. For that, use *_Actions_* -> *_Add GraphQL @Argument_* in the Inspector. Mark the argument `reason` as `@NotNull` and `eventId` as `@GraphQLId`.
+
+image::arguments.png[align=center]
+
+The final code of the `cancel` method should look like this:
+
+[source, java]
+----
+    @MutationMapping(name = "cancelEvent")
+    public EventDto cancel(
+                @Argument @NonNull String reason,
+                @Argument @GraphQLId Long eventId) {
+        Event eventParam = eventRepository.findById(eventId).orElseThrow();
+        Event event = eventService.cancelEvent(eventParam, reason);
+        EventDto result = eventMapper.toDto(event);
+        return result;
+    }
+----
+
+[[query-load-item-by-id-example]]
+=== Query (load item by id) Example
+
+For this item we can choose Empty Implementation as described under xref:#common-features[Common Features], but it will be necessary to select the *_id type_* and the *_Result type_* on the second step.
+
+image::type-of-id.png[align=center]
+
+This will create the method signature (arguments, the returned value type), which will later be recognized by the React screen generation wizard. The implementation has to be written by the application developer.
+
+The second option, which delegates the operation to a Spring bean, is faster. The simplest way is to delegate the operation to a repository. In this case we can select the `findById()` method. The DTO (if we choose to use it) will be defined automatically, as well as the mapper.
+
+image::delegate-to-repository.png[align=center]
+
+At the end a fully functional method will be generated to load an object by its id.
+
+[source, java]
+----
+@NonNull
+    @QueryMapping(name = "event")
+    public Event findById(@Argument @NonNull @GraphQLId Long id) {
+        Optional<Event> optional = eventRepository.findById(id);
+        return eventMapper.toDto(optional.orElseThrow());
+    }
+----
+

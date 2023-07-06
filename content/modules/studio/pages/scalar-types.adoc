@@ -1,0 +1,137 @@
+= Supported Types and Scalars
+
+In order to generate a schema based on the backend objects, as well as backend objects based on the schema, Studio contains certain mapping between Java types and schema elements. This mapping works both ways.
+
+There are also certain limitations on the kinds of data that can be used in the *_Spring for GraphQL API_* layer by the arguments and response classes. The supported data types are described in this article.
+
+Scalar types are the types that resolve to a single scalar object and can't have sub-selections in the query.
+
+[[scalar-types]]
+== Scalar Types
+
+By default, Spring for GraphQL supports scalar types mentioned in the GraphQL specification, namely:
+
+ * *Int* - 32-bit signed.
+
+ * *Float* - IEEE 754.
+
+ * *String* - UTF-8.
+
+ * *Boolean* - true/false.
+
+ * *ID* - serialized representation - String
+
+Besides, Spring for GraphQL offers an opportunity to add our own scalar types.
+
+Below is the table to scalar types supported by Amplicode out of the box.
+
+ * *_Scalar Type_* - Scalar type name in the GraphQL schema
+
+ * *_Java Type_* - the list of Java types corresponding to this scalar type.
+
+|===
+|*Scalar Type*	|*Java Type*	|*JSON presentation*	|*JSON Sample*
+|*Standard types* |||
+|Int	|Integer, int, Byte, byte, Short, short, char	|A signed 32‐bit integer	|5
+|Float	|Double, double, Float, float	|A signed double-precision floating-point value	|5.5
+|String	|String, UUID	|An UTF‐8 string	|"valueString"
+|Boolean	|Boolean, boolean	|true or false	|true
+|ID	|String, Integer, Long, UUID, BigInteger	|An UTF‐8 string	|"code"
+|*Additional Amplicode types* |||
+|BigInteger	|BigInteger	|A value as string	|"120 000"
+|Long	|Long, long	|A value as UTF‐8 string	|"120 000"
+|BigDecimal	|BigDecimal	|value as string	|"123.505"
+|Date	|LocalDate	|A date string, full-date format RFC3339	|"2007-12-03"
+|Time	|OffsetTime	|A time string with offset, full-time format RFC3339	|"14:10:20+01:00"
+|DateTime	|OffsetDateTime	|A date time string with offset, date-time format RFC3339	|"2016-01-01T14:10:20+01:00"
+|Url	|URL	|URL format as specified in RFC3986	|"http://yandex.ru"
+|Void	|Void	|null	|null
+|LocalTime	|LocalTime	|A local time string (i.e., with no associated timezone) in 24-hr HH:mm[:ss[.SSS]] format	|"14:25 or 14:25:06 or 14:25:06.123"
+|LocalDateTime	|LocalDateTime	|A local datetime string in full-date"T"partial-time format RFC3339	|"2007-12-03T14:25:06"
+|Timestamp	|Date	|A value as string of number of milliseconds from start of UNIX epoch	|"1644399147756"
+|===
+
+Read https://datatracker.ietf.org/doc/html/rfc3339#section-5.6[here] about RFC3339 date time formats.
+
+
+[[collections-arrays]]
+== Collections and Arrays
+
+Data arrays and collections are represented as arrays in the schema. For example `double[]` is represented as `Float[]` in the schema.
+
+`Set`, `Collection` and `List` types are all represented as arrays in the schema.
+
+*Example:*
+[source, java]
+@QueryMapping("myAuthorities")
+public List<String> getAuthorities(@AuthenticationPrincipal UserDetails userDetails) {
+    return userDetails.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
+}
+
+Schema:
+[source, java]
+myAuthorities: [String]
+
+[[enums]]
+== Enums
+Java enums are represented as enums in the GraphQL schema. Each constant is represented by a corresponding constant in the schema.
+
+[[generic]]
+== Generic Classes and Interfaces
+In the case when a generic class parametrized by another class is the result of an operation, then for each combination of the two types there will be a separate type generated.
+
+*Example:*
+[source, java]
+----
+// Generic class
+public class ContactInfo<T>
+    private T item;
+    private String address;
+    private String fullName;
+    private String telephoneNumber;
+
+    // getters, setters
+}
+
+// implementations
+@QueryMapping
+public ContactInfo<OwnerDTO> getOwnerWithContact() {
+    return null;
+}
+
+@QueryMapping
+public ContactInfo<PetDTO> getPetWithContact() {
+    return null;
+}
+----
+Here we have two queries that both have the `ContactInfo` type parameterized by two different types. Such types are also supported by Amplicode. When we regenerate the schema, we will get:
+
+[source, java]
+    getOwnerWithContect: OwnerDTOContactInfo
+    getPetWithContact: PetDTOContactInfo
+
+We will also get two separate types in the schema:
+
+[source, java]
+----
+type OwnerDTOContactInfo {
+    address: String
+    fullName: String
+    item: OwnerDTO
+    telephoneNumber: String
+}
+
+type PetDTOContactInfo {
+    address: String
+    fullName: String
+    item: PetDTO
+    telephoneNumber: String
+}
+----
+
+[[other-types]]
+== Other Types
+Types not mentioned above should be interpreted as complex objects. Meaning that if there is no corresponding scalar type for a Java type, a new GraphQL type is created in the GraphQL schema. A GraphQL type field will be generated for every field of the Java type.
+

@@ -1,0 +1,138 @@
+= Creating GraphQL Controllers
+
+[[intro-about]]
+== Three Ways to Generate Controllers
+
+There are three ways to create a controller in Studio:
+
+ * Create an empty controller and then fill it in using the Palette items
+ * Create a controller based on an existing repository, an action that allows us to implement basic CRUD operations for an Entity
+ * Using the schema-first approach. This approach means that we develop the API layer starting from the GraphQL schema and moving towards the backend. This method is the most convenient for implementing customized business logic.
+
+Let us look at all three ways in detail.
+
+[[empty-controller]]
+== Creating an Empty Controller
+
+In order to create an empty controller, you need to use the *_Plus_* pictogram (image:add-new-actions.png[align=center]) in the *_Amplicode Tool Window_* and select *_MVC Controller_*.
+
+image::new-mvc-controller.png[align=center]
+
+In the following window, enter the name of the Controller, use the *_Three Dots_* pictogram to choose the package name from the tree, then click *_OK_*.
+
+image::add-mvc-controller.png[align=center]
+
+In the code that will be generated, delete the @RequestMapping annotation. The resulting code looks as follows:
+
+image::mvc-controller.png[align=center]
+
+Now we can use the Palette elements for Spring for GraphQL controllers to develop our controller further. This process will be described in more detail below.
+
+image::palette-for-controllers.png[align=center]
+
+[NOTE]
+A Spring for GraphQL controller is, in essence, a Spring MVC controller. Which means that it is possible to create other kinds of methods within the controller class, e.g. Request Handling methods.
+
+[[create-crud-controller]]
+== Creating CRUD Controller by Spring Data Repository
+
+In this case, we need an already created *_Spring Data repository_*. This action allows us to create a CRUD controller, which implements all the necessary CRUD operations for an entity and to delegate all these operations to a Spring Data repository. The entity can be a JPA entity or, for example, a MongoDB entity.
+
+*_CRUD_* means that we are going to create operations for **C**reating, **R**eading, **U**pdating and **D**eleting entities. The controller will delegate these operations to a repository, which can be a JPA repository or a repository working with other kinds of entities, e.g. MongoDB entities.
+
+In order to create this controller, you will have to xref:studio:spring-data-jpa.adoc#repository-creation[create a repository] first. If you prefer to use DTOs, you will need to create a DTO class also.
+
+[TIP]
+If you are planning on supplying _filtering_ possibilities for this entity in the Spring for GraphQL API, then the *_Criteria API Specification_* checkbox has to be checked. Otherwise, filtering options will not be available.
+
+Visit our xref:studio:creating-dto.adoc[How to create a DTO] page if you have decided to use DTOs in your controller. Otherwise, skip it.
+
+[[back-from-dto]]
+
+Now it is possible to create a new Spring for GraphQL Controller. Right-click the package and select *_New_* -> *_Spring for GraphQL Controller_*
+
+image::new-springgraphql-controller.png[align=center]
+
+A window will appear that will allow us to create a CRUD controller quickly. The controller delegates all operations to the Spring Data repository.
+
+image::new-springgraphql-controller-window.png[align=center]
+
+In the table under the controller name we can choose, which operations we are going to include. It is possible to uncheck some of the operations.
+
+image::operations-unchecked.png[align=center]
+
+By default, all four basic CRUD operations are checked. Any new customized operations cannot be created here, but can be added later to the created controller using Palette items.
+
+[[mapping]]
+=== Mapping
+
+Then we select the mapping option. If we are using DTOs in this particular controller, we need to check the *_Mapstruct_* radio button.
+
+image::mapstruct.png[align=center]
+
+Once we checked the Mapstruct radio button, two new fields will appear: *_DTO class_* and *_Input DTO class_*. We can choose the same class for both roles or use two different DTO classes. Also, the *_Plus_* icon allows us to create a DTO on the fly.
+
+image::dto-classes.png[align=center]
+
+The output DTO class is the DTO that outputs the data - that is, the result of the `findAll()`, `findById()` and `save()` operations. The input DTO class is the class that provides input data for the `save()` operation. In most cases, they are the same class.
+
+The *_Sources_* section determines where the controller is going to be created. Here, we are choosing the package. It also offers us options to add everything to an existing controller or to create a new one (the *_Controller_* drop-down box). If we choose to use an existing controller, the *_Class_* field is not used.
+
+image::sources.png[align=center]
+
+[[pagination-sorting-filtering]]
+=== Pagination, Sorting, Filtering
+
+The section that contains *_Filtering_*, *_Pagination_* and *_Sorting_* is available only if we check the `findAll()` method. When this method is unchecked, these options disappear. This section allows us to set all the filtering, pagination and sorting functionality that will be given to the `findAll()` operation. The clients of our GraphQL API will be able to use all these options if they want to. But if we don't add a particular field to our choice, the clients won't be able to use it.
+
+In Pagination and Sorting, the options are the following: we can turn Pagination on and off, set the default size of the page (which will be used of the client doesn't pass the page size) and the drop-down list that shows all attributes available for sorting.
+
+image::pagination-and-sorting.png[align=center]
+
+These attributes include the attributes belonging to the Entity, for which we are creating the controller, as well as the attributes belonging to associated entities. We can choose any number of attributes from the list.
+
+image::pagination-and-sorting-ready.png[align=center]
+
+[[filtering]]
+The Filtering section defined the maximum functionality for filtering on the client side. This section is available only if `findAll()` is selected, only for JPA Entities and only if the repository implements the `JpaSpecificationExecutor` interface, since filtering is based on this interface.
+
+In this section, we need to create a set of the filtering conditions, which the GraphQL controller will provide to the API clients (for example, to a user interface). In the first column (*_Attribute_*) we select either one of the Entity's main attributes or one of the associated attributes.
+
+image::filtration-table.png[align=center]
+
+In the *_Operation_* column we select the operations. For different types of attributes different operations will be available. For example, the *_contains_* operation will be available for strings, but not for numbers.
+
+The *_IgnoreCase_* option makes sense only for strings, therefore, it becomes enabled only when you select a string attribute. If this option is activated, then the attribute value and the value for comparison will be converted to the same case. This way we carry out case-insensitive search.
+
+All conditions entered into the filtering table will be combined via the logical `AND`. If, for example, we enter three parameters and all three parameters are passed by the client, they will all have to be fulfilled. But each of these conditions is optional.
+
+image::three-parameters.png[align=center]
+
+If one of these parameters is not passed by the client, is it not counted among the conditions; therefore, it cannot hinder the search. The code that Studio will provide for it will be as follows:
+
+[source, java]
+----
+    protected Specification<City> createFilter(CityFilter filter) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (filter != null) {
+                if (filter.countryName != null) {
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("country").get("name")), "%" + filter.countryName.toLowerCase() + "%"));
+                }
+                if (filter.name != null) {
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + filter.name.toLowerCase() + "%"));
+                }
+                if (filter.countryPopulationMin != null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("country").get("population"), filter.countryPopulationMin));
+                }
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+----
+
+Once we've set all the parameters, we click *_OK_* and the controller will be created as a Java class containing all the necessary code. We receive a high-quality implementation that includes error processing and can be used for UI development without any additional fine-tuning.
+
+This code includes all four basic CRUD operations and takes into account all the requested options. The transformation between an entity and a DTO is delegated to the mapper's interface, while the data loading and data saving operations are delegated to the repository.
+
+
