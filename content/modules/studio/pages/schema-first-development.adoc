@@ -2,7 +2,7 @@
 
 [[intro]]
 == Introduction
-On of the ways of creating a Spring for GraphQL Controller is to change the GraphQL schema first and then use a quick fix for code generation. This method is the most convenient for creating customized business operations implementing the business logic of the application.
+One of the ways of creating a Spring for GraphQL Controller is to change the GraphQL schema first and then use a quick fix for code generation. This method is the most convenient for creating customized business operations implementing the business logic of the application.
 
 The code in the GraphQL schema is written manually, so, for a detailed description of the syntax we recommend you to visit this resource:
 https://graphql.org/learn/schema/[Schemas and Types - GraphQL Documentation]
