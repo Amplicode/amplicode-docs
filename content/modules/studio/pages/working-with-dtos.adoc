@@ -7,11 +7,11 @@
 
 Studio offers DTO generation from JPA entities via visual designer. Right-click the entity class in the project tree, then select *_New_* -> *_DTO_*, as shown below:
 
-image::new-dto1.png[align=center]
+image::new-dto.png[align=center]
 
 The following pop-up window will appear:
 
-image::create-dto1.png[align=center]
+image::create-dto.png[align=center]
 
 Clicking the *_Plus_* icon near the *_MapStruct interface_* field will provide us with the interface for creating a mapper.
 
@@ -19,11 +19,11 @@ Studio will suggest the default name for the mapper in accordance with the namin
 
 The next step is to choose the attributes that will be included in the DTO. As we switch between arguments, the interface on the right side of the window changes to provide the necessary interfaces for adding settings. For example, for an associated attribute it will look as below:
 
-image::associated-attribute1.png[align=center]
+image::associated-attribute.png[align=center]
 
 For the purposes of our project, we choose *_Existing Class_* for *_DTO type_* and *_Country_* for *_Class_*.
 
-image::existing-class1.png[align=center]
+image::existing-class.png[align=center]
 
 Click *_OK_*. Two new classes for the DTO and for the Mapper will be generated. The DTO class will contain only those attributes, which we checked in the DTO creation window.
 
@@ -123,13 +123,13 @@ Studio will generate it automatically. The gutter icon will appear to help us na
 
 Studio provides an *_Entity from POJO_* action that helps us to generate a JPA entity from any Java/Kotlin class. This feature may be helpful if you develop your application following the API-first approach: define DTOs for the API first and implement the data model later.
 
-In order to do this, use the *_JPA Entity from POJO_* option available both in the "+" menu in the Amplicode tool window and in the Context menu in the project tree.
+In order to do this, use the *_JPA Entity from POJO_* option available both in the *_"+"_* menu in the Amplicode tool window and in the context menu in the project tree.
 
-*Studio drop-down:*
+*"+" menu in the Amplicode tool window:*
 
 image::dto-jpa-entity-from-pojo1.png[align=center]
 
-*Main menu:*
+*Context menu:*
 
 image::dto-jpa-entity-from-pojo2.png[align=center]
 
@@ -144,7 +144,7 @@ In the *_JPA Entity from POJO_* popup window, the following data needs to be spe
 
 image::dto-jpa-entity-from-pojo-window.png[align=center]
 
-The POJO class can be selected from existing ones using the Browse icon on the right, but it is also possible to enter the name manually. Alternatively, if you right-click the source POJO class before selecting the *_JPA Entity from POJO_* option, its name will be inserted into the form automatically along with the suggested name for the resulting entity class and attributes.
+The POJO class can be selected from existing ones using the *_Browse_* icon on the right, but it is also possible to enter the name manually. Alternatively, if you right-click the source POJO class before selecting the *_JPA Entity from POJO_* option, its name will be inserted into the form automatically along with the suggested name for the resulting entity class and attributes.
 
 image::dto-jpa-entity-from-pojo-window1.png[align=center]
 
@@ -214,7 +214,7 @@ With Studio, you are not restricted to using DTOs with just JPA entities. You ca
 [[mapstruct-support]]
 == MapStruct Support
 
-https://mapstruct.org/[*_MapStruct_*] is a code generator that greatly simplifies the implementation of mappings. The *_Mapper class_* field appears in the *_New DTO_* window if your project contains the corresponding dependency. You can select an existing Mapper or create a new one.
+{mapstruct-doc}[*_MapStruct_*] is a code generator that greatly simplifies the implementation of mappings. The *_Mapper class_* field appears in the *_New DTO_* window if your project contains the corresponding dependency. You can select an existing Mapper or create a new one.
 
 image::dto-select-existing-mapper.png[align=center]
 

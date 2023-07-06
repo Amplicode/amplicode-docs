@@ -18,5 +18,6 @@
 **** xref:studio:graphql-protocol-conventions.adoc[]
 ***** xref:studio:graphql-naming-rules.adoc[]
 ***** xref:studio:paging-sorting-filtering.adoc[]
+*** xref:studio:working-with-dtos.adoc[]
 *** xref:studio:marketplace.adoc[]
 *** xref:studio:plugin-settings.adoc[]
