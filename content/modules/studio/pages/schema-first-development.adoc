@@ -1,0 +1,99 @@
+= Schema-First Development
+
+[[intro]]
+== Introduction
+One of the ways of creating a Spring for GraphQL Controller is to change the GraphQL schema first and then use a quick fix for code generation. This method is the most convenient for creating customized business operations implementing the business logic of the application.
+
+The code in the GraphQL schema is written manually, so, for a detailed description of the syntax we recommend you to visit this resource:
+https://graphql.org/learn/schema/[Schemas and Types - GraphQL Documentation]
+
+Studio allows us to create backend controllers and data transfer objects (DTOs) using the schema-first  approach. The developer adds new elements to the schema manually, and then uses the quick fix and enters all the necessary parameters in a dialog window.
+
+This quick fix allows the developer to add a new query, a new mutation, a new type or an input type, which is used by the query or mutation, a new argument, an attribute to an existing type or a new constant to an enum.
+
+[[example]]
+== Example
+
+Open the `schema.graphqls` file, find the Query Root block and add the following line:
+
+[source, java]
+type Query {
+  ...
+  eventEmptyWindows(date:Date!): [LocalDateTime]
+}
+
+Press *_Alt+Enter_* (or *_Opt+Enter_* on a Mac) and select *_Adjust annotated GraphQL controllers and DTOs_*.
+
+The following window will appear:
+
+image::adjust-window.png[align=center]
+
+This window contains all queries, mutations, types, enums, etc, corresponding to existing controllers on the backend. The new elements will be marked with a green word *_new_*.
+
+image::green-new.png[align=center]
+
+We can set additional parameters for every new element in the right half of the window. For example, for a new query or mutation we need to specify a controller. We either select one of the existing controllers or select the *_create new controller_* option and specify the root and the class name for the new controller.
+
+Once we have clicked *_OK_*, Studio will generate the new classes and open them in the Source Code Editor.
+
+It is also possible to create a new input or output type. It can be done, if they are connected with a query or a mutation. Let us change the previously created query to this:
+
+[source, java]
+eventEmptyWindows(params: EventSearchParams): EventResponse
+
+The code for the new types will be as follows:
+[source, java]
+----
+type EventResponse {
+    options: [LocalDateTime]
+}
+
+input EventSearchParams {
+    date: Date!
+    category: String
+}
+----
+
+The quick fix window will let us choose the package and the root for the new types.
+
+image::new-types.png[align=center]
+
+It is necessary to check the checkbox corresponding to the new type.
+
+image::checkbox.png[align=center]
+
+For the output types we can choose how this field will be loaded. Either it will become an attribute of the new Java class, or it will be loaded via Schema Mapping or Batch Mapping.
+
+image::loading.png[align=center]
+
+First, let us look at the first option, *_Attribute to Java class_*. When we click OK, new Java classes will be created.
+
+image::created-classes.png[align=center]
+
+The schema also allows us to add new arguments to types.
+
+[source, java]
+type EventResponse {
+    options: [LocalDateTime]
+    timeSpent: Long
+}
+
+Let us mark the new argument `timeSpent` as *_@SchemaMapping method_*. In this case we will need to specify the controller, to which this method will be placed, in the *_Controller_* drop-down box.
+
+The new method will be created within the `EventController` class.
+
+[source, java]
+    @SchemaMapping(value = "timeSpent", typeName = "EventResponse")
+    public Long getTimeSpent(EventResponse eventResponse) {
+        // TODO
+        return null;
+    }
+
+It will be similar for Batch Mapping.
+
+[NOTE]
+When we add a mutation or a query with `id` as an argument, in the *_Adjust_* dialog such fields will be unchecked by default. We need to check them and specify the `ID` type explicitly. By default, it will be the `String` type, but in our example it should be `Long`, so we change it.
+
+image::id-type.png[align=center]
+
+

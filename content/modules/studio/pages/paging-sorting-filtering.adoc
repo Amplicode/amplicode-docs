@@ -1,0 +1,187 @@
+= Pagination, Sorting and Filtering
+
+In order to integrate React-admin UI smoothly with the backend API, as well as to ensure that Studio provides user-friendly high-level code-generators, it is necessary for the backend and the frontend to follow the same protocol conventions. These conventions are described in the GraphQL API protocol for an Amplicode application. This article describes the protocol conventions followed by the *_Query(load list of items)_* operation and required by the high-level UI generators (by the components that visualize item lists).
+
+[[list]]
+== List of Requirements
+Standard Amplicode method of getting a list of objects.
+
+[[general]]
+=== General
+
+All three aspects - *_Pagination_*, *_Sorting_* and *_Filtering_* - are optional and can be present in the API independently.
+
+[[pagination]]
+=== Pagination
+ . Studio supports the following two API models:
+ .. *No pagination:* all the data is returned together without breaking it up into pages.
+ .. *Offset-based:* loading of a randomly selected page.
+
+ . Parameters
+ .. Parameters are presented as a wrapper-argument named `page`:
+ ... In the case of *no pagination*, the `page` argument is absent in the method signature.
+ ... In the case of *offset-based*, it must contain the number of the page that is being loaded  (the `number` property) and the page size (the `size` property).
+ .. The method that supports pagination must have default values for its parameters.
+ ... Studio supports the loading of the first page of a fixed size. It is possible for the client not to specify the whole `page` argument in the query, since it is not mandatory. But if it _is_ specified, then the `number` and `size` parameters are mandatory.
+ . Returned value:
+ .. The format of the query's returned value depends on the Pagination model:
+ ... In the case of *no pagination*, the result is the list of found objects.
+ ... In the case of *offset-based*, the result is a wrapper-object as a set of found objects and the total number of objects that match the given search criterion (to provide for the pagination UI functionality).
+
+[[sorting]]
+=== Sorting
+ . Sorting is not mandatory, but if we do specify it, we can specify several sorting fields.
+ . The GraphQL schema must declare properties that can be used for sorting.
+ .. The incoming argument is named `sort`; it is not mandatory, and it is a list of objects with the following structure:
+ ... `property`: an enum value of one of the properties available for sorting
+ ... `direction`: an enum value of the sorting direction. Its possible values are `Ascending` or `Descending`. The default value is `Ascending`. This list can contain one or more fields for sorting.
+. The list of the field names available for sorting doesn't have to match the set of attributes belonging to the returned entity type.
+
+[[filtering]]
+=== Filtering
+
+ . Studio supports the following API models:
+ .. No filtration
+ .. Values for filtration are presented as separate arguments
+ .. Values for filtration are wrapped into one wrapper argument named `filter`.
+
+[[examples]]
+== Examples
+General objects of the GraphQL schema, participating in the scenarios, are given below:
+
+[source, java]
+----
+type OwnerDTO {
+  address: String
+  city: String
+  email: String
+  firstName: String
+  id: ID
+  lastName: String
+  telephone: String
+}
+
+type OwnerDTOResultPage  {
+  content: [OwnerDTO!]!
+  totalElements: Long
+}
+
+input OffsetPageInput {
+  number: Int
+  size: Int
+}
+
+input OwnerFilterInput {
+  firstName: String
+  lastName: String
+}
+
+input OwnerOrderByInput {
+  property: OwnerOrderByProperty
+  direction: SortDirection
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+enum OwnerOrderByProperty {
+  FIRST_NAME
+  LAST_NAME
+  CITY
+}
+----
+
+[[loading-two-filters]]
+=== Loading all data with filtration by two fields as API arguments
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListByNamesProperties(firstName: String, lastName: String): [OwnerDTO]
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListByNamesProperties")
+public List<OwnerDTO> ownerListByNamesProperties(
+            @Argument String firstName,
+            @Argument String lastName) {
+  //
+}
+----
+
+[[all-data]]
+=== Loading all the data with a filter
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListByNamesFilter(filter: OwnerFilterInput): [OwnerDTO]
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListByNamesFilter")
+public List<OwnerDTO> ownerListByNamesFilter(@Argument OwnerFilter filter) {
+  //
+}
+----
+
+[[offset-based-sorting]]
+=== Loading one page of data with sorting
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListOffsetPageSorted(page: OffsetPageInput, sort: [OwnerOrderByInput]): OwnerDTOResultPage
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListOffsetPageSorted")
+@Transactional
+public ResultPage<OwnerDTO> ownerListOffsetPageSorted(
+        @Argument OffsetPageInput page,
+        @Argument List<OwnerOrderByInput> sort) {
+  //
+}
+----
+
+[[offset-based-sort-filter]]
+=== Loading one page with sorting and filtering
+
+Schema:
+[source, java]
+----
+type Query {
+  ownerListByNamesFilterOffsetPageSorted(
+    page: OffsetPageInput,
+    sort: [OwnerOrderByInput],
+    filter: OwnerFilterInput
+  ): OwnerDTOResultPage
+}
+----
+
+Controller:
+[source, java]
+----
+@QueryMapping(name = "ownerListByNamesFilterOffsetPageSorted")
+@Transactional
+public ResultPage<OwnerDTO> ownerListByNamesFilterOffsetPageSorted(
+                @Argument OffsetPageInput page,
+                @Argument List<OwnerOrderByInput> sort,
+                @Argument OwnerFilter filter)
+  //
+}
+----
