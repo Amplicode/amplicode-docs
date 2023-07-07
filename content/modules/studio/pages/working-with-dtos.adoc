@@ -1,0 +1,388 @@
+= Working with DTOs
+
+[[introduction]]
+== Introduction
+
+*_DTO_* (data transfer object) is an object that carries data between processes. DTOs for JPA entities generally contain a subset of entity attributes. For example, if you need to expose only a few of the entity attributes via *_GraphQL API_*, you can map entities to DTOs with those attributes and serialize only them. Basically, DTOs allow you to decouple presentation/business logic layer from the data access layer.
+
+Studio offers DTO generation from JPA entities via visual designer. Right-click the entity class in the project tree, then select *_New_* -> *_DTO_*, as shown below:
+
+image::new-dto.png[align=center]
+
+The following pop-up window will appear:
+
+image::create-dto.png[align=center]
+
+Clicking the *_Plus_* icon near the *_MapStruct interface_* field will provide us with the interface for creating a mapper.
+
+Studio will suggest the default name for the mapper in accordance with the naming convention, which you can  preserve or change. Click *_OK_*.
+
+The next step is to choose the attributes that will be included in the DTO. As we switch between arguments, the interface on the right side of the window changes to provide the necessary interfaces for adding settings. For example, for an associated attribute it will look as below:
+
+image::associated-attribute.png[align=center]
+
+For the purposes of our project, we choose *_Existing Class_* for *_DTO type_* and *_Country_* for *_Class_*.
+
+image::existing-class.png[align=center]
+
+Click *_OK_*. Two new classes for the DTO and for the Mapper will be generated. The DTO class will contain only those attributes, which we checked in the DTO creation window.
+
+[[generation-options]]
+== DTO Generation Options
+
+When creating DTOs, Studio provides the following options to choose from:
+
+image::creating-options.png[align=center]
+
+ * *_Java record_* – Generates a DTO as a Java record, providing a concise and immutable representation of the DTO with automatic implementations of `equals()`, `hashCode()`, and `toString()`
+ * *_All args constructor_* – Generates a constructor that accepts arguments for all fields of the DTO
+ * *_equals() and hashCode()_* – Generates the `equals()` and `hashCode()` methods for the DTO based on its fields
+ * *_toString()_* – Generates the `toString()` method for the DTO, providing a string representation of its fields
+ * *_Mutable_* – By default, the generated DTOs are immutable with final fields and no setters. If you need mutable DTOs with private fields and setters, you can check this option
+ * *_Fluent setters_* – This option is available when  the Mutable option is chosen. It allows the generated setters to return this instead of void, enabling method chaining for multiple setter calls
+
+image::mutable.png[align=center]
+
+ * *_Ignore unknown properties for json deserialization_* – Applies the `@JsonIgnoreProperties(ignoreUnknown = true)` annotation to the DTO, allowing it to ignore any unknown properties during JSON deserialization. Only available when the *_Jackson Annotations_* dependency is included in the project.
+
+[[lombok-support]]
+== Lombok Support
+
+Studio simplifies the generation of DTOs by providing *_Lombok_* support in the most optimal way.
+
+For example, when you check *_All args constructor_*, *_equals() and hashCode()_* and *_toString()_* checkboxes in the DTO generator wizard, Studio applies `@Value` to the generated DTO, discarding the redundant access modifiers to keep your code clean.
+
+image::dto-lombok-support.png[align=center]
+
+[source, java]
+@Value
+public class PersonDto implements Serializable {
+    String firstName;
+    String lastName;
+    String telephone;
+}
+
+In case you need a mutable DTO with the same parameters as in the example above, Studio will add `@Data`,`@AllArgsConstructor` and `@NoArgsConstructor` annotations instead.
+
+image::dto-lombok-support1.png[align=center]
+
+[source, java]
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PersonDto1 implements Serializable {
+    private String firstName;
+    private String lastName;
+    private String telephone;
+}
+
+To use this feature, make sure to add https://mvnrepository.com/artifact/org.projectlombok/lombok[Lombok dependencies] to your project and enable it in the  xref:#settings[DTO Declaration Settings].
+
+[[inner-dtos]]
+== Inner DTOs for Associations
+
+Entities can reference other entities via associations, and Studio allows us to generate DTOs for the referenced entities from the same window. Just check the referenced entity in the tree, choose the DTO type and pick the required fields.
+
+image::inner-dtos-for-associations.png[align=center]
+
+Let’s look at the available DTO types:
+
+ * *_New Class_* – a new class will be created in a separate file.
+ * *_New Nested Class_* – a new public static nested class will be created.
+ * *_Existing Class_* – you can select a DTO class that already exists in the project.
+ * *_Flat_* – all inner class fields will be top-class fields. The names of the generated entities will be formed by combining the inner class name with the field names.
+
+[[java-record]]
+== Java Records Support
+
+If you use SDK version 16 and higher in your project, then Studio will provide an additional *_Java Record_* checkbox in the *_New DTO_* wizard. To check the SDK version of the project, select *_File_* -> *_Project Structure_*.
+
+image::project-structure.png[align=center]
+
+If you want to create immutable DTOs, a https://jenkov.com/tutorials/java/record.html[*_Java Record_*] is a great option.
+
+image::dto-java-record.png[align=center]
+
+*Example:*
+
+For this example, we create a separate package named `dtos` and check the Java Record checkbox in the *_New DTO_* window. We also choose the New Class option for the associates. For the `startDate` attribute we add a validation (*_PastOrPresent_*) to generate an annotation.
+
+image::dto-java-record-annotation.png[align=center]
+
+Since the entity and the DTO will be in different packages, the following comment is needed to help them find each other:
+
+[source, java]
+/**
+ * DTO for {@link com.company.citycountrydemo.event.Event}
+ */
+
+Studio will generate it automatically. The gutter icon will appear to help us navigate between the DTO and the entity. If the original entity has validation annotations, they will be copied into the DTO.
+
+[[entities-from-pojos]]
+== Generate Entities from POJOs
+
+Studio provides an *_Entity from POJO_* action that helps us to generate a JPA entity from any Java/Kotlin class. This feature may be helpful if you develop your application following the API-first approach: define DTOs for the API first and implement the data model later.
+
+In order to do this, use the *_JPA Entity from POJO_* option available both in the *_"+"_* menu in the Amplicode tool window and in the context menu in the project tree.
+
+*"+" menu in the Amplicode tool window:*
+
+image::dto-jpa-entity-from-pojo1.png[align=center]
+
+*Context menu:*
+
+image::dto-jpa-entity-from-pojo2.png[align=center]
+
+In the *_JPA Entity from POJO_* popup window, the following data needs to be specified:
+
+ * *_Source root_*
+ * *_Package_*
+ * *_POJO class_*
+ * *_Entity class_*
+ * *_Parent_* (optional)
+ * *_MapStruct interface_* (optional)
+
+image::dto-jpa-entity-from-pojo-window.png[align=center]
+
+The POJO class can be selected from existing ones using the *_Browse_* icon on the right, but it is also possible to enter the name manually. Alternatively, if you right-click the source POJO class before selecting the *_JPA Entity from POJO_* option, its name will be inserted into the form automatically along with the suggested name for the resulting entity class and attributes.
+
+image::dto-jpa-entity-from-pojo-window1.png[align=center]
+
+Once the POJO class is selected, Studio will load its attributes into the entity creation window and provide the interface for the procedure of adding the necessary settings for the future entity's attributes.
+
+Additionally, Studio will detect existing entities, provide interface for generating new associated entities if they are missing in the project, suggest the relationship's cardinality and correctly generate the entity classes including the mapper declarations.
+
+For example, in our demo project we have a POJO class named `InstitutionDto`, but no `Institution` entity. The code of our class is as follows:
+
+[source, java]
+----
+public class InstitutionDto implements Serializable{
+    private final Long id;
+    private final String name;
+    private final PersonDto head;
+    private final Set<DepartmentDto> departments;
+
+    public InstitutionDto(Long id, String name, PersonDto head, Set<DepartmentDto> departments) {
+        this.id = id;
+        this.name = name;
+        this.head = head;
+        this.departments = departments;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public PersonDto getHead() { return head; }
+    public Set<DepartmentDto> getDepartments() { return departments; }
+}
+----
+
+Apart from the `Institution` entity, we need to generate the `Department` entity for the set of `DepartmentDto` objects needed for the `Institution` entity. In order to achieve this, we just check the *_Create new Entity Class_* radiobutton, and Studio suggests the correct *_One to Many_* cardinality.
+
+image::dto-jpa-entity-from-pojo-window2.png[align=center]
+
+Once we click *_OK_*, the code for the new entities and the mapper will be automatically generated. The `InstitutionMapper` class will contain a correct mapper declaration.
+
+[source, java]
+----
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
+public interface InstitutionMapper {
+    com.company.citycountrydemo.dto.Institution toEntity(InstitutionDto institutionDto);
+
+    InstitutionDto toDto(com.company.citycountrydemo.dto.Institution institution);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Institution partialUpdate(InstitutionDto institutionDto, @MappingTarget Institution institution);
+}
+----
+
+And the `InstitutionDto` class will have the necessary comment added, which links it to the corresponding entity.
+
+[source, java]
+/**
+ * DTO for {@link com.company.citycountrydemo.dto.Institution}
+ */
+
+[[generate-from-classes]]
+== Generating DTOs from any Java/Kotlin classes
+
+With Studio, you are not restricted to using DTOs with just JPA entities. You can create DTOs from any Java or Kotlin class, which gives you more flexibility and control over your code. For example, you can use Studio with MongoDB documents.
+
+[[mapstruct-support]]
+== MapStruct Support
+
+{mapstruct-doc}[*_MapStruct_*] is a code generator that greatly simplifies the implementation of mappings. The *_Mapper class_* field appears in the *_New DTO_* window if your project contains the corresponding dependency. You can select an existing Mapper or create a new one.
+
+image::dto-select-existing-mapper.png[align=center]
+
+To create a new Mapper, click the *_Plus_* icon and enter the *_Mapper class name_*.
+
+image::dto-create-new-mapper.png[align=center]
+
+Studio analyzes MapStruct mappers and can define which DTO is associated with which entity. Thanks to this, you can see the DTOs in the corresponding section in the xref:studio:tool-window.adoc#structure[*_Structure_*] and navigate between the entity and its DTOs through gutter icons.
+
+image::dto-gutter-icon.png[align=center]
+
+[[mapping-methods]]
+=== Mapping Methods
+
+Also, Studio can help if you prefer to have a single big mapper interface with methods for all entities. In this case, use the IDE's *_Generate_* menu (*_Cmd+N/Alt+Insert_*) in the open mapper class and create methods for any entity.
+
+*Example:*
+Suppose, we have three entities (`Play`, `Author`, `Character`), two of which (`Play` and `Author`) have DTOs, but no mappers. We are creating the DTO for the third entity, `Character`.
+
+We do it in the usual way, and for the `play` attribute we select the *_Existing Class_* option.
+
+image::dto-mapping-methods1.png[align=center]
+
+We also create a new MapStruct interface for it and name it simply `Mapper`, since it will be used for all entities.
+
+image::dto-mapping-methods2.png[align=center]
+
+Once we click *_OK_*, the new classes `CharacterDto` and `Mapper` will be generated. But now we need to add more methods to it - the methods to convert `Play` and `Author` entities to DTO and back.
+
+From within the `Mapper` class code press *_Alt+Insert_* (or *_Cmd+N_* for Mac) and select *_Mapper Methods_* from the *_Generate_* menu.
+
+Select the domain entity and the DTO class from the corresponding drop-down boxes, set the remaining parameters according to your needs and click *_OK_*.
+
+image::dto-mapping-methods3.png[align=center]
+
+Repeat the same procedure for the second entity. We are done.
+
+[[generic-inheritance]]
+=== Generic Mapper Inheritance
+
+MapStruct allows us to declare generic mappers:
+
+[source, java]
+----
+public interface EntityMapper<D, E> {
+    E toEntity(D dto);
+
+    D toDto(E entity);
+
+    List<E> toEntity(List<D> dtoList);
+
+    List<D> toDto(List<E> entityList);
+}
+----
+
+Such a mapper is convenient to use as a parent for all other mappers and keep them concise and clean. For example, the complicated code of the PersonMapper class will turn into the following line:
+
+[source, java]
+@Mapper(componentModel = "spring")
+public interface PersonMapper extends EntityMapper<PersonDTO, Person> {}
+
+Still, complex mapping logic can be easily added if required. If the generic mapper is present in the project, Studio will detect it automatically and suggest it as a parent every time we are creating a new mapper for a new DTO, like in the example below.
+
+image::dto-inheriting-generic-mapper.png[align=center]
+
+Now, we only need to accept the suggestion, select the attributes to be included in the DTO and click *_OK_*. The resulting code for the mapper will be generated as follows:
+
+[source, java]
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
+public interface AttractionMapper extends EntityMapper<AttractionDto, Attraction> {
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Attraction partialUpdate(AttractionDto attractionDto, @MappingTarget Attraction attraction);
+}
+
+[[mapper-declaration]]
+=== Mapper Declaration
+
+Studio provides flexible settings for mapper declaration. To configure naming patterns or mapping naming strategy for collections, select *_Settings_* in the *_File_* menu and open *_Tools_* -> *_Amplicode_* -> *_Data Access_* -> *_Mapper Declaration_*
+
+image::mapper-declaration.png[align=center]
+
+Configure the options and naming patterns as desired and click *_OK_*.
+
+[[keeping-in-sync]]
+== Keeping DTO in Sync with Its JPA Entity
+
+[[refactoring-attributes]]
+=== Refactoring Attributes
+
+DTOs are commonly used at the API controller level to define only the fields required by the client. This is why DTOs nearly copy the structure of their entities. With Amplicode, you can use the MapStruct library to map entities to DTOs and vice versa. The library auto-maps namesake properties. However, changing the property name in an entity often leads to a corrupted mapping logic. Studio helps developers refactor entity properties along with their related fields in DTOs:
+
+For example, if we use the *_Refactor_* -> *_Rename_* option to rename the `name` attribute of the `City` class into `cityName`, the following window will appear:
+
+image::dto-renaming-attribute.png[align=center]
+
+It will suggest all the necessary changes in the names of methods, components and parameters including those located in the corresponding DTO class. We just need to decide which items in this list should be renamed, uncheck the rest and click *_OK_*.
+
+[[adding-attributes]]
+=== Adding Attributes
+
+If you happen to add a new attribute to an entity, the corresponding DTOs may also need to be updated with this new field. Studio enables you to add a new field to all the required DTOs at once. For this purpose, use the *_DTOs and Spring Data Projections_* icon in the *_Editor Toolbar_*.
+
+image::dto-add-attribute-icon.png[align=center]
+
+Select the *_Add Attributes to DTO_* item in the menu, then in the popup window check the new attribute in all DTOs that require it.
+
+image::dto-add-attribute.png[align=center]
+
+Moreover, if you prefer typing the code manually instead of using wizards, Studio can help you with that too! Just start typing the name of the field that is not in your DTO, and it will be correctly added to the class.
+
+image::dto-add-attribute-manually.png[align=center]
+
+It works with associations also.
+
+[NOTE]
+This feature works with any domain entity (any Java/Kotlin classes), not only with JPA entities.
+
+[[settings]]
+== DTO Declaration Settings
+
+image::declaration-settings.png[align=center]
+
+Each project may follow its own conventions for code writing. In the *_Tools_* -> *_Amplicode_* -> *_Data Access_* -> *_DTO Declaration_* you can configure:
+
+ . *_Serializable type_*.
+ . *_Class name postfix_*.
+ . Whether to use *_Lombok_* or not.
+ . *_Comment link regexp_* (The feature is disabled when the field is empty). It allows Studio to associate a DTO with its JPA Entity. To specify a placeholder for the target entity FQN (Fully Qualified Name) in a comment use the `+(?<entity>.*)+` pattern. So, if the regexp is defined as `DTO for (?:the )?\{@link (?<entity>.*)\}` it will be resolved into the following comment:
+
+[literal, indent=8]
+----
+/**
+ * DTO for {@link com.company.citycountrydemo.event.Event}
+ */
+----
+
+[start=5]
+. *_Class name regexp_*. This option is useful if you follow an obligatory naming convention for DTOs. It allows Studio to associate a DTO with its JPA Entity using the DTO name only. You can specify a placeholder for the simple class name of the target JPA entity using the `(?<entity>.)` pattern. E.g., `(?.)Dto` means that the `MyEntityDto` class will be considered as a DTO for `MyEntity`. This feature is disabled when the field is empty.
+
+ . *_Class comment_*. Defines the comment that will be generated over the DTO class.
+
+[[validation-rules]]
+=== Validation Rules
+
+Studio offers seamless configuration of bean validation constraints for DTO fields within its dedicated DTO generation wizard. In addition to defining validations from scratch, you can automatically transfer the validations from the corresponding entities and manage them in the same wizard.
+
+image::dto-validation.png[align=center]
+
+With the enable/disable functionality for each constraint and customizable validation messages, this feature allows you to fully manage bean validation constraints for your DTO fields.
+
+[NOTE]
+To enable the validations list, it is necessary to include either https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator[*_Hibernate Validator_*] or https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation[*_Spring Boot Starter Validation_*] dependency.
+
+[navigation]
+=== Convenient Navigation Between Entity and Its DTOs
+
+Once Studio associates a DTO class with its corresponding entity:
+
+ * The DTO class will appear in the *_Dto & Projections_* section in the Structure tab and in the Editor Toolbar.
+
+*Structure:*
+
+image::dto-projections.png[align=center]
+
+*Editor Toolbar:*
+
+image::dto-icon.png[align=center]
+
+ * A *_gutter icon_* will appear in the DTO class, providing a convenient way to navigate to its associated entity.
+
+image::dto-navigation.png[align=center]
