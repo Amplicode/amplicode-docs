@@ -60,6 +60,6 @@ VS Code will proceed to open the project that you have just created. You should 
 
 image::project-tree.png[align=center]
 
-The project will contain a useful README.md file, which provides you with useful information and tips regarding the project itself and various commands that will help you work with it.
+The project will contain a README.md file, which provides you with useful information and tips regarding the project itself and various commands that will help you work with it.
 
 
