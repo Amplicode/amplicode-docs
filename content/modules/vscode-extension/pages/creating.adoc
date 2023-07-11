@@ -41,9 +41,6 @@ image::prompt.png[align=center]
 
 Click *_Open generated project_*.
 
-[IMPORTANT]
-You will have to be extremely quick to use this prompt, since it only stays on the screen for a few seconds. If you have missed it, there is still an alternative way described below.
-
 [[alternative-opening]]
 === The Alternative
 
@@ -62,5 +59,7 @@ image::trust-the-author.png[align=center]
 VS Code will proceed to open the project that you have just created. You should see the project tree on the left now.
 
 image::project-tree.png[align=center]
+
+The project will contain a README.md file, which provides you with useful information and tips regarding the project itself and various commands that will help you work with it.
 
 
